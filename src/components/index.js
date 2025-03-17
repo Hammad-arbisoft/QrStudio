@@ -16,6 +16,16 @@ import { ImageToolBar } from './ImageToolBar';
 import { ShapeToolBar } from './ShapeToolBar';
 import { QrToolBar } from './QrToolBar';
 import { HelperSideBar } from './HelperSideBar';
+import { SideBarHeader } from './SideBarHeader';
+import { Button } from './Button';
+import { TemplateSideBar } from './TemplateSideBar';
+import { TextSideBar } from './TextSideBar';
+import { ImageSideBar } from './ImageSideBar';
+import { ShapeSideBar } from './ShapeSideBar';
+import { QrSideBar } from './QrSideBar';
+import { WhiteLabelSideBar } from './WhiteLabelSideBar';
+import { Collapsable } from './Collapsable';
+import { RadioSection } from './RadioSection';
 
 export {
     Test,
@@ -36,4 +46,14 @@ export {
     ShapeToolBar,
     QrToolBar,
     HelperSideBar,
+    SideBarHeader,
+    Button,
+    TemplateSideBar,
+    TextSideBar,
+    ImageSideBar,
+    ShapeSideBar,
+    QrSideBar,
+    WhiteLabelSideBar,
+    Collapsable,
+    RadioSection,
 };
