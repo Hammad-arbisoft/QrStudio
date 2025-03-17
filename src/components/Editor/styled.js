@@ -23,7 +23,7 @@ export const InnerContainer = styled.div`
 export const InnerContainerWrapper = styled.div`
     display: flex;
     flex-direction: column;
-    margin-left: 200px;
+    // margin-left: 200px;
     overflow: hidden;
 `;
 

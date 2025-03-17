@@ -23,6 +23,12 @@ export const palette = {
     gray_F2F2F2: '#F2F2F2',
     gray_FDFCFC: '#FDFCFC',
     gray_EDEDED: '#EDEDED',
+    gray_FBFBFB: '#FBFBFB',
+    gray_F5F6F6: '#F5F6F6',
+    gray_A1A1A1: '#A1A1A1',
+    gray_F0F2F7: '#F0F2F7',
+    gray_333: '#333',
+    green_80D965: '#80D965',
     black: '#000000',
 };
 

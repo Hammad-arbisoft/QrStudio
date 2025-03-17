@@ -5,11 +5,15 @@ import { BottomToolBarControls } from '../BottomToolBarControls';
 import { BottomToolbarWrapper } from './styled';
 import { UndoRedoControls } from '../UndoRedoControls';
 
-export const BottomToolBar = () => {
+export const BottomToolBar = ({ selectedTab }) => {
     return (
-        <BottomToolbarWrapper>
-            <UndoRedoControls />
-            <BottomToolBarControls />
+        <BottomToolbarWrapper selectedTab={selectedTab}>
+            {selectedTab && (
+                <>
+                    <UndoRedoControls />
+                    <BottomToolBarControls />
+                </>
+            )}
             <ZoomControls />
         </BottomToolbarWrapper>
     );

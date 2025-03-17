@@ -9,10 +9,10 @@ const Wrapper = styled.div`
     padding: 0;
     display: flex;
     align-items: center;
-    justify-content: flex-end;
+    justify-content: center;
 `;
 const InnerWrapper = styled.div`
-    height: 100%;
+    height: 80%;
     width: 80%;
     background-color: ${theme.color.gray_535354};
     display: flex;
