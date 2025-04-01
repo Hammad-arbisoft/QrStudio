@@ -1,20 +1,22 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { propTypes } from './props';
 import { ToolsTabBar } from '../ToolsTabBar';
 import { StyledImage } from '@/generic/Styled';
 import { IconRedo, IconUndo } from '@/assets';
 
-export const UndoRedoControls = () => {
-    let UndeRedoTabsData = useMemo(() => {
-        return [
-            {
-                element: <StyledImage src={IconUndo} />,
-            },
-            {
-                element: <StyledImage src={IconRedo} />,
-            },
-        ];
-    }, []);
+export const UndoRedoControls = ({ onUndo, onRedo, disableUndo, disableRedo }) => {
+    let UndeRedoTabsData = [
+        {
+            element: <StyledImage src={IconUndo} />,
+            onClick: () => onUndo(),
+            disabled: disableUndo,
+        },
+        {
+            element: <StyledImage src={IconRedo} />,
+            onClick: () => onRedo(),
+            disabled: disableRedo,
+        },
+    ];
 
     return <ToolsTabBar height={44} tabPadding="12px 17px" tabsData={UndeRedoTabsData} />;
 };

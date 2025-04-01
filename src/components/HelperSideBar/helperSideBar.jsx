@@ -13,6 +13,11 @@ export const HelperSideBar = ({
     selectedSideBarItem,
     helperSideBarVisible,
     onCollapse = () => {},
+    onAddShape,
+    defaultImagesList,
+    customImagesList,
+    onAddCustomImageToList,
+    onAddImageToCanvas,
 }) => (
     <SideBarWrapper visible={selectedSideBarItem && helperSideBarVisible}>
         <SideBarHeader onCollapse={onCollapse} selectedSideBarItem={selectedSideBarItem} />
@@ -22,9 +27,14 @@ export const HelperSideBar = ({
             ) : selectedSideBarItem === sideBarpillsList?.text ? (
                 <TextSideBar />
             ) : selectedSideBarItem === sideBarpillsList?.image ? (
-                <ImageSideBar />
+                <ImageSideBar
+                    defaultImagesList={defaultImagesList}
+                    customImagesList={customImagesList}
+                    onAddCustomImageToList={onAddCustomImageToList}
+                    onAddImageToCanvas={onAddImageToCanvas}
+                />
             ) : selectedSideBarItem === sideBarpillsList?.shape ? (
-                <ShapeSideBar />
+                <ShapeSideBar onAddShape={onAddShape} />
             ) : selectedSideBarItem === sideBarpillsList?.qr ? (
                 <QrSideBar />
             ) : selectedSideBarItem === sideBarpillsList?.whiteLabel ? (

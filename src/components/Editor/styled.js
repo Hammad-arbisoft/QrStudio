@@ -14,7 +14,7 @@ export const Container = styled.div`
 export const InnerContainer = styled.div`
     display: flex;
     flex-direction: column;
-    overflow: hidden;
+    overflow: auto;
     flex: 1;
     align-items: center;
     justify-content: center;
@@ -23,8 +23,9 @@ export const InnerContainer = styled.div`
 export const InnerContainerWrapper = styled.div`
     display: flex;
     flex-direction: column;
-    // margin-left: 200px;
-    overflow: hidden;
+    overflow: auto;
+    flex: 1;
+    justify-content: center;
 `;
 
 export const Title = styled.p`
@@ -39,8 +40,12 @@ export const Title = styled.p`
 `;
 
 export const EditorBox = styled.div`
-    height: 470px;
-    width: 350px;
+    height: ${({ editorHeight }) => editorHeight || 470}px;
+    width: ${({ editorWidth }) => editorWidth || 350}px;
+    min-height: ${({ editorHeight }) => editorHeight || 470}px;
+    min-width: ${({ editorWidth }) => editorWidth || 350}px;
     background: ${theme.color.gray_25};
     box-shadow: 1.317px 1.317px 1.317px 0px rgba(0, 0, 0, 0.08);
+    // transition: all 0.1s ease-in-out;
+    overflow: hidden;
 `;

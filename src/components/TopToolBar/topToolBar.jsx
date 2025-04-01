@@ -8,17 +8,65 @@ import { ImageToolBar } from '../ImageToolBar';
 import { ShapeToolBar } from '../ShapeToolBar';
 import { QrToolBar } from '../QrToolBar';
 
-export const TopToolBar = ({ selectedTab }) => {
+export const TopToolBar = ({
+    selectedTab,
+    onSetBackgroundColor,
+    canvasBackgroundColor,
+    canvasBackgroundImage,
+    onSetBackgroundImage,
+    shapeStrokeColor,
+    shapeStrokeWidth,
+    shapeFillColor,
+    shapeOpacity,
+    onChangeShapeStrokeColor,
+    onChangeShapeStrokeWidth,
+    onChangeShapeFill,
+    onChangeShapeOpacity,
+    selectedElement,
+    onChangeBackgroundImageOpacity,
+    backgroundImageOpacity,
+    imageStrokeWidth,
+    imageStrokeColor,
+    imageOpacity,
+    onChangeImageStrokeWidth,
+    onChangeImageStrokeColor,
+    onChangeImageOpacity,
+}) => {
     return (
-        <ToolBarWrapper>
+        <ToolBarWrapper disabled={selectedElement && !selectedElement?.draggable}>
             {selectedTab === sideBarpillsList?.template ? (
-                <TemplateToolBar />
+                <TemplateToolBar
+                    onSetBackgroundColor={onSetBackgroundColor}
+                    canvasBackgroundColor={canvasBackgroundColor}
+                    canvasBackgroundImage={canvasBackgroundImage}
+                    onSetBackgroundImage={onSetBackgroundImage}
+                    onChangeBackgroundImageOpacity={onChangeBackgroundImageOpacity}
+                    backgroundImageOpacity={backgroundImageOpacity}
+                />
             ) : selectedTab === sideBarpillsList?.text ? (
                 <TextToolBar />
             ) : selectedTab === sideBarpillsList?.image ? (
-                <ImageToolBar />
+                <ImageToolBar
+                    imageStrokeWidth={imageStrokeWidth}
+                    imageStrokeColor={imageStrokeColor}
+                    imageOpacity={imageOpacity}
+                    onChangeImageStrokeWidth={onChangeImageStrokeWidth}
+                    onChangeImageStrokeColor={onChangeImageStrokeColor}
+                    onChangeImageOpacity={onChangeImageOpacity}
+                    selectedElement={selectedElement}
+                />
             ) : selectedTab === sideBarpillsList?.shape ? (
-                <ShapeToolBar />
+                <ShapeToolBar
+                    shapeStrokeColor={shapeStrokeColor}
+                    shapeStrokeWidth={shapeStrokeWidth}
+                    shapeFillColor={shapeFillColor}
+                    onChangeShapeStrokeColor={onChangeShapeStrokeColor}
+                    onChangeShapeStrokeWidth={onChangeShapeStrokeWidth}
+                    onChangeShapeFill={onChangeShapeFill}
+                    shapeOpacity={shapeOpacity}
+                    onChangeShapeOpacity={onChangeShapeOpacity}
+                    selectedElement={selectedElement}
+                />
             ) : selectedTab === sideBarpillsList?.qr ? (
                 <QrToolBar />
             ) : null}

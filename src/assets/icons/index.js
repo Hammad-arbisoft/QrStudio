@@ -50,3 +50,4 @@ export { default as IconVerticalLine } from './ic_vertical_line.svg';
 export { default as IconStar } from './ic_star.svg';
 export { default as IconHeart } from './ic_heart.svg';
 export { default as IconAddImage } from './ic_add_image.svg';
+export { default as IconUnlock } from './ic_unlock.svg';

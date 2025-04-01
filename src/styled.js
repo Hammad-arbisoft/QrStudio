@@ -9,13 +9,14 @@ const Wrapper = styled.div`
     padding: 0;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-end;
 `;
 const InnerWrapper = styled.div`
-    height: 80%;
-    width: 80%;
+    height: 100%;
+    width: 85%;
     background-color: ${theme.color.gray_535354};
     display: flex;
+    overflow: auto;
 `;
 
 export { InnerWrapper, Wrapper };

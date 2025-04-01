@@ -5,7 +5,7 @@ import theme from '@/theme';
 import { ShapesContainer, SingleItem, StyledContainer } from './styled';
 import { shapesList } from '@/constants';
 
-export const ShapeSideBar = () => {
+export const ShapeSideBar = ({ onAddShape }) => {
     return (
         <StyledContainer>
             <StyledText
@@ -19,7 +19,7 @@ export const ShapeSideBar = () => {
             <ShapesContainer>
                 {shapesList.map((item, index) => {
                     return (
-                        <SingleItem key={index}>
+                        <SingleItem key={index} onClick={() => onAddShape(item?.shape)}>
                             <StyledImage src={item?.icon} />
                         </SingleItem>
                     );

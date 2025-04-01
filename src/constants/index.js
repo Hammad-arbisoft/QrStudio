@@ -5,6 +5,8 @@ import {
     IconHorizontalLine,
     IconSquare,
     IconStar,
+    IconTools,
+    IconToolsPink,
     IconTriangle,
     IconVerticalLine,
 } from '@/assets';
@@ -32,7 +34,17 @@ export const ButtonVarients = {
     primary: 'primary',
     secondary: 'secondary',
 };
-
+export const shapes = {
+    circle: 'circle',
+    square: 'square',
+    triangle: 'triangle',
+    arrowRight: 'arrowRight',
+    horizontalLine: 'horizontalLine',
+    verticalLine: 'verticalLine',
+    star: 'star',
+    heart: 'heart',
+};
+export const defaultSideBarImagesList = [IconTools, IconToolsPink];
 export const textList = [
     {
         text: '+ Heading 1',
@@ -77,38 +89,50 @@ export const textList = [
         fontWeight: theme.fontWeights[400],
     },
 ];
-
+export const elementTypes = {
+    backgroundColor: 'backgroundColor',
+    backgroundImage: 'backgroundImage',
+    circle: 'circle',
+    square: 'square',
+    triangle: 'triangle',
+    arrowRight: 'arrowRight',
+    horizontalLine: 'horizontalLine',
+    verticalLine: 'verticalLine',
+    star: 'star',
+    heart: 'heart',
+    image: 'image',
+};
 export const shapesList = [
     {
-        shape: 'circle',
+        shape: elementTypes.circle,
         icon: IconCircle,
     },
     {
-        shape: 'square',
+        shape: elementTypes.square,
         icon: IconSquare,
     },
     {
-        shape: 'triangle',
+        shape: elementTypes.triangle,
         icon: IconTriangle,
     },
     {
-        shape: 'arrowRight',
+        shape: elementTypes.arrowRight,
         icon: IconArrowRight,
     },
     {
-        shape: 'horizontalLine',
+        shape: elementTypes.horizontalLine,
         icon: IconHorizontalLine,
     },
     {
-        shape: 'verticalLine',
+        shape: elementTypes.verticalLine,
         icon: IconVerticalLine,
     },
     {
-        shape: 'star',
+        shape: elementTypes.star,
         icon: IconStar,
     },
     {
-        shape: 'heart',
+        shape: elementTypes.heart,
         icon: IconHeart,
     },
 ];

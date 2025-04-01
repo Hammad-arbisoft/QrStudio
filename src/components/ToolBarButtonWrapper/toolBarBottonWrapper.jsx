@@ -13,6 +13,8 @@ export const ToolBarButtonWrapper = ({
     marginRight,
     justifyContent,
     gap,
+    onClick,
+    disabled = false,
 }) => (
     <StyledContainer
         height={height}
@@ -24,6 +26,13 @@ export const ToolBarButtonWrapper = ({
         marginRight={marginRight}
         justifyContent={justifyContent}
         gap={gap}
+        onClick={() => {
+            if (disabled) {
+                return;
+            }
+            onClick && onClick();
+        }}
+        disabled={disabled}
     >
         {children}
     </StyledContainer>

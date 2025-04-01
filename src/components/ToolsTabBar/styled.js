@@ -12,6 +12,8 @@ export const TabBarContainer = styled.div`
     border-radius: 6px;
     overflow: hidden;
     background: ${theme.color.white};
+    opacity: ${({ disabled }) => (disabled ? 0.5 : 1)};
+    pointer-events: ${({ disabled }) => (disabled ? 'none' : 'all')};
 `;
 
 export const TabItem = styled.div`
@@ -22,4 +24,5 @@ export const TabItem = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
+    opacity: ${({ disabled }) => (disabled ? 0.5 : 1)};
 `;

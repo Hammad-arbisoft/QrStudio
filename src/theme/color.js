@@ -5,7 +5,7 @@ export const palette = {
     primary: '#5F98D0',
     secondary: '#F9FAFB',
     gray_700: '#344054',
-    white: '#FFF',
+    white: '#FFFFFF',
     white_F5F5F5: '#F5F5F5',
     white_F7F7F7: '#F7F7F7',
     gray_535354: '#535354',
@@ -28,6 +28,7 @@ export const palette = {
     gray_A1A1A1: '#A1A1A1',
     gray_F0F2F7: '#F0F2F7',
     gray_333: '#333',
+    gray_EFEFEF: '#EFEFEF',
     green_80D965: '#80D965',
     black: '#000000',
 };

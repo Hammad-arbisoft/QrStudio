@@ -11,8 +11,14 @@ export const Button = ({
     text = 'Button',
     marginBottom = 0,
     marginTop = 0,
+    onClick,
 }) => (
-    <StyledButton varient={varient} marginTop={marginTop} marginBottom={marginBottom}>
+    <StyledButton
+        varient={varient}
+        marginTop={marginTop}
+        marginBottom={marginBottom}
+        onClick={onClick}
+    >
         {left && <IconWrapper>{left}</IconWrapper>}
         <StyledText
             fontSize={14}

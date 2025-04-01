@@ -2,8 +2,10 @@ import theme from '@/theme';
 import styled from 'styled-components';
 
 export const StyledImage = styled.img`
-    width: ${({ width }) => width || 'auto'};
-    height: ${({ height }) => height || 'auto'};
+    width: ${({ width }) => width + 'px' || 'auto'};
+    height: ${({ height }) => height + 'px' || 'auto'};
+    max-width: ${({ maxWidth }) => maxWidth + 'px' || 'auto'};
+    max-height: ${({ maxHeight }) => maxHeight + 'px' || 'auto'};
     object-fit: ${({ objectFit }) => objectFit || 'contain'};
 `;
 export const StyledText = styled.p`

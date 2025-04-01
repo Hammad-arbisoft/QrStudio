@@ -8,5 +8,7 @@ export const ToolBarWrapper = styled.div`
     border-bottom: 1px solid ${theme.color.gray_EAEAEA};
     background: ${theme.color.white};
     flex-direction: row;
-    overflow: auto;
+    opacity: ${({ disabled }) => (disabled ? 0.5 : 1)};
+    pointer-events: ${({ disabled }) => (disabled ? 'none' : 'all')};
+    // overflow: auto;
 `;

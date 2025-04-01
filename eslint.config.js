@@ -57,7 +57,7 @@ export default [
                     ignoreRestSiblings: false,
                 },
             ],
-            indent: ['error', 4],
+            // indent: ['error', 4],
             quotes: ['error', 'single'],
             camelcase: [
                 'error',

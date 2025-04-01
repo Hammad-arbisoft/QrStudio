@@ -26,6 +26,9 @@ import { QrSideBar } from './QrSideBar';
 import { WhiteLabelSideBar } from './WhiteLabelSideBar';
 import { Collapsable } from './Collapsable';
 import { RadioSection } from './RadioSection';
+import { CanvasImage } from './CanvasImage';
+import { StrokePicker } from './StrokePicker';
+import { OpacityPicker } from './OpacityPicker';
 
 export {
     Test,
@@ -56,4 +59,7 @@ export {
     WhiteLabelSideBar,
     Collapsable,
     RadioSection,
+    CanvasImage,
+    StrokePicker,
+    OpacityPicker,
 };

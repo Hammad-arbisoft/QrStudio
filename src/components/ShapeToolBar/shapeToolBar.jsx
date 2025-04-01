@@ -2,29 +2,51 @@ import React from 'react';
 import { propTypes } from './props';
 import { ToolBarButtonWrapper } from '../ToolBarButtonWrapper';
 import { RowContainer } from './styled';
-import { IconBackgroundColor, IconGrid, IconLineColor, IconOpacity } from '@/assets';
-import theme from '@/theme';
-import { StyledImage, StyledText } from '@/generic/Styled';
+import { IconBackgroundColor } from '@/assets';
+import { StyledImage } from '@/generic/Styled';
 import { ColorBox } from '../ColorBox';
+import { isElementShape } from '@/utils';
+import { StrokePicker } from '../StrokePicker';
+import { OpacityPicker } from '../OpacityPicker';
 
-export const ShapeToolBar = () => {
+export const ShapeToolBar = ({
+    shapeStrokeColor,
+    shapeStrokeWidth,
+    shapeFillColor,
+    shapeOpacity,
+    onChangeShapeStrokeColor,
+    onChangeShapeStrokeWidth,
+    onChangeShapeFill,
+    onChangeShapeOpacity,
+    selectedElement,
+}) => {
     return (
         <RowContainer>
             <ToolBarButtonWrapper gap={11}>
                 <StyledImage src={IconBackgroundColor} />
-                <ColorBox backgroundColor={theme.color.black} />
+                <ColorBox
+                    backgroundColor={
+                        (isElementShape(selectedElement) && selectedElement?.fill) || shapeFillColor
+                    }
+                    onChange={onChangeShapeFill}
+                />
             </ToolBarButtonWrapper>
-            <ToolBarButtonWrapper gap={12}>
-                <StyledImage src={IconGrid} />
-                <StyledText fontFamily={theme.fonts.secondary} marginRight={10}>
-                    1
-                </StyledText>
-                <StyledImage src={IconLineColor} />
-            </ToolBarButtonWrapper>
-            <ToolBarButtonWrapper gap={12}>
-                <StyledImage src={IconOpacity} />
-                <StyledText fontFamily={theme.fonts.secondary}>100%</StyledText>
-            </ToolBarButtonWrapper>
+            <StrokePicker
+                value={
+                    isElementShape(selectedElement)
+                        ? selectedElement?.strokeWidth
+                        : shapeStrokeWidth
+                }
+                onChangeStrokeWidth={onChangeShapeStrokeWidth}
+                strokeColor={
+                    isElementShape(selectedElement) ? selectedElement?.stroke : shapeStrokeColor
+                }
+                onChangeShapeStrokeColor={onChangeShapeStrokeColor}
+            />
+            <OpacityPicker
+                value={isElementShape(selectedElement) ? selectedElement?.opacity : shapeOpacity}
+                onChangeOpacity={onChangeShapeOpacity}
+            />
         </RowContainer>
     );
 };
