@@ -10,8 +10,9 @@ export const TabBarContainer = styled.div`
     align-items: center;
     justify-content: center;
     border-radius: 6px;
-    overflow: hidden;
     background: ${theme.color.white};
+    opacity: ${({ disabled }) => (disabled ? 0.5 : 1)};
+    pointer-events: ${({ disabled }) => (disabled ? 'none' : 'all')};
 `;
 
 export const TabItem = styled.div`
@@ -22,4 +23,10 @@ export const TabItem = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
+    opacity: ${({ disabled }) => (disabled ? 0.5 : 1)};
+    background: ${({ selected = false }) => (selected ? theme.color.gray_200 : theme.color.white)};
+    border-top-left-radius: ${({ isFirst }) => (isFirst ? '5' : '0')}px;
+    border-bottom-left-radius: ${({ isFirst }) => (isFirst ? '5' : '0')}px;
+    border-top-right-radius: ${({ isLast }) => (isLast ? '5' : '0')}px;
+    border-bottom-right-radius: ${({ isLast }) => (isLast ? '5' : '0')}px;
 `;

@@ -4,8 +4,9 @@ import { StyledImage, StyledText } from '@/generic/Styled';
 import theme from '@/theme';
 import { ShapesContainer, SingleItem, StyledContainer } from './styled';
 import { shapesList } from '@/constants';
+import { TEXT_DICTIONARY } from '@/constants/textConstants';
 
-export const ShapeSideBar = () => {
+export const ShapeSideBar = ({ onAddShape, translation }) => {
     return (
         <StyledContainer>
             <StyledText
@@ -14,12 +15,12 @@ export const ShapeSideBar = () => {
                 marginRight={6}
                 marginBottom={15}
             >
-                Add shapes
+                {translation?.ADD_SHAPES || TEXT_DICTIONARY?.ADD_SHAPES}
             </StyledText>
             <ShapesContainer>
                 {shapesList.map((item, index) => {
                     return (
-                        <SingleItem key={index}>
+                        <SingleItem key={index} onClick={() => onAddShape(item?.shape)}>
                             <StyledImage src={item?.icon} />
                         </SingleItem>
                     );

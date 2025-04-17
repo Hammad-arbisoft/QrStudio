@@ -1,12 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { propTypes } from './props';
 import { StyledImage, StyledText } from '@/generic/Styled';
 import { IconInfo } from '@/assets';
 import theme from '@/theme';
 import { Container, InfoContainer, ToggleCircle, ToggleContainer } from './styled';
 
-export const RadioSection = ({ text }) => {
-    const [isActive, setIsActive] = useState(true);
+export const RadioSection = ({ text, onToggle, isActive, disabled }) => {
     return (
         <Container>
             <InfoContainer>
@@ -20,7 +19,15 @@ export const RadioSection = ({ text }) => {
                     {text}
                 </StyledText>
             </InfoContainer>
-            <ToggleContainer isActive={isActive} onClick={() => setIsActive(!isActive)}>
+            <ToggleContainer
+                isActive={isActive}
+                onClick={() => {
+                    if (disabled) {
+                        return;
+                    }
+                    onToggle && onToggle();
+                }}
+            >
                 <ToggleCircle isActive={isActive} />
             </ToggleContainer>
         </Container>

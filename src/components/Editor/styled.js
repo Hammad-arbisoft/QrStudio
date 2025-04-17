@@ -9,22 +9,36 @@ export const Container = styled.div`
     background-image: ${({ selectedTab }) => (selectedTab ? 'none' : `url(${EditorBg})`)};
     position: relative;
     flex-direction: column;
+    overflow: hidden;
 `;
 
 export const InnerContainer = styled.div`
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
+    // display: flex;
+    // flex-direction: column;
+    // overflow: auto;
+    // flex: 1;
+    // align-items: center;
+    // justify-content: center;
+    // flex-grow: 1;
+    // background: green;
+    // // min-height: 100px;
+
+    display: grid;
+    place-items: center;
+    overflow: auto;
     flex: 1;
-    align-items: center;
-    justify-content: center;
 `;
 
 export const InnerContainerWrapper = styled.div`
     display: flex;
     flex-direction: column;
-    // margin-left: 200px;
-    overflow: hidden;
+    overflow: auto;
+    flex: 1;
+    justify-content: center;
+    min-height: ${({ editorHeight }) => editorHeight || 500}px;
+    height: ${({ editorHeight }) => editorHeight || 500}px;
+    min-width: ${({ editorWidth }) => editorWidth || 400}px;
+    width: ${({ editorWidth }) => editorWidth || 400}px;
 `;
 
 export const Title = styled.p`
@@ -39,8 +53,12 @@ export const Title = styled.p`
 `;
 
 export const EditorBox = styled.div`
-    height: 470px;
-    width: 350px;
+    height: ${({ editorHeight }) => editorHeight || 470}px;
+    width: ${({ editorWidth }) => editorWidth || 350}px;
+    min-height: ${({ editorHeight }) => editorHeight || 470}px;
+    min-width: ${({ editorWidth }) => editorWidth || 350}px;
     background: ${theme.color.gray_25};
     box-shadow: 1.317px 1.317px 1.317px 0px rgba(0, 0, 0, 0.08);
+    // transition: all 0.1s ease-in-out;
+    overflow: hidden;
 `;

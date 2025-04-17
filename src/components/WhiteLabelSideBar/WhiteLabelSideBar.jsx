@@ -7,8 +7,9 @@ import { RadioSection } from '../RadioSection';
 import { Button } from '../Button';
 import { IconGraph } from '@/assets';
 import { ButtonVarients } from '@/constants';
+import { TEXT_DICTIONARY } from '@/constants/textConstants';
 
-export const WhiteLabelSideBar = () => (
+export const WhiteLabelSideBar = ({ translation }) => (
     <StyledContainer>
         <StyledText
             color={theme.color.gray_646464}
@@ -16,9 +17,9 @@ export const WhiteLabelSideBar = () => (
             marginRight={6}
             marginBottom={17}
         >
-            premium settings
+            {translation?.PREMIUM_SETTINGS || TEXT_DICTIONARY?.PREMIUM_SETTINGS}
         </StyledText>
-        <RadioSection text="Show Fixalert Branding" />
+        <RadioSection text={TEXT_DICTIONARY?.SHOW_BRANDING} />
 
         <StyledText
             fontSize={12}
@@ -27,11 +28,11 @@ export const WhiteLabelSideBar = () => (
             marginBottom={30}
             lineHeight={'20px'}
         >
-            Unlock premium features to customize your QR code sticker by hiding the company logo and
-            watermark. Upgrade your plan for full control over your design.
+            {translation?.UNLOCK_PREMIUM_FEATURE_PARAGRAPH ||
+                TEXT_DICTIONARY?.UNLOCK_PREMIUM_FEATURE_PARAGRAPH}
         </StyledText>
         <Button
-            text="Upgrade your plan"
+            text={translation?.UPGRADE_PLAN || TEXT_DICTIONARY?.UPGRADE_PLAN}
             left={<StyledImage src={IconGraph} />}
             varient={ButtonVarients.primary}
         />

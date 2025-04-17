@@ -10,9 +10,10 @@ import {
     IconWrapper,
     LeftIconWrapper,
 } from './styled';
+import { TEXT_DICTIONARY } from '@/constants/textConstants';
 
 export const Collapsable = ({
-    title = 'Collapsable',
+    title = TEXT_DICTIONARY?.COLLAPSABLE,
     left,
     hideIcon = false,
     marginTop = 0,

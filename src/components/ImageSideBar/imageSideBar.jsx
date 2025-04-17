@@ -1,55 +1,97 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { propTypes } from './props';
 import { Button } from '../Button';
-import { StyledImage } from '@/generic/Styled';
-import { IconTools, IconToolsPink, IconUpload, ImageSampleLogo, ImageSampleLogo2 } from '@/assets';
+import { StyledImage, StyledText } from '@/generic/Styled';
+import { IconUpload } from '@/assets';
 import { ImagesContainer, SingleItem, StyledContainer } from './styled';
 import { Collapsable } from '../Collapsable';
+import theme from '@/theme';
+import { pickImage } from '@/utils';
+import { TEXT_DICTIONARY } from '@/constants/textConstants';
 
-export const ImageSideBar = () => {
-    const defaultImagesList = useMemo(() => {
-        return [
-            { image: IconTools, onClick: () => {} },
-            { image: IconToolsPink, onClick: () => {} },
-        ];
-    }, []);
+export const ImageSideBar = ({
+    defaultImagesList,
+    customImagesList,
+    onAddCustomImageToList,
+    onAddImageToCanvas,
+    translation,
+    uploadImageCallBack,
+    setLoadingUploadImage,
+}) => {
+    const renderDefaultContent = (
+        <ImagesContainer>
+            {defaultImagesList?.length === 0 && (
+                <StyledText fontSize={10} color={theme.color.gray_535354}>
+                    {translation?.PLEASE_ADD_IMAGES || TEXT_DICTIONARY?.PLEASE_ADD_IMAGES}
+                </StyledText>
+            )}
+            {defaultImagesList?.map((item, index) => (
+                <SingleItem
+                    key={index}
+                    width={'auto'}
+                    onClick={() => {
+                        onAddImageToCanvas(item);
+                    }}
+                >
+                    <StyledImage src={item} maxHeight={100} maxWidth={100} />
+                </SingleItem>
+            ))}
+        </ImagesContainer>
+    );
 
-    const CustomImagesList = useMemo(() => {
-        return [
-            { image: ImageSampleLogo, onClick: () => {} },
-            { image: ImageSampleLogo2, onClick: () => {} },
-        ];
-    }, []);
+    const renderCustomImages = (
+        <ImagesContainer>
+            {customImagesList?.length === 0 && (
+                <StyledText fontSize={10} color={theme.color.gray_535354}>
+                    {translation?.PLEASE_ADD_IMAGES || TEXT_DICTIONARY?.PLEASE_ADD_IMAGES}
+                </StyledText>
+            )}
+            {customImagesList?.map((item, index) => (
+                <SingleItem
+                    key={index}
+                    onClick={() => {
+                        onAddImageToCanvas(item);
+                    }}
+                >
+                    <StyledImage src={item} maxHeight={100} maxWidth={100} />
+                </SingleItem>
+            ))}
+        </ImagesContainer>
+    );
 
-    const renderDefaultContent = useMemo(() => {
-        return (
-            <ImagesContainer>
-                {defaultImagesList?.map((item, index) => (
-                    <SingleItem key={index} width={'auto'}>
-                        <StyledImage src={item?.image} />
-                    </SingleItem>
-                ))}
-            </ImagesContainer>
-        );
-    }, []);
-
-    const renderCustomImages = useMemo(() => {
-        return (
-            <ImagesContainer>
-                {CustomImagesList?.map((item, index) => (
-                    <SingleItem key={index}>
-                        <StyledImage src={item?.image} />
-                    </SingleItem>
-                ))}
-            </ImagesContainer>
-        );
-    }, []);
+    const addImageToList = async () => {
+        const file = await pickImage();
+        if (!file) return;
+        if (uploadImageCallBack) {
+            setLoadingUploadImage(true);
+            const imageUrl = await uploadImageCallBack(file);
+            onAddCustomImageToList(imageUrl);
+            setLoadingUploadImage(false);
+        } else {
+            const reader = new FileReader();
+            reader.onload = () => {
+                onAddCustomImageToList(reader.result);
+            };
+            reader.readAsDataURL(file);
+        }
+    };
 
     return (
         <StyledContainer>
-            <Button text="Add Image" left={<StyledImage src={IconUpload} />} marginBottom={38} />
-            <Collapsable title="Default" content={renderDefaultContent} />
-            <Collapsable title="Custom Images" content={renderCustomImages} />
+            <Button
+                text={translation?.ADD_IMAGE || TEXT_DICTIONARY?.ADD_IMAGE}
+                left={<StyledImage src={IconUpload} />}
+                marginBottom={38}
+                onClick={addImageToList}
+            />
+            <Collapsable
+                title={translation?.DEFAULT || TEXT_DICTIONARY?.DEFAULT}
+                content={renderDefaultContent}
+            />
+            <Collapsable
+                title={translation?.CUSTOM_IMAGES || TEXT_DICTIONARY?.CUSTOM_IMAGES}
+                content={renderCustomImages}
+            />
         </StyledContainer>
     );
 };

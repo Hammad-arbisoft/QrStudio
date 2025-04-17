@@ -7,4 +7,6 @@ export const BottomToolbarWrapper = styled.div`
     padding-right: 3%;
     padding-left: 5%;
     padding-bottom: ${({ selectedTab }) => (selectedTab ? '6' : '14')}px;
+    flex-wrap: wrap;
+    gap: 5px;
 `;
