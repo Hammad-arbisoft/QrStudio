@@ -8,6 +8,7 @@ import { ColorBox } from '../ColorBox';
 import { isElementShape } from '@/utils';
 import { StrokePicker } from '../StrokePicker';
 import { OpacityPicker } from '../OpacityPicker';
+import { TEXT_DICTIONARY } from '@/constants/textConstants';
 
 export const ShapeToolBar = ({
     shapeStrokeColor,
@@ -19,10 +20,15 @@ export const ShapeToolBar = ({
     onChangeShapeFill,
     onChangeShapeOpacity,
     selectedElement,
+    translation,
 }) => {
     return (
         <RowContainer>
-            <ToolBarButtonWrapper gap={11}>
+            <ToolBarButtonWrapper
+                gap={11}
+                tooltip={translation?.SHAPE_FILL || TEXT_DICTIONARY?.SHAPE_FILL}
+                tooltipPosition="bottom"
+            >
                 <StyledImage src={IconBackgroundColor} />
                 <ColorBox
                     backgroundColor={
@@ -42,8 +48,10 @@ export const ShapeToolBar = ({
                     isElementShape(selectedElement) ? selectedElement?.stroke : shapeStrokeColor
                 }
                 onChangeShapeStrokeColor={onChangeShapeStrokeColor}
+                translation={translation}
             />
             <OpacityPicker
+                tooltip={translation?.SHAPE_OPACITY || TEXT_DICTIONARY?.SHAPE_OPACITY}
                 value={isElementShape(selectedElement) ? selectedElement?.opacity : shapeOpacity}
                 onChangeOpacity={onChangeShapeOpacity}
             />

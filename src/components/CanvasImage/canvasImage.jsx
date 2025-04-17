@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { propTypes } from './props';
 import { Image } from 'react-konva';
 
-export const CanvasImage = ({ id, element, onClick, onDragEnd, onTransformEnd }) => {
+export const CanvasImage = ({ id, element, onClick, onDragEnd, onTransformEnd, onDragMove }) => {
     const [loaded, setLoaded] = useState(false);
     const [image, setImage] = useState(null);
 
@@ -29,9 +29,11 @@ export const CanvasImage = ({ id, element, onClick, onDragEnd, onTransformEnd })
                 height={element?.height}
                 onClick={() => onClick && onClick()}
                 onDragEnd={e => onDragEnd && onDragEnd(e)}
+                onDragMove={onDragMove}
                 onTransformEnd={e => {
                     onTransformEnd && onTransformEnd(e);
                 }}
+                strokeScaleEnabled={false}
             />
         );
     } else {

@@ -29,7 +29,11 @@ import { RadioSection } from './RadioSection';
 import { CanvasImage } from './CanvasImage';
 import { StrokePicker } from './StrokePicker';
 import { OpacityPicker } from './OpacityPicker';
-
+import { QrElement } from './QrElement';
+import { EditableText } from './EditableText';
+import { Tooltip } from './Tooltip';
+import { Overlay } from './Overlay';
+import { LoadingSpinner } from './LoadingSpinner';
 export {
     Test,
     SideBar,
@@ -62,4 +66,9 @@ export {
     CanvasImage,
     StrokePicker,
     OpacityPicker,
+    QrElement,
+    EditableText,
+    Tooltip,
+    Overlay,
+    LoadingSpinner,
 };

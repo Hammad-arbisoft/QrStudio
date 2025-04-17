@@ -8,7 +8,7 @@ import { IconWrapper, StyledButton } from './styled';
 export const Button = ({
     varient = ButtonVarients.secondary,
     left,
-    text = 'Button',
+    text,
     marginBottom = 0,
     marginTop = 0,
     onClick,

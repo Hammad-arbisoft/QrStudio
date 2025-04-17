@@ -6,4 +6,8 @@ export const StudioWrapper = styled.div`
     display: flex;
     flex: 1;
     flex-direction: row;
+    overflow: hidden;
+    height: 100%;
+    width: 100%;
+    position: relative;
 `;

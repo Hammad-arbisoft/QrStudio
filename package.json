@@ -16,9 +16,11 @@
     "@babel/preset-react": "^7.26.3",
     "konva": "^9.3.19",
     "prop-types": "^15.8.1",
+    "qrcode": "^1.5.4",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-konva": "^19.0.3",
+    "react-konva-utils": "^1.1.0",
     "styled-components": "^6.1.15"
   },
   "devDependencies": {

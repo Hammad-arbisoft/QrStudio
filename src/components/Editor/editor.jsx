@@ -15,13 +15,20 @@ import {
     Path,
     Star,
     Line,
+    Group,
 } from 'react-konva';
 import { CanvasImage } from '../CanvasImage';
 import theme from '@/theme';
+import { QrElement } from '../QrElement';
+import { EditableText } from '../EditableText';
+import { debounce } from '@/utils';
+import { useKonvaSnapping } from './util';
+import { TEXT_DICTIONARY } from '@/constants/textConstants';
 
 export const Editor = ({
     selectedTab,
-    title = 'title',
+    translation,
+    title = translation?.TITLE || TEXT_DICTIONARY?.TITLE,
     zoomPercentage,
     onChangeZoomPercentage,
     editorHeight,
@@ -58,6 +65,20 @@ export const Editor = ({
     onChangeImageStrokeWidth,
     onChangeImageStrokeColor,
     onChangeImageOpacity,
+    qrStrokeWidth,
+    qrStrokeColor,
+    qrOpacity,
+    onChangeQrStrokeWidth,
+    onChangeQrStrokeColor,
+    onChangeQrOpacity,
+    defaultTextProps,
+    onChangeTextProperty,
+    onSetPageSize,
+    selectedPageSize,
+    loadingImages,
+    loadingFonts,
+    uploadImageCallBack,
+    setLoadingUploadImage,
 }) => {
     const transformerRef = useRef(null);
     useEffect(() => {
@@ -71,14 +92,23 @@ export const Editor = ({
             }
         }
     }, [selectedElement]);
-    console.error({ selectedElement });
-
+    const { handleDragging, handleDragEnd, handleResizing, handleResizeEnd } = useKonvaSnapping({
+        guidelineColor: 'blue',
+        guidelineDash: true,
+        snapToStageCenter: true,
+        snapRange: 5,
+        guidelineThickness: 1,
+        showGuidelines: true,
+        snapToShapes: true,
+        snapToStageBorders: true,
+    });
+    // console.error({ selectedElement });
     let canvasBackgroundColor = useMemo(() => {
         let backgroundColor;
-        let backgroundIndex = elements.findIndex(e => e?.type === elementTypes?.backgroundColor);
+        let backgroundIndex = elements?.findIndex(e => e?.type === elementTypes?.backgroundColor);
 
         if (backgroundIndex > -1) {
-            backgroundColor = elements[backgroundIndex]?.color;
+            backgroundColor = elements?.[backgroundIndex]?.color;
         }
         return backgroundColor;
     }, [elements]);
@@ -86,25 +116,54 @@ export const Editor = ({
     let canvasBackgroundImage = useMemo(() => {
         let backgroundImage;
 
-        let backgroundImageIndex = elements.findIndex(
+        let backgroundImageIndex = elements?.findIndex(
             e => e?.type === elementTypes?.backgroundImage,
         );
         if (backgroundImageIndex > -1) {
-            backgroundImage = elements[backgroundImageIndex];
+            backgroundImage = elements?.[backgroundImageIndex];
         }
         return backgroundImage;
     }, [elements]);
 
     const handleTransform = (id, newAttrs) => {
-        const updatedElements = elements.map(el => (el.id === id ? { ...el, ...newAttrs } : el));
+        let newAttributes = { ...newAttrs };
+        delete newAttributes['ref'];
+        const updatedElements = elements?.map(el =>
+            el.id === id ? { ...el, ...newAttributes } : el,
+        );
         saveHistory(updatedElements);
-        onSelectElement({ ...newAttrs });
+        onSelectElement({ ...newAttributes });
     };
     const handleSelect = elem => {
-        console.error('handleSelect', elem);
         onSelectElement(elem);
     };
 
+    const debouncedTransform = debounce((id, attrs) => {
+        const updatedElements = elements?.map(el =>
+            el.id === id
+                ? {
+                      ...el,
+                      ...attrs,
+                  }
+                : el,
+        );
+        saveHistory(updatedElements);
+        onSelectElement({
+            ...attrs,
+        });
+    }, 100);
+
+    const debouncedChangeText = debounce(e => {
+        onChangeTextProperty('text', e);
+    }, 300);
+
+    const handleTextTransform = (id, attrs) => {
+        debouncedTransform(id, attrs);
+    };
+
+    const onChangeTextContent = e => {
+        debouncedChangeText(e);
+    };
     const renderElements = useCallback(
         el => {
             switch (el.type) {
@@ -115,10 +174,15 @@ export const Editor = ({
                             {...el}
                             id={el.id}
                             onClick={() => handleSelect(el)}
-                            onDragEnd={e => handleTransform(el.id, e.target.attrs)}
+                            onDragEnd={e => {
+                                handleTransform(el.id, e.target.attrs);
+                                handleDragEnd(e);
+                            }}
+                            onDragMove={handleDragging}
                             onTransformEnd={e => {
                                 handleTransform(el.id, e.target.attrs);
                             }}
+                            strokeScaleEnabled={false}
                         />
                     );
                 case elementTypes.square:
@@ -128,10 +192,15 @@ export const Editor = ({
                             {...el}
                             id={el.id}
                             onClick={() => handleSelect(el)}
-                            onDragEnd={e => handleTransform(el.id, e.target.attrs)}
+                            onDragEnd={e => {
+                                handleTransform(el.id, e.target.attrs);
+                                handleDragEnd(e);
+                            }}
+                            onDragMove={handleDragging}
                             onTransformEnd={e => {
                                 handleTransform(el.id, e.target.attrs);
                             }}
+                            strokeScaleEnabled={false}
                         />
                     );
                 case elementTypes.arrowRight:
@@ -141,10 +210,15 @@ export const Editor = ({
                             {...el}
                             id={el.id}
                             onClick={() => handleSelect(el)}
-                            onDragEnd={e => handleTransform(el.id, e.target.attrs)}
+                            onDragEnd={e => {
+                                handleTransform(el.id, e.target.attrs);
+                                handleDragEnd(e);
+                            }}
+                            onDragMove={handleDragging}
                             onTransformEnd={e => {
                                 handleTransform(el.id, e.target.attrs);
                             }}
+                            strokeScaleEnabled={false}
                         />
                     );
                 case elementTypes.triangle:
@@ -154,10 +228,15 @@ export const Editor = ({
                             {...el}
                             id={el.id}
                             onClick={() => handleSelect(el)}
-                            onDragEnd={e => handleTransform(el.id, e.target.attrs)}
+                            onDragEnd={e => {
+                                handleTransform(el.id, e.target.attrs);
+                                handleDragEnd(e);
+                            }}
+                            onDragMove={handleDragging}
                             onTransformEnd={e => {
                                 handleTransform(el.id, e.target.attrs);
                             }}
+                            strokeScaleEnabled={false}
                         />
                     );
                 case elementTypes.heart:
@@ -167,10 +246,15 @@ export const Editor = ({
                             {...el}
                             id={el.id}
                             onClick={() => handleSelect(el)}
-                            onDragEnd={e => handleTransform(el.id, e.target.attrs)}
+                            onDragEnd={e => {
+                                handleTransform(el.id, e.target.attrs);
+                                handleDragEnd(e);
+                            }}
+                            onDragMove={handleDragging}
                             onTransformEnd={e => {
                                 handleTransform(el.id, e.target.attrs);
                             }}
+                            strokeScaleEnabled={false}
                         />
                     );
                 case elementTypes.star:
@@ -180,10 +264,15 @@ export const Editor = ({
                             {...el}
                             id={el.id}
                             onClick={() => handleSelect(el)}
-                            onDragEnd={e => handleTransform(el.id, e.target.attrs)}
+                            onDragEnd={e => {
+                                handleTransform(el.id, e.target.attrs);
+                                handleDragEnd(e);
+                            }}
+                            onDragMove={handleDragging}
                             onTransformEnd={e => {
                                 handleTransform(el.id, e.target.attrs);
                             }}
+                            strokeScaleEnabled={false}
                         />
                     );
                 case elementTypes.horizontalLine:
@@ -193,10 +282,15 @@ export const Editor = ({
                             {...el}
                             id={el.id}
                             onClick={() => handleSelect(el)}
-                            onDragEnd={e => handleTransform(el.id, e.target.attrs)}
+                            onDragEnd={e => {
+                                handleTransform(el.id, e.target.attrs);
+                                handleDragEnd(e);
+                            }}
+                            onDragMove={handleDragging}
                             onTransformEnd={e => {
                                 handleTransform(el.id, e.target.attrs);
                             }}
+                            strokeScaleEnabled={false}
                         />
                     );
                 case elementTypes.verticalLine:
@@ -206,10 +300,15 @@ export const Editor = ({
                             {...el}
                             id={el.id}
                             onClick={() => handleSelect(el)}
-                            onDragEnd={e => handleTransform(el.id, e.target.attrs)}
+                            onDragEnd={e => {
+                                handleTransform(el.id, e.target.attrs);
+                                handleDragEnd(e);
+                            }}
+                            onDragMove={handleDragging}
                             onTransformEnd={e => {
                                 handleTransform(el.id, e.target.attrs);
                             }}
+                            strokeScaleEnabled={false}
                         />
                     );
                 case elementTypes.image:
@@ -221,17 +320,55 @@ export const Editor = ({
                                 ...el,
                             }}
                             onClick={() => handleSelect(el)}
-                            onDragEnd={e => handleTransform(el.id, e.target.attrs)}
+                            onDragEnd={e => {
+                                handleTransform(el.id, e.target.attrs);
+                                handleDragEnd(e);
+                            }}
+                            onDragMove={handleDragging}
                             onTransformEnd={e => {
                                 handleTransform(el.id, e.target.attrs);
                             }}
+                        />
+                    );
+                case elementTypes.qr:
+                    return (
+                        <QrElement
+                            key={el.id}
+                            element={el}
+                            onClick={() => handleSelect(el)}
+                            onDragEnd={e => {
+                                handleTransform(el.id, e.target.attrs);
+                                handleDragEnd(e);
+                            }}
+                            onTransformEnd={e => {
+                                handleTransform(el.id, e.target.attrs);
+                            }}
+                            onDragMove={handleDragging}
+                            translation={translation}
+                            LogoTitle={translation?.LOGO || TEXT_DICTIONARY?.LOGO}
+                        />
+                    );
+                case elementTypes.text:
+                    return (
+                        <EditableText
+                            key={el.id}
+                            element={el}
+                            onClick={() => handleSelect(el)}
+                            onTransform={e => handleTextTransform(el.id, e)}
+                            onDragEnd={e => {
+                                handleTransform(el.id, e.target.attrs);
+                                handleDragEnd(e);
+                            }}
+                            onDragMove={handleDragging}
+                            onChangeTextContent={onChangeTextContent}
+                            onChangeTextProperty={onChangeTextProperty}
                         />
                     );
                 default:
                     return null;
             }
         },
-        [elements],
+        [elements, selectedElement],
     );
 
     return (
@@ -261,85 +398,111 @@ export const Editor = ({
                     onChangeImageStrokeWidth={onChangeImageStrokeWidth}
                     onChangeImageStrokeColor={onChangeImageStrokeColor}
                     onChangeImageOpacity={onChangeImageOpacity}
+                    qrStrokeWidth={qrStrokeWidth}
+                    qrStrokeColor={qrStrokeColor}
+                    qrOpacity={qrOpacity}
+                    onChangeQrStrokeWidth={onChangeQrStrokeWidth}
+                    onChangeQrStrokeColor={onChangeQrStrokeColor}
+                    onChangeQrOpacity={onChangeQrOpacity}
+                    defaultTextProps={defaultTextProps}
+                    onChangeTextProperty={onChangeTextProperty}
+                    onSetPageSize={onSetPageSize}
+                    selectedPageSize={selectedPageSize}
+                    translation={translation}
+                    uploadImageCallBack={uploadImageCallBack}
+                    setLoadingUploadImage={setLoadingUploadImage}
                 />
             )}
             <InnerContainer>
-                <InnerContainerWrapper>
+                <InnerContainerWrapper editorHeight={editorHeight + 50} editorWidth={editorWidth}>
                     <Title>{title}</Title>
                     <EditorBox editorHeight={editorHeight} editorWidth={editorWidth}>
-                        <Stage
-                            width={editorWidth}
-                            height={editorHeight}
-                            ref={stageRef}
-                            onMouseDown={e => {
-                                if (e.target === e.target.getStage()) {
-                                    onSelectElement(null);
-                                }
-                            }}
-                        >
-                            <Layer
-                                onClick={() => {
-                                    onSelectElement(null);
+                        {!loadingImages && !loadingFonts && (
+                            <Stage
+                                width={editorWidth}
+                                height={editorHeight}
+                                ref={stageRef}
+                                onMouseDown={e => {
+                                    if (e.target === e.target.getStage()) {
+                                        onSelectElement(null);
+                                    }
                                 }}
                             >
-                                {canvasBackgroundColor && (
-                                    <Rect
-                                        width={editorWidth}
-                                        height={editorHeight}
-                                        fill={canvasBackgroundColor}
-                                    />
-                                )}
-                                {canvasBackgroundImage && (
-                                    <CanvasImage
-                                        element={{
-                                            ...canvasBackgroundImage,
-                                            width: editorWidth,
-                                            height: editorHeight,
-                                        }}
-                                    />
-                                )}
-                            </Layer>
-                            <Layer>
-                                {elements.map(el => renderElements(el))}
-                                {selectedElement && (
-                                    <Transformer
-                                        ref={transformerRef}
-                                        // anchorSize={8}
-                                        enabledAnchors={
-                                            selectedElement?.draggable
-                                                ? [
-                                                      'top-left',
-                                                      'top-right',
-                                                      'bottom-left',
-                                                      'bottom-right',
-                                                      'middle-left',
-                                                      'middle-right',
-                                                      'top-center',
-                                                      'bottom-center',
-                                                  ]
-                                                : []
-                                        }
-                                        borderStroke={theme.color.primary}
-                                        borderStrokeWidth={2}
-                                        // add anchors
-                                        anchorFill={theme.color.white}
-                                        anchorStroke={theme.color.primary}
-                                        anchorStrokeWidth={2}
-                                        anchorSize={8}
-                                        rotateEnabled={selectedElement?.draggable ? true : false}
-                                        // make all anchors look like circles
-                                        // anchorCornerRadius={50}
-                                        boundBoxFunc={(oldBox, newBox) => {
-                                            // limit resize
-                                            if (!selectedElement?.draggable) {
-                                                return oldBox;
-                                            }
-                                            return newBox;
-                                        }}
-                                    />
-                                )}
-                            </Layer>
-                        </Stage>
+                                <Layer
+                                    onClick={() => {
+                                        onSelectElement(null);
+                                    }}
+                                >
+                                    {canvasBackgroundColor && (
+                                        <Rect
+                                            width={editorWidth}
+                                            height={editorHeight}
+                                            fill={canvasBackgroundColor}
+                                        />
+                                    )}
+                                    {canvasBackgroundImage && (
+                                        <CanvasImage
+                                            element={{
+                                                ...canvasBackgroundImage,
+                                                width: editorWidth,
+                                                height: editorHeight,
+                                            }}
+                                        />
+                                    )}
+                                </Layer>
+                                <Layer>
+                                    <Group
+                                        scaleX={zoomPercentage / 100}
+                                        scaleY={zoomPercentage / 100}
+                                    >
+                                        {elements?.map(el => renderElements(el))}
+                                        {selectedElement && (
+                                            <Transformer
+                                                ref={transformerRef}
+                                                onTransform={handleResizing}
+                                                onTransformEnd={handleResizeEnd}
+                                                enabledAnchors={
+                                                    selectedElement?.draggable
+                                                        ? selectedElement?.type ===
+                                                          elementTypes?.text
+                                                            ? ['middle-left', 'middle-right']
+                                                            : [
+                                                                  'top-left',
+                                                                  'top-right',
+                                                                  'bottom-left',
+                                                                  'bottom-right',
+                                                                  'middle-left',
+                                                                  'middle-right',
+                                                                  'top-center',
+                                                                  'bottom-center',
+                                                              ]
+                                                        : []
+                                                }
+                                                borderStroke={theme.color.primary}
+                                                borderStrokeWidth={2}
+                                                // add anchors
+                                                anchorFill={theme.color.white}
+                                                anchorStroke={theme.color.primary}
+                                                anchorStrokeWidth={2}
+                                                anchorSize={8}
+                                                rotateEnabled={
+                                                    selectedElement?.draggable ? true : false
+                                                }
+                                                // make all anchors look like circles
+                                                // anchorCornerRadius={50}
+                                                boundBoxFunc={(oldBox, newBox) => {
+                                                    // limit resize
+                                                    if (!selectedElement?.draggable) {
+                                                        return oldBox;
+                                                    }
+                                                    return newBox;
+                                                }}
+                                            />
+                                        )}
+                                    </Group>
+                                </Layer>
+                            </Stage>
+                        )}
                     </EditorBox>
                 </InnerContainerWrapper>
             </InnerContainer>
@@ -357,6 +520,7 @@ export const Editor = ({
                 onToggleLockElement={onToggleLockElement}
                 bringSelectedElementToFront={bringSelectedElementToFront}
                 sendSelectedElementToBack={sendSelectedElementToBack}
+                translation={translation}
             />
         </Container>
     );

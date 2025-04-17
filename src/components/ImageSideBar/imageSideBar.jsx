@@ -7,15 +7,24 @@ import { ImagesContainer, SingleItem, StyledContainer } from './styled';
 import { Collapsable } from '../Collapsable';
 import theme from '@/theme';
 import { pickImage } from '@/utils';
+import { TEXT_DICTIONARY } from '@/constants/textConstants';
 
 export const ImageSideBar = ({
     defaultImagesList,
     customImagesList,
     onAddCustomImageToList,
     onAddImageToCanvas,
+    translation,
+    uploadImageCallBack,
+    setLoadingUploadImage,
 }) => {
     const renderDefaultContent = (
         <ImagesContainer>
+            {defaultImagesList?.length === 0 && (
+                <StyledText fontSize={10} color={theme.color.gray_535354}>
+                    {translation?.PLEASE_ADD_IMAGES || TEXT_DICTIONARY?.PLEASE_ADD_IMAGES}
+                </StyledText>
+            )}
             {defaultImagesList?.map((item, index) => (
                 <SingleItem
                     key={index}
@@ -34,7 +43,7 @@ export const ImageSideBar = ({
         <ImagesContainer>
             {customImagesList?.length === 0 && (
                 <StyledText fontSize={10} color={theme.color.gray_535354}>
-                    Please Add Images
+                    {translation?.PLEASE_ADD_IMAGES || TEXT_DICTIONARY?.PLEASE_ADD_IMAGES}
                 </StyledText>
             )}
             {customImagesList?.map((item, index) => (
@@ -53,23 +62,36 @@ export const ImageSideBar = ({
     const addImageToList = async () => {
         const file = await pickImage();
         if (!file) return;
-        const reader = new FileReader();
-        reader.onload = () => {
-            onAddCustomImageToList(reader.result);
-        };
-        reader.readAsDataURL(file);
+        if (uploadImageCallBack) {
+            setLoadingUploadImage(true);
+            const imageUrl = await uploadImageCallBack(file);
+            onAddCustomImageToList(imageUrl);
+            setLoadingUploadImage(false);
+        } else {
+            const reader = new FileReader();
+            reader.onload = () => {
+                onAddCustomImageToList(reader.result);
+            };
+            reader.readAsDataURL(file);
+        }
     };
 
     return (
         <StyledContainer>
             <Button
-                text="Add Image"
+                text={translation?.ADD_IMAGE || TEXT_DICTIONARY?.ADD_IMAGE}
                 left={<StyledImage src={IconUpload} />}
                 marginBottom={38}
                 onClick={addImageToList}
             />
-            <Collapsable title="Default" content={renderDefaultContent} />
-            <Collapsable title="Custom Images" content={renderCustomImages} />
+            <Collapsable
+                title={translation?.DEFAULT || TEXT_DICTIONARY?.DEFAULT}
+                content={renderDefaultContent}
+            />
+            <Collapsable
+                title={translation?.CUSTOM_IMAGES || TEXT_DICTIONARY?.CUSTOM_IMAGES}
+                content={renderCustomImages}
+            />
         </StyledContainer>
     );
 };

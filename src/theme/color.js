@@ -29,8 +29,10 @@ export const palette = {
     gray_F0F2F7: '#F0F2F7',
     gray_333: '#333',
     gray_EFEFEF: '#EFEFEF',
+    gray_9DA1A7: '#9DA1A7',
     green_80D965: '#80D965',
     black: '#000000',
+    black_transparent: 'rgba(0,0,0,0.4)',
 };
 
 export const color = {

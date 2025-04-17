@@ -9,15 +9,24 @@ export const Container = styled.div`
     background-image: ${({ selectedTab }) => (selectedTab ? 'none' : `url(${EditorBg})`)};
     position: relative;
     flex-direction: column;
+    overflow: hidden;
 `;
 
 export const InnerContainer = styled.div`
-    display: flex;
-    flex-direction: column;
+    // display: flex;
+    // flex-direction: column;
+    // overflow: auto;
+    // flex: 1;
+    // align-items: center;
+    // justify-content: center;
+    // flex-grow: 1;
+    // background: green;
+    // // min-height: 100px;
+
+    display: grid;
+    place-items: center;
     overflow: auto;
     flex: 1;
-    align-items: center;
-    justify-content: center;
 `;
 
 export const InnerContainerWrapper = styled.div`
@@ -26,6 +35,10 @@ export const InnerContainerWrapper = styled.div`
     overflow: auto;
     flex: 1;
     justify-content: center;
+    min-height: ${({ editorHeight }) => editorHeight || 500}px;
+    height: ${({ editorHeight }) => editorHeight || 500}px;
+    min-width: ${({ editorWidth }) => editorWidth || 400}px;
+    width: ${({ editorWidth }) => editorWidth || 400}px;
 `;
 
 export const Title = styled.p`

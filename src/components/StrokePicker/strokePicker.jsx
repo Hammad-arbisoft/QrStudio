@@ -4,6 +4,7 @@ import { ToolBarButtonWrapper } from '../ToolBarButtonWrapper';
 import { StyledImage, StyledText } from '@/generic/Styled';
 import { IconGrid } from '@/assets';
 import theme from '@/theme';
+import { TEXT_DICTIONARY } from '@/constants/textConstants';
 
 export const StrokePicker = ({
     value,
@@ -14,6 +15,7 @@ export const StrokePicker = ({
     onChangeStrokeWidth,
     onChangeShapeStrokeColor,
     pickerWidth = 100,
+    translation,
 }) => {
     const pickerRef = useRef(null);
     const [strokePickerVisible, setStrokePickerVisible] = useState(false);
@@ -50,7 +52,13 @@ export const StrokePicker = ({
             }}
             ref={pickerRef}
         >
-            <ToolBarButtonWrapper gap={12}>
+            <ToolBarButtonWrapper
+                gap={12}
+                tooltip={
+                    translation?.STROKE_WIDTH_AND_COLOR || TEXT_DICTIONARY?.STROKE_WIDTH_AND_COLOR
+                }
+                tooltipPosition={'bottom'}
+            >
                 <StyledImage src={IconGrid} />
                 <StyledText
                     fontFamily={theme.fonts.secondary}
@@ -107,6 +115,7 @@ export const StrokePicker = ({
                         padding: 10,
                         borderRadius: 5,
                         border: 'solid 1px rgba(0,0,0,0.1)',
+                        zIndex: 9999,
                     }}
                 >
                     <input

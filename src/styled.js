@@ -13,7 +13,7 @@ const Wrapper = styled.div`
 `;
 const InnerWrapper = styled.div`
     height: 100%;
-    width: 85%;
+    width: 80%;
     background-color: ${theme.color.gray_535354};
     display: flex;
     overflow: auto;

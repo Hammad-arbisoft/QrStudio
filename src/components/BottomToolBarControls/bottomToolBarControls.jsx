@@ -14,6 +14,7 @@ import {
     IconSentBack,
     IconUnlock,
 } from '@/assets';
+import { TEXT_DICTIONARY } from '@/constants/textConstants';
 
 export const BottomToolBarControls = ({
     onDeleteSelectedElement,
@@ -22,6 +23,7 @@ export const BottomToolBarControls = ({
     selectedElement,
     bringSelectedElementToFront,
     sendSelectedElementToBack,
+    translation,
 }) => {
     let BringFrontBackTabsData = [
         {
@@ -29,18 +31,24 @@ export const BottomToolBarControls = ({
             onClick: () => {
                 bringSelectedElementToFront && bringSelectedElementToFront();
             },
+            tooltip: translation?.BRING_FORWARD || TEXT_DICTIONARY?.BRING_FORWARD,
         },
         {
             element: <StyledImage src={IconSentBack} />,
             onClick: () => {
                 sendSelectedElementToBack && sendSelectedElementToBack();
             },
+            tooltip: translation?.SEND_BACKWARD || TEXT_DICTIONARY?.SEND_BACKWARD,
         },
     ];
 
     return (
         <ToolBarContainer>
-            <ToolsTabBar disabled={!selectedElement?.draggable} tabsData={BringFrontBackTabsData} />
+            <ToolsTabBar
+                disabled={!selectedElement?.draggable}
+                tabsData={BringFrontBackTabsData}
+                tooltipPosition="top"
+            />
             {/* <ToolBarButtonWrapper
                 paddingRight={14.6}
                 paddingLeft={14.6}
@@ -58,6 +66,12 @@ export const BottomToolBarControls = ({
                 <StyledImage src={IconGroup} />
             </ToolBarButtonWrapper> */}
             <ToolBarButtonWrapper
+                tooltip={
+                    selectedElement?.draggable
+                        ? translation?.LOCK || TEXT_DICTIONARY?.LOCK
+                        : translation?.UNLOCK || TEXT_DICTIONARY?.UNLOCK
+                }
+                tooltipPosition="top"
                 paddingRight={14.6}
                 paddingLeft={14.6}
                 height={36}
@@ -71,6 +85,8 @@ export const BottomToolBarControls = ({
                 />
             </ToolBarButtonWrapper>
             <ToolBarButtonWrapper
+                tooltip={translation?.COPY || TEXT_DICTIONARY?.COPY}
+                tooltipPosition="top"
                 paddingRight={14.6}
                 paddingLeft={14.6}
                 height={36}
@@ -81,6 +97,8 @@ export const BottomToolBarControls = ({
                 <StyledImage src={IconCopy} />
             </ToolBarButtonWrapper>
             <ToolBarButtonWrapper
+                tooltip={translation?.DELETE || TEXT_DICTIONARY?.DELETE}
+                tooltipPosition="top"
                 paddingRight={14.6}
                 paddingLeft={14.6}
                 height={36}

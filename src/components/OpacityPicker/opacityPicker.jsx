@@ -4,6 +4,7 @@ import { ToolBarButtonWrapper } from '../ToolBarButtonWrapper';
 import { StyledImage, StyledText } from '@/generic/Styled';
 import theme from '@/theme';
 import { IconOpacity } from '@/assets';
+import { TEXT_DICTIONARY } from '@/constants/textConstants';
 
 export const OpacityPicker = ({
     value = 1,
@@ -15,6 +16,11 @@ export const OpacityPicker = ({
     leftChild,
     rightChild,
     gap = 12,
+    showLeftChild = true,
+    varient = 'opacity',
+    fontFamily = theme.fonts.secondary,
+    tooltip = TEXT_DICTIONARY?.OPACITY,
+    tooltipPosition = 'bottom',
 }) => {
     const pickerRef = useRef(null);
 
@@ -39,9 +45,11 @@ export const OpacityPicker = ({
                 setOpacityPickerVisible(true);
             }}
         >
-            <ToolBarButtonWrapper gap={gap}>
-                {leftChild ? leftChild : <StyledImage src={IconOpacity} />}
-                <StyledText fontFamily={theme.fonts.secondary}>{value * 100}%</StyledText>
+            <ToolBarButtonWrapper gap={gap} tooltip={tooltip} tooltipPosition={tooltipPosition}>
+                {showLeftChild && (leftChild ? leftChild : <StyledImage src={IconOpacity} />)}
+                <StyledText fontFamily={fontFamily}>
+                    {varient === 'opacity' ? `${value * 100}%` : value}
+                </StyledText>
                 {rightChild && rightChild}
             </ToolBarButtonWrapper>
             {opacityPickerVisible && (
@@ -53,6 +61,7 @@ export const OpacityPicker = ({
                         padding: 10,
                         borderRadius: 5,
                         border: 'solid 1px rgba(0,0,0,0.1)',
+                        zIndex: 9999,
                     }}
                 >
                     <input

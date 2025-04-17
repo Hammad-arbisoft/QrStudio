@@ -9,14 +9,14 @@ export const SideBarItem = styled.div`
     width: 100%;
     height: 100px;
     min-height: 100px;
-    background-color: ${({ isSelected }) =>
-        isSelected ? theme.color.primary : theme.color.secondary};
+    background-color: ${({ isSelected, pillActiveColor }) =>
+        isSelected ? pillActiveColor : theme.color.secondary};
     margin-bottom: 2px;
     cursor: pointer;
     transition: background-color 0.2s ease-in-out;
 
     &:hover {
-        background-color: ${theme.color.primary};
+        background-color: ${({ pillActiveColor }) => pillActiveColor};
     }
 `;
 
