@@ -16,6 +16,8 @@ export const StrokePicker = ({
     onChangeShapeStrokeColor,
     pickerWidth = 100,
     translation,
+    tooltip = translation?.STROKE_WIDTH_AND_COLOR || TEXT_DICTIONARY?.STROKE_WIDTH_AND_COLOR,
+    leftIcon = IconGrid,
 }) => {
     const pickerRef = useRef(null);
     const [strokePickerVisible, setStrokePickerVisible] = useState(false);
@@ -52,14 +54,8 @@ export const StrokePicker = ({
             }}
             ref={pickerRef}
         >
-            <ToolBarButtonWrapper
-                gap={12}
-                tooltip={
-                    translation?.STROKE_WIDTH_AND_COLOR || TEXT_DICTIONARY?.STROKE_WIDTH_AND_COLOR
-                }
-                tooltipPosition={'bottom'}
-            >
-                <StyledImage src={IconGrid} />
+            <ToolBarButtonWrapper gap={12} tooltip={tooltip} tooltipPosition={'bottom'}>
+                <StyledImage src={leftIcon} />
                 <StyledText
                     fontFamily={theme.fonts.secondary}
                     // marginRight={10}

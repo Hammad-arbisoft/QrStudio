@@ -1,5 +1,4 @@
 import { elementTypes, fontFamilies } from '@/constants';
-import { STANDARD_PAPER_SIZES_MM } from '@/constants/layoutConstants';
 
 export const calculatePercentageValue = (value, percentage) => {
     return (value * percentage) / 100;
@@ -153,43 +152,6 @@ export const removeImageProperty = (elements = []) => {
     });
 };
 
-const MM_TO_PX = mm => (mm * 300) / 25.4; // Convert mm to px at 300 DPI
-
-// export const exportStageAsImage = async (stageRef, pageSizeKey, scale = 2) => {
-//     const stage = stageRef?.current;
-//     const canvas = await stage.toCanvas({ pixelRatio: scale });
-
-//     // Convert canvas to data URL
-//     const dataURL = await canvas.toDataURL('image/png');
-//     // if (!stage || !STANDARD_PAPER_SIZES_MM[pageSizeKey]) return null;
-
-//     // const { width: mmWidth, height: mmHeight } = STANDARD_PAPER_SIZES_MM[pageSizeKey];
-
-//     // // Convert dimensions to pixels
-//     // const pxWidth = MM_TO_PX(mmWidth);
-//     // const pxHeight = MM_TO_PX(mmHeight);
-
-//     // // Resize stage to match page dimensions
-//     // const originalSize = {
-//     //     width: stage.width(),
-//     //     height: stage.height(),
-//     // };
-
-//     // stage.width(pxWidth);
-//     // stage.height(pxHeight);
-//     // stage.batchDraw();
-
-//     // // Export canvas as image
-//     // const canvas = stage.toCanvas({ pixelRatio: scale });
-//     // const dataURL = canvas.toDataURL('image/png');
-
-//     // // Optionally: restore original size if needed
-//     // stage.width(originalSize.width);
-//     // stage.height(originalSize.height);
-//     // stage.batchDraw();
-
-//     return dataURL;
-// };
 export const exportStageAsImage = async (stageRef, pageSizeKey, scale = 2) => {
     // eslint-disable-next-line no-async-promise-executor
     return new Promise(async (resolve, reject) => {

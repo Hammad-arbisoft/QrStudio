@@ -1,9 +1,10 @@
 import PropTypes from 'prop-types';
 
 export const propTypes = {
-    key: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+    key: PropTypes.string.isRequired,
     isSelected: PropTypes.bool,
     onClick: PropTypes.func,
-    icon: PropTypes.string.isRequired,
-    text: PropTypes.string,
+    icon: PropTypes.node,
+    text: PropTypes.string.isRequired,
+    pillActiveColor: PropTypes.string,
 };

@@ -1,4 +1,3 @@
-import { Test } from './Test';
 import { SideBar } from './SideBar';
 import { SideBarPill } from './SideBarPill';
 import { Editor } from './Editor';
@@ -35,7 +34,6 @@ import { Tooltip } from './Tooltip';
 import { Overlay } from './Overlay';
 import { LoadingSpinner } from './LoadingSpinner';
 export {
-    Test,
     SideBar,
     SideBarPill,
     Editor,
