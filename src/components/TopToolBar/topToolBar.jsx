@@ -45,6 +45,9 @@ export const TopToolBar = ({
     translation,
     uploadImageCallBack,
     setLoadingUploadImage,
+    cuttingGuideStroke,
+    cuttingGuideStrokeColor,
+    onChangeCuttingGuideProp,
 }) => {
     return (
         <ToolBarWrapper disabled={selectedElement && !selectedElement?.draggable}>
@@ -68,6 +71,9 @@ export const TopToolBar = ({
                     translation={translation}
                     uploadImageCallBack={uploadImageCallBack}
                     setLoadingUploadImage={setLoadingUploadImage}
+                    cuttingGuideStroke={cuttingGuideStroke}
+                    cuttingGuideStrokeColor={cuttingGuideStrokeColor}
+                    onChangeCuttingGuideProp={onChangeCuttingGuideProp}
                 />
             ) : selectedTab === sideBarpillsList?.text ? (
                 <TextToolBar

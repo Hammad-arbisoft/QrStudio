@@ -161,6 +161,8 @@ export const defaultElements = [
         type: elementTypes?.pageSize,
         id: `element${Date.now()}`,
         size: pageSizes?.A4,
+        cuttingGuideStroke: 0,
+        cuttingGuideStrokeColor: theme.color.black,
     },
 ];
 export const basicTextProps = {

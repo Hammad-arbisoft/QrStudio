@@ -1,3 +1,6 @@
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 
-export const propTypes = {};
+export const propTypes = {
+    onAddShape: PropTypes.func,
+    translation: PropTypes.object,
+};

@@ -47,8 +47,6 @@ export const Studio = forwardRef(
         },
         ref,
     ) => {
-        // const defaultImagesList = [IconTools, IconToolsPink];
-        // const QrText = 'https://react.dev/learn/updating-objects-in-state#updating-a-nested-object';
         const stageRef = useRef(null);
         const [selectedTab, setSelectedTab] = useState(null);
         const [loadingFonts, setLoadingFonts] = useState(true);
@@ -196,19 +194,36 @@ export const Studio = forwardRef(
             if (!size) {
                 return;
             }
-            let newElement;
-            let elemClone = [...elements];
+            let elemClone = JSON.parse(JSON.stringify(elements));
             let sizeIndex = elemClone.findIndex(e => e?.type === elementTypes?.pageSize);
             if (sizeIndex > -1) {
-                elemClone.splice(sizeIndex, 1);
+                elemClone[sizeIndex]['size'] = size;
+            } else {
+                let sizeElement = {
+                    type: elementTypes?.pageSize,
+                    id: `element${Date.now()}`,
+                    size: size,
+                };
+                elemClone.push(sizeElement);
             }
-            newElement = {
-                type: elementTypes?.pageSize,
-                id: `element${Date.now()}`,
-                size: size,
-            };
 
-            saveHistory([...elemClone, newElement]);
+            saveHistory(removeImageProperty(elemClone));
+        };
+
+        const onChangeCuttingGuideProp = (type, value) => {
+            let elemClone = JSON.parse(JSON.stringify(elements));
+            let sizeIndex = elemClone.findIndex(e => e?.type === elementTypes?.pageSize);
+            if (sizeIndex > -1) {
+                elemClone[sizeIndex][type] = value;
+            } else {
+                let sizeElement = {
+                    type: elementTypes?.pageSize,
+                    id: `element${Date.now()}`,
+                };
+                sizeElement[type] = value;
+                elemClone.push(sizeElement);
+            }
+            saveHistory(removeImageProperty(elemClone));
         };
 
         const addElement = elem => {
@@ -647,6 +662,7 @@ export const Studio = forwardRef(
                 setDefaultTextProps({ ...copyDefultProps });
             }
         };
+
         return (
             <StudioWrapper>
                 <SideBar
@@ -685,6 +701,17 @@ export const Studio = forwardRef(
                 />
                 <Editor
                     // canvasSize={canvasSize}
+                    cuttingGuideStroke={
+                        elements?.find(e => e?.type === elementTypes?.pageSize)
+                            ?.cuttingGuideStroke || 0
+                    }
+                    cuttingGuideStrokeColor={
+                        elements?.find(e => e?.type === elementTypes?.pageSize)
+                            ?.cuttingGuideStrokeColor || theme?.color.black
+                    }
+                    onChangeCuttingGuideProp={(type, value) => {
+                        onChangeCuttingGuideProp(type, value);
+                    }}
                     editorHeight={editorHeight}
                     editorWidth={editorWidth}
                     selectedTab={selectedTab}

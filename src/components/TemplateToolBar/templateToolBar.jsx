@@ -12,11 +12,12 @@ import {
 } from '@/assets';
 import theme from '@/theme';
 import { ColorBox } from '../ColorBox';
-import { StyledImage, StyledText } from '@/generic/Styled';
+import { StyledImage } from '@/generic/Styled';
 import { pickImage } from '@/utils';
 import { OpacityPicker } from '../OpacityPicker';
 import { pageSizes } from '@/constants/layoutConstants';
 import { TEXT_DICTIONARY } from '@/constants/textConstants';
+import { StrokePicker } from '../StrokePicker';
 
 export const TemplateToolBar = ({
     onSetBackgroundColor,
@@ -29,6 +30,9 @@ export const TemplateToolBar = ({
     translation,
     uploadImageCallBack,
     setLoadingUploadImage,
+    cuttingGuideStroke,
+    cuttingGuideStrokeColor,
+    onChangeCuttingGuideProp,
 }) => {
     const selectBackgroundColor = e => {
         onSetBackgroundColor(e);
@@ -92,15 +96,21 @@ export const TemplateToolBar = ({
                 leftChild={<StyledImage src={IconBackgroundImageOpacity} />}
                 rightChild={<StyledImage src={IconDropDownSmall} />}
             />
-            <ToolBarButtonWrapper
+            <StrokePicker
                 gap={10}
+                value={cuttingGuideStroke}
+                onChangeStrokeWidth={e => {
+                    onChangeCuttingGuideProp('cuttingGuideStroke', e);
+                }}
+                strokeColor={cuttingGuideStrokeColor}
+                onChangeShapeStrokeColor={e => {
+                    onChangeCuttingGuideProp('cuttingGuideStrokeColor', e);
+                }}
                 tooltip={translation?.CUTTING_GUIDE || TEXT_DICTIONARY?.CUTTING_GUIDE}
-                tooltipPosition={'bottom'}
-            >
-                <StyledImage src={IconFrame} />
-                <StyledText fontFamily={theme.fonts.secondary}>10 mm</StyledText>
-                <ColorBox backgroundColor={theme.color.gray_F2F2F2} />
-            </ToolBarButtonWrapper>
+                translation={translation}
+                leftIcon={IconFrame}
+                max={200}
+            />
         </RowContainer>
     );
 };

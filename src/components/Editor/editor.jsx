@@ -79,6 +79,9 @@ export const Editor = ({
     loadingFonts,
     uploadImageCallBack,
     setLoadingUploadImage,
+    cuttingGuideStroke,
+    cuttingGuideStrokeColor,
+    onChangeCuttingGuideProp,
 }) => {
     const transformerRef = useRef(null);
     useEffect(() => {
@@ -411,6 +414,9 @@ export const Editor = ({
                     translation={translation}
                     uploadImageCallBack={uploadImageCallBack}
                     setLoadingUploadImage={setLoadingUploadImage}
+                    cuttingGuideStroke={cuttingGuideStroke}
+                    cuttingGuideStrokeColor={cuttingGuideStrokeColor}
+                    onChangeCuttingGuideProp={onChangeCuttingGuideProp}
                 />
             )}
             <InnerContainer>
@@ -432,14 +438,13 @@ export const Editor = ({
                                     onClick={() => {
                                         onSelectElement(null);
                                     }}
+                                    listening={false}
                                 >
-                                    {canvasBackgroundColor && (
-                                        <Rect
-                                            width={editorWidth}
-                                            height={editorHeight}
-                                            fill={canvasBackgroundColor}
-                                        />
-                                    )}
+                                    <Rect
+                                        width={editorWidth}
+                                        height={editorHeight}
+                                        fill={canvasBackgroundColor || theme.color.white}
+                                    />
                                     {canvasBackgroundImage && (
                                         <CanvasImage
                                             element={{
@@ -500,6 +505,19 @@ export const Editor = ({
                                             />
                                         )}
                                     </Group>
+                                </Layer>
+                                <Layer listening={false}>
+                                    <Rect
+                                        listening={false}
+                                        x={0}
+                                        y={0}
+                                        width={editorWidth}
+                                        height={editorHeight}
+                                        stroke={cuttingGuideStrokeColor}
+                                        strokeWidth={cuttingGuideStroke}
+                                        strokeScaleEnabled={false}
+                                        fill={'transparent'}
+                                    />
                                 </Layer>
                             </Stage>
                         )}
