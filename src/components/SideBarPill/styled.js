@@ -39,6 +39,7 @@ export const SideBarText = styled.p`
     font-family: ${theme.fonts.primary};
     font-weight: ${theme.fontWeights[400]};
     line-height: 109.023%;
+    text-align: center;
 
     ${SideBarItem}:hover & {
         color: ${theme.color.white};

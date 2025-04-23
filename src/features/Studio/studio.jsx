@@ -19,6 +19,7 @@ import {
     pickImage,
     preloadRelevantImages,
     removeImageProperty,
+    validateLocale,
 } from '@/utils';
 import { pageSizes, pageSizesDimensions } from '@/constants/layoutConstants';
 import {
@@ -29,12 +30,31 @@ import {
     sideBarpillsList,
 } from '@/constants';
 import theme from '@/theme';
+/**
+ * @typedef {Object} StudioProps
+ * @property {string} [title]
+ * @property {string} [languageLocale]
+ * @property {Array} [elementsList]
+ * @property {Array} [customImages]
+ * @property {Array} [defaultImages]
+ * @property {boolean} [disableWhiteLabel]
+ * @property {Array} [defaultTemplatesList]
+ * @property {Array} [customTemplatesList]
+ * @property {string} [qrLink]
+ * @property {Object} [styleProps]
+ * @property {string} [defaultText]
+ * @property {Function} onSave
+ * @property {string} [saveButtonText]
+ * @property {'en'|'ru'|'pl'|'de'|'es'|'fr'|'it'} [locale]
+ */
 
+/**
+ * @type {React.ForwardRefExoticComponent<StudioProps & React.RefAttributes<HTMLDivElement>>}
+ */
 export const Studio = forwardRef(
     (
         {
             title = 'untitled',
-            translation = {},
             elementsList = defaultElements,
             uploadImageCallBack,
             customImages = [],
@@ -44,11 +64,16 @@ export const Studio = forwardRef(
             customTemplatesList = [],
             qrLink = 'www.google.com',
             styleProps = {},
+            defaultText,
+            onSave,
+            saveButtonText,
+            locale = 'en',
         },
         ref,
     ) => {
         const stageRef = useRef(null);
         const [selectedTab, setSelectedTab] = useState(null);
+        const [languageLocale, setLanguageLocale] = useState(validateLocale(locale));
         const [loadingFonts, setLoadingFonts] = useState(true);
         const [loadingImages, setLoadingImages] = useState(true);
         const [loading, setLoading] = useState(false);
@@ -86,6 +111,10 @@ export const Studio = forwardRef(
             },
         }));
         useEffect(() => {
+            setLanguageLocale(validateLocale(locale));
+        }, [locale]);
+
+        useEffect(() => {
             setLoadingFonts(true);
             loadAllGoogleFonts()
                 .then(msg => {
@@ -108,6 +137,9 @@ export const Studio = forwardRef(
             LoadImages(elementsList);
             setElements(elementsList);
         }, [...elementsList]);
+        useEffect(() => {
+            setCustomImagesList([...customImages]);
+        }, [customImages]);
 
         const LoadImages = elems => {
             setLoadingImages(true);
@@ -662,13 +694,26 @@ export const Studio = forwardRef(
                 setDefaultTextProps({ ...copyDefultProps });
             }
         };
+        const onSaveProgress = async () => {
+            if (!onSave) {
+                return;
+            }
+            setLoading(true);
+            setSelectedElement(null);
+            setZoomPercentage(100);
+            await new Promise(resolve => setTimeout(resolve, 100));
+            let processedElements = removeImageProperty(elements);
+            const dataURL = await exportStageAsImage(stageRef);
+            setLoading(false);
+            onSave({ elements: processedElements, image: dataURL });
+        };
 
         return (
             <StudioWrapper>
                 <SideBar
                     selectedSideBarItem={selectedTab}
                     onClickPill={onSelectedTab}
-                    translation={translation}
+                    languageLocale={languageLocale}
                     disableWhiteLabel={disableWhiteLabel}
                     styleProps={styleProps}
                 />
@@ -692,12 +737,13 @@ export const Studio = forwardRef(
                     }
                     elements={elements}
                     oncreateNewTemplate={createNewTemplate}
-                    translation={translation}
                     uploadImageCallBack={uploadImageCallBack}
                     setLoadingUploadImage={setLoadingUploadImage}
                     defaultTemplatesList={defaultTemplatesList}
                     customTemplatesList={customTemplatesList}
                     styleProps={styleProps}
+                    defaultText={defaultText}
+                    languageLocale={languageLocale}
                 />
                 <Editor
                     // canvasSize={canvasSize}
@@ -763,11 +809,13 @@ export const Studio = forwardRef(
                     onChangeTextProperty={onChangeTextProperty}
                     onSetPageSize={onSetPageSize}
                     selectedPageSize={selectedPageSize}
-                    translation={translation}
                     loadingImages={loadingImages}
                     loadingFonts={loadingFonts}
                     uploadImageCallBack={uploadImageCallBack}
                     setLoadingUploadImage={setLoadingUploadImage}
+                    onSave={onSave && onSaveProgress}
+                    saveButtonText={saveButtonText}
+                    languageLocale={languageLocale}
                 />
                 {(loadingFonts || loadingImages || loadingUploadImage || loading) && (
                     <Overlay>

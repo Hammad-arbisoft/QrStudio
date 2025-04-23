@@ -8,5 +8,5 @@ export const propTypes = {
     onChangeQrStrokeColor: PropTypes.func,
     onChangeQrOpacity: PropTypes.func,
     selectedElement: PropTypes.object,
-    translation: PropTypes.object,
+    languageLocale: PropTypes.string,
 };

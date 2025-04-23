@@ -27,8 +27,8 @@ import { TEXT_DICTIONARY } from '@/constants/textConstants';
 
 export const Editor = ({
     selectedTab,
-    translation,
-    title = translation?.TITLE || TEXT_DICTIONARY?.TITLE,
+    languageLocale,
+    title = TEXT_DICTIONARY?.[languageLocale]?.TITLE,
     zoomPercentage,
     onChangeZoomPercentage,
     editorHeight,
@@ -82,6 +82,8 @@ export const Editor = ({
     cuttingGuideStroke,
     cuttingGuideStrokeColor,
     onChangeCuttingGuideProp,
+    onSave,
+    saveButtonText,
 }) => {
     const transformerRef = useRef(null);
     useEffect(() => {
@@ -347,8 +349,8 @@ export const Editor = ({
                                 handleTransform(el.id, e.target.attrs);
                             }}
                             onDragMove={handleDragging}
-                            translation={translation}
-                            LogoTitle={translation?.LOGO || TEXT_DICTIONARY?.LOGO}
+                            languageLocale={languageLocale}
+                            LogoTitle={TEXT_DICTIONARY?.[languageLocale]?.LOGO}
                         />
                     );
                 case elementTypes.text:
@@ -371,7 +373,7 @@ export const Editor = ({
                     return null;
             }
         },
-        [elements, selectedElement],
+        [elements, selectedElement, languageLocale],
     );
 
     return (
@@ -411,7 +413,7 @@ export const Editor = ({
                     onChangeTextProperty={onChangeTextProperty}
                     onSetPageSize={onSetPageSize}
                     selectedPageSize={selectedPageSize}
-                    translation={translation}
+                    languageLocale={languageLocale}
                     uploadImageCallBack={uploadImageCallBack}
                     setLoadingUploadImage={setLoadingUploadImage}
                     cuttingGuideStroke={cuttingGuideStroke}
@@ -538,7 +540,9 @@ export const Editor = ({
                 onToggleLockElement={onToggleLockElement}
                 bringSelectedElementToFront={bringSelectedElementToFront}
                 sendSelectedElementToBack={sendSelectedElementToBack}
-                translation={translation}
+                languageLocale={languageLocale}
+                onSave={onSave}
+                saveButtonText={saveButtonText}
             />
         </Container>
     );

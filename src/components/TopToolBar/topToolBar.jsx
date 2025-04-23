@@ -42,7 +42,7 @@ export const TopToolBar = ({
     onChangeTextProperty,
     onSetPageSize,
     selectedPageSize,
-    translation,
+    languageLocale,
     uploadImageCallBack,
     setLoadingUploadImage,
     cuttingGuideStroke,
@@ -68,7 +68,7 @@ export const TopToolBar = ({
                     backgroundImageOpacity={backgroundImageOpacity}
                     onSetPageSize={onSetPageSize}
                     selectedPageSize={selectedPageSize}
-                    translation={translation}
+                    languageLocale={languageLocale}
                     uploadImageCallBack={uploadImageCallBack}
                     setLoadingUploadImage={setLoadingUploadImage}
                     cuttingGuideStroke={cuttingGuideStroke}
@@ -119,7 +119,7 @@ export const TopToolBar = ({
                             : defaultTextProps?.opacity
                     }
                     onChangeTextProperty={onChangeTextProperty}
-                    translation={translation}
+                    languageLocale={languageLocale}
                 />
             ) : selectedTab === sideBarpillsList?.image ? (
                 <ImageToolBar
@@ -130,7 +130,7 @@ export const TopToolBar = ({
                     onChangeImageStrokeColor={onChangeImageStrokeColor}
                     onChangeImageOpacity={onChangeImageOpacity}
                     selectedElement={selectedElement}
-                    translation={translation}
+                    languageLocale={languageLocale}
                 />
             ) : selectedTab === sideBarpillsList?.shape ? (
                 <ShapeToolBar
@@ -143,7 +143,7 @@ export const TopToolBar = ({
                     shapeOpacity={shapeOpacity}
                     onChangeShapeOpacity={onChangeShapeOpacity}
                     selectedElement={selectedElement}
-                    translation={translation}
+                    languageLocale={languageLocale}
                 />
             ) : selectedTab === sideBarpillsList?.qr ? (
                 <QrToolBar
@@ -154,7 +154,7 @@ export const TopToolBar = ({
                     onChangeQrStrokeColor={onChangeQrStrokeColor}
                     onChangeQrOpacity={onChangeQrOpacity}
                     selectedElement={selectedElement}
-                    translation={translation}
+                    languageLocale={languageLocale}
                 />
             ) : null}
         </ToolBarWrapper>

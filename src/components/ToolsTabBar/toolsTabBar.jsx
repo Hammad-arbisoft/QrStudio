@@ -13,7 +13,12 @@ export const ToolsTabBar = ({
 }) => (
     <TabBarContainer disabled={disabled} height={height} marginRight={marginRight}>
         {tabsData.map((item, index) => (
-            <Tooltip key={index} position={tooltipPosition} text={item?.tooltip}>
+            <Tooltip
+                key={index}
+                position={tooltipPosition}
+                text={item?.tooltip}
+                disabled={item?.disabled}
+            >
                 <TabItem
                     key={index}
                     tabPadding={tabPadding}

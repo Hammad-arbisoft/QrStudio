@@ -14,7 +14,7 @@ export const ImageSideBar = ({
     customImagesList,
     onAddCustomImageToList,
     onAddImageToCanvas,
-    translation,
+    languageLocale,
     uploadImageCallBack,
     setLoadingUploadImage,
 }) => {
@@ -22,7 +22,7 @@ export const ImageSideBar = ({
         <ImagesContainer>
             {defaultImagesList?.length === 0 && (
                 <StyledText fontSize={10} color={theme.color.gray_535354}>
-                    {translation?.PLEASE_ADD_IMAGES || TEXT_DICTIONARY?.PLEASE_ADD_IMAGES}
+                    {TEXT_DICTIONARY?.[languageLocale]?.PLEASE_ADD_IMAGES}
                 </StyledText>
             )}
             {defaultImagesList?.map((item, index) => (
@@ -43,7 +43,7 @@ export const ImageSideBar = ({
         <ImagesContainer>
             {customImagesList?.length === 0 && (
                 <StyledText fontSize={10} color={theme.color.gray_535354}>
-                    {translation?.PLEASE_ADD_IMAGES || TEXT_DICTIONARY?.PLEASE_ADD_IMAGES}
+                    {TEXT_DICTIONARY?.[languageLocale]?.PLEASE_ADD_IMAGES}
                 </StyledText>
             )}
             {customImagesList?.map((item, index) => (
@@ -79,17 +79,17 @@ export const ImageSideBar = ({
     return (
         <StyledContainer>
             <Button
-                text={translation?.ADD_IMAGE || TEXT_DICTIONARY?.ADD_IMAGE}
+                text={TEXT_DICTIONARY?.[languageLocale]?.ADD_IMAGE}
                 left={<StyledImage src={IconUpload} />}
                 marginBottom={38}
                 onClick={addImageToList}
             />
             <Collapsable
-                title={translation?.DEFAULT || TEXT_DICTIONARY?.DEFAULT}
+                title={TEXT_DICTIONARY?.[languageLocale]?.DEFAULT}
                 content={renderDefaultContent}
             />
             <Collapsable
-                title={translation?.CUSTOM_IMAGES || TEXT_DICTIONARY?.CUSTOM_IMAGES}
+                title={TEXT_DICTIONARY?.[languageLocale]?.CUSTOM_IMAGES}
                 content={renderCustomImages}
             />
         </StyledContainer>

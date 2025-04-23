@@ -26,24 +26,25 @@ export const HelperSideBar = ({
     qrLogo,
     onAddTextToCanvas,
     oncreateNewTemplate,
-    translation,
     uploadImageCallBack,
     setLoadingUploadImage,
     defaultTemplatesList,
     customTemplatesList,
     styleProps,
+    defaultText,
+    languageLocale,
 }) => (
     <SideBarWrapper visible={selectedSideBarItem && helperSideBarVisible}>
         <SideBarHeader
             onCollapse={onCollapse}
             selectedSideBarItem={selectedSideBarItem}
-            translation={translation}
+            languageLocale={languageLocale}
         />
         <SideBarContainer visible={selectedSideBarItem && helperSideBarVisible}>
             {selectedSideBarItem === sideBarpillsList?.template ? (
                 <TemplateSideBar
                     oncreateNewTemplate={oncreateNewTemplate}
-                    translation={translation}
+                    languageLocale={languageLocale}
                     defaultTemplatesList={defaultTemplatesList}
                     customTemplatesList={customTemplatesList}
                     styleProps={styleProps}
@@ -51,8 +52,9 @@ export const HelperSideBar = ({
             ) : selectedSideBarItem === sideBarpillsList?.text ? (
                 <TextSideBar
                     onAddTextToCanvas={onAddTextToCanvas}
-                    translation={translation}
+                    languageLocale={languageLocale}
                     styleProps={styleProps}
+                    defaultText={defaultText}
                 />
             ) : selectedSideBarItem === sideBarpillsList?.image ? (
                 <ImageSideBar
@@ -60,13 +62,13 @@ export const HelperSideBar = ({
                     customImagesList={customImagesList}
                     onAddCustomImageToList={onAddCustomImageToList}
                     onAddImageToCanvas={onAddImageToCanvas}
-                    translation={translation}
+                    languageLocale={languageLocale}
                     uploadImageCallBack={uploadImageCallBack}
                     setLoadingUploadImage={setLoadingUploadImage}
                     styleProps={styleProps}
                 />
             ) : selectedSideBarItem === sideBarpillsList?.shape ? (
-                <ShapeSideBar onAddShape={onAddShape} translation={translation} />
+                <ShapeSideBar onAddShape={onAddShape} languageLocale={languageLocale} />
             ) : selectedSideBarItem === sideBarpillsList?.qr ? (
                 <QrSideBar
                     toggleQr={toggleQr}
@@ -75,11 +77,11 @@ export const HelperSideBar = ({
                     addQrLogo={addQrLogo}
                     elements={elements}
                     qrLogo={qrLogo}
-                    translation={translation}
+                    languageLocale={languageLocale}
                     styleProps={styleProps}
                 />
             ) : selectedSideBarItem === sideBarpillsList?.whiteLabel ? (
-                <WhiteLabelSideBar translation={translation} styleProps={styleProps} />
+                <WhiteLabelSideBar languageLocale={languageLocale} styleProps={styleProps} />
             ) : null}
         </SideBarContainer>
     </SideBarWrapper>

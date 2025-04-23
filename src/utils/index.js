@@ -1,4 +1,5 @@
 import { elementTypes, fontFamilies } from '@/constants';
+import { SUPPPORTED_LOCALES } from '@/constants/textConstants';
 
 export const calculatePercentageValue = (value, percentage) => {
     return (value * percentage) / 100;
@@ -173,4 +174,12 @@ export const exportStageAsImage = async (stageRef, pageSizeKey, scale = 2) => {
             reject(error);
         }
     });
+};
+
+export const validateLocale = locale => {
+    if (SUPPPORTED_LOCALES.includes(locale)) {
+        return locale;
+    } else {
+        return 'en';
+    }
 };

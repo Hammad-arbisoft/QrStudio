@@ -17,7 +17,7 @@ export const propTypes = {
     qrLogo: PropTypes.string,
     onAddTextToCanvas: PropTypes.func,
     oncreateNewTemplate: PropTypes.func,
-    translation: PropTypes.object,
+    languageLocale: PropTypes.string,
     uploadImageCallBack: PropTypes.func,
     setLoadingUploadImage: PropTypes.func,
     defaultTemplatesList: PropTypes.array,

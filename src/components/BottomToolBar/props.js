@@ -14,5 +14,5 @@ export const propTypes = {
     onToggleLockElement: PropTypes.func,
     bringSelectedElementToFront: PropTypes.func,
     sendSelectedElementToBack: PropTypes.func,
-    translation: PropTypes.object,
+    languageLocale: PropTypes.string,
 };

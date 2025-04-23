@@ -359,7 +359,7 @@ export const customTemplates = [
     },
 ];
 
-export const fontFamilies = [
+export const normalFonts = [
     'Open Sans',
     'Roboto',
     'Lato',
@@ -377,15 +377,19 @@ export const fontFamilies = [
     'DM Sans',
     'PT Sans',
     'Quicksand',
+    'Baloo 2',
+    'Amatic SC',
     'Plus Jakarta Sans',
     'Rubik',
     'Oswald',
+    'Kalam',
+    'Caveat',
+];
+export const funkyFonts = [
     'Open Sans Condensed',
-    // Funky fonts
     'Lobster',
     'Pacifico',
     'Bangers',
-    'Caveat',
     'Shadows Into Light',
     'Indie Flower',
     'Fredericka the Great',
@@ -393,19 +397,18 @@ export const fontFamilies = [
     'Coming Soon',
     'Gloria Hallelujah',
     'Luckiest Guy',
-    'Amatic SC',
     'Patrick Hand',
     'Rock Salt',
     'Architects Daughter',
-    'Baloo 2',
     'Boogaloo',
     'Concert One',
     'Courgette',
     'Great Vibes',
     'Handlee',
-    'Kalam',
     'Mansalva',
     'Satisfy',
     'Special Elite',
     'Titan One',
 ];
+
+export const fontFamilies = [...normalFonts, ...funkyFonts];

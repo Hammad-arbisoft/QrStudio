@@ -16,6 +16,7 @@ export const Overlay = ({ children, backgroundColor = theme.color.black_transpar
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
+            zIndex: 99999,
         }}
     >
         {children}

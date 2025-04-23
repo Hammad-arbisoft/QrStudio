@@ -10,5 +10,5 @@ export const propTypes = {
     textAlign: PropTypes.string,
     textOpacity: PropTypes.number,
     onChangeTextProperty: PropTypes.func.isRequired,
-    translation: PropTypes.object,
+    languageLocale: PropTypes.string,
 };

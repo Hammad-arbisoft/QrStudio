@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 
 export const propTypes = {
     title: PropTypes.string,
-    translation: PropTypes.object,
+    languageLocale: PropTypes.string,
     elementsList: PropTypes.array,
     customImages: PropTypes.array,
     defaultImages: PropTypes.array,
@@ -11,4 +11,8 @@ export const propTypes = {
     customTemplatesList: PropTypes.array,
     qrLink: PropTypes.string,
     styleProps: PropTypes.object,
+    defaultText: PropTypes.string,
+    onSave: PropTypes.func.isRequired,
+    saveButtonText: PropTypes.string,
+    locale: PropTypes.oneOf(['en', 'ru', 'pl', 'de', 'es', 'fr', 'it']),
 };

@@ -207,6 +207,30 @@ const App = () => {
             }, 1000);
         });
     };
+    const onSave = async data => {
+        console.error({ data });
+        let a = data?.image;
+        const byteString = atob(a.split(',')[1]);
+        const mimeString = a.split(',')[0].split(':')[1].split(';')[0];
+        const ab = new ArrayBuffer(byteString.length);
+        const ia = new Uint8Array(ab);
+        for (let i = 0; i < byteString.length; i++) {
+            ia[i] = byteString.charCodeAt(i);
+        }
+        const blob = new Blob([ab], { type: mimeString });
+        const url = URL.createObjectURL(blob);
+        // console.error({ url });
+        window.open(url);
+    };
+    // const supportedLocales = [
+    //     'en',  // English
+    //     'ru',  // Russian
+    //     'pl',  // Polish
+    //     'de',  // German
+    //     'es',  // Spanish
+    //     'fr',  // French
+    //     'it'   // Italian
+    //   ];
     return (
         <Wrapper>
             <div style={{ display: 'flex' }}>
@@ -230,8 +254,12 @@ const App = () => {
                             // primaryColor: 'green',
                         }
                     }
+                    defaultText={'hellow this is default Text'}
                     // qrLink={'http://localhost:5173/'}
                     // uploadImageCallBack={uploadImageAndReturnUrl}
+                    onSave={onSave}
+                    // saveButtonText={'Save Progress'}
+                    locale={'fr'}
                 />
             </InnerWrapper>
         </Wrapper>

@@ -8,5 +8,5 @@ export const propTypes = {
     onChangeImageStrokeColor: PropTypes.func,
     onChangeImageOpacity: PropTypes.func,
     selectedElement: PropTypes.object,
-    translation: PropTypes.object,
+    languageLocale: PropTypes.string,
 };

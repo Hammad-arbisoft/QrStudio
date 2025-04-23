@@ -15,7 +15,7 @@ export const QrToolBar = ({
     onChangeQrStrokeColor,
     onChangeQrOpacity,
     selectedElement,
-    translation,
+    languageLocale,
 }) => {
     return (
         <RowContainer>
@@ -32,7 +32,7 @@ export const QrToolBar = ({
                         : qrStrokeColor
                 }
                 onChangeShapeStrokeColor={onChangeQrStrokeColor}
-                translation={translation}
+                languageLocale={languageLocale}
             />
             <OpacityPicker
                 value={
@@ -41,7 +41,8 @@ export const QrToolBar = ({
                         : qrOpacity
                 }
                 onChangeOpacity={onChangeQrOpacity}
-                tooltip={translation?.OPACITY || TEXT_DICTIONARY?.OPACITY}
+                tooltip={TEXT_DICTIONARY?.[languageLocale]?.OPACITY}
+                languageLocale={languageLocale}
             />
         </RowContainer>
     );

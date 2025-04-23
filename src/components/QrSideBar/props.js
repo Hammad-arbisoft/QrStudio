@@ -7,5 +7,5 @@ export const propTypes = {
     addQrLogo: PropTypes.func,
     elements: PropTypes.array.isRequired,
     qrLogo: PropTypes.object,
-    translation: PropTypes.object,
+    languageLocale: PropTypes.string,
 };

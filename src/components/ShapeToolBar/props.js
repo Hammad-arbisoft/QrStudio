@@ -10,5 +10,5 @@ export const propTypes = {
     onChangeShapeFill: PropTypes.func,
     onChangeShapeOpacity: PropTypes.func,
     selectedElement: PropTypes.object,
-    translation: PropTypes.object,
+    languageLocale: PropTypes.string,
 };

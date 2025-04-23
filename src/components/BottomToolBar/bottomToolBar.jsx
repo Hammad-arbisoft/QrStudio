@@ -19,7 +19,9 @@ export const BottomToolBar = ({
     onToggleLockElement,
     bringSelectedElementToFront,
     sendSelectedElementToBack,
-    translation,
+    languageLocale,
+    onSave,
+    saveButtonText,
 }) => {
     const onZoomIn = () => {
         if (zoomPercentage < 300) {
@@ -40,7 +42,7 @@ export const BottomToolBar = ({
                         onRedo={onRedo}
                         disableUndo={disableUndo}
                         disableRedo={disableRedo}
-                        translation={translation}
+                        languageLocale={languageLocale}
                     />
                     {selectedElement ? (
                         <BottomToolBarControls
@@ -50,7 +52,7 @@ export const BottomToolBar = ({
                             selectedElement={selectedElement}
                             bringSelectedElementToFront={bringSelectedElementToFront}
                             sendSelectedElementToBack={sendSelectedElementToBack}
-                            translation={translation}
+                            languageLocale={languageLocale}
                         />
                     ) : (
                         <div style={{ height: 63 }} />
@@ -61,7 +63,9 @@ export const BottomToolBar = ({
                 zoomLevel={zoomPercentage}
                 onZoomIn={onZoomIn}
                 onZoomOut={onZoomOut}
-                translation={translation}
+                languageLocale={languageLocale}
+                onSave={onSave}
+                saveButtonText={saveButtonText}
             />
         </BottomToolbarWrapper>
     );

@@ -1,7 +1,12 @@
 import styled from 'styled-components';
 import theme from '@/theme';
 
-export const Container = styled.div``;
+export const Container = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+`;
 
 export const ZoomControlWrapper = styled.div`
     border: 1px solid ${theme.color.gray_200};
