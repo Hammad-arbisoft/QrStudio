@@ -12,12 +12,14 @@ export const Button = ({
     marginBottom = 0,
     marginTop = 0,
     onClick,
+    style,
 }) => (
     <StyledButton
         varient={varient}
         marginTop={marginTop}
         marginBottom={marginBottom}
         onClick={onClick}
+        style={style}
     >
         {left && <IconWrapper>{left}</IconWrapper>}
         <StyledText

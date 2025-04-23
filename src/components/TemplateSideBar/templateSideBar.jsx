@@ -10,7 +10,7 @@ import { TEXT_DICTIONARY } from '@/constants/textConstants';
 
 export const TemplateSideBar = ({
     oncreateNewTemplate,
-    translation,
+    languageLocale,
     defaultTemplatesList,
     customTemplatesList,
 }) => {
@@ -85,17 +85,17 @@ export const TemplateSideBar = ({
     return (
         <StyledContainer>
             <Button
-                text={translation?.NEW_TEMPLATE || TEXT_DICTIONARY?.NEW_TEMPLATE}
+                text={TEXT_DICTIONARY?.[languageLocale]?.NEW_TEMPLATE}
                 left={<StyledImage src={IconAdd} />}
                 marginBottom={38}
                 onClick={() => oncreateNewTemplate()}
             />
             <Collapsable
-                title={translation?.DEFAULT || TEXT_DICTIONARY?.DEFAULT}
+                title={TEXT_DICTIONARY?.[languageLocale]?.DEFAULT}
                 content={renderDefaultContent}
             />
             <Collapsable
-                title={translation?.CUSTOM_TEMPLATES || TEXT_DICTIONARY?.CUSTOM_TEMPLATES}
+                title={TEXT_DICTIONARY?.[languageLocale]?.CUSTOM_TEMPLATES}
                 content={renderCustomContent}
             />
         </StyledContainer>

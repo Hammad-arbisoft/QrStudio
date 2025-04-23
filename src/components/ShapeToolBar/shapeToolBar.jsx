@@ -20,13 +20,13 @@ export const ShapeToolBar = ({
     onChangeShapeFill,
     onChangeShapeOpacity,
     selectedElement,
-    translation,
+    languageLocale,
 }) => {
     return (
         <RowContainer>
             <ToolBarButtonWrapper
                 gap={11}
-                tooltip={translation?.SHAPE_FILL || TEXT_DICTIONARY?.SHAPE_FILL}
+                tooltip={TEXT_DICTIONARY?.[languageLocale]?.SHAPE_FILL}
                 tooltipPosition="bottom"
             >
                 <StyledImage src={IconBackgroundColor} />
@@ -48,12 +48,13 @@ export const ShapeToolBar = ({
                     isElementShape(selectedElement) ? selectedElement?.stroke : shapeStrokeColor
                 }
                 onChangeShapeStrokeColor={onChangeShapeStrokeColor}
-                translation={translation}
+                languageLocale={languageLocale}
             />
             <OpacityPicker
-                tooltip={translation?.SHAPE_OPACITY || TEXT_DICTIONARY?.SHAPE_OPACITY}
+                tooltip={TEXT_DICTIONARY?.[languageLocale]?.SHAPE_OPACITY}
                 value={isElementShape(selectedElement) ? selectedElement?.opacity : shapeOpacity}
                 onChangeOpacity={onChangeShapeOpacity}
+                languageLocale={languageLocale}
             />
         </RowContainer>
     );

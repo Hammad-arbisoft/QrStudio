@@ -9,7 +9,7 @@ import { IconGraph } from '@/assets';
 import { ButtonVarients } from '@/constants';
 import { TEXT_DICTIONARY } from '@/constants/textConstants';
 
-export const WhiteLabelSideBar = ({ translation }) => (
+export const WhiteLabelSideBar = ({ languageLocale }) => (
     <StyledContainer>
         <StyledText
             color={theme.color.gray_646464}
@@ -17,9 +17,9 @@ export const WhiteLabelSideBar = ({ translation }) => (
             marginRight={6}
             marginBottom={17}
         >
-            {translation?.PREMIUM_SETTINGS || TEXT_DICTIONARY?.PREMIUM_SETTINGS}
+            {TEXT_DICTIONARY?.[languageLocale]?.PREMIUM_SETTINGS}
         </StyledText>
-        <RadioSection text={TEXT_DICTIONARY?.SHOW_BRANDING} />
+        <RadioSection text={TEXT_DICTIONARY?.[languageLocale]?.SHOW_BRANDING} />
 
         <StyledText
             fontSize={12}
@@ -28,11 +28,10 @@ export const WhiteLabelSideBar = ({ translation }) => (
             marginBottom={30}
             lineHeight={'20px'}
         >
-            {translation?.UNLOCK_PREMIUM_FEATURE_PARAGRAPH ||
-                TEXT_DICTIONARY?.UNLOCK_PREMIUM_FEATURE_PARAGRAPH}
+            {TEXT_DICTIONARY?.[languageLocale]?.UNLOCK_PREMIUM_FEATURE_PARAGRAPH}
         </StyledText>
         <Button
-            text={translation?.UPGRADE_PLAN || TEXT_DICTIONARY?.UPGRADE_PLAN}
+            text={TEXT_DICTIONARY?.[languageLocale]?.UPGRADE_PLAN}
             left={<StyledImage src={IconGraph} />}
             varient={ButtonVarients.primary}
         />

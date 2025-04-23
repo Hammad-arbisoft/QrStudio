@@ -8,7 +8,7 @@ export const propTypes = {
     onChangeBackgroundImageOpacity: PropTypes.func.isRequired,
     onSetPageSize: PropTypes.func.isRequired,
     selectedPageSize: PropTypes.object.isRequired,
-    translation: PropTypes.object,
+    languageLocale: PropTypes.string,
     uploadImageCallBack: PropTypes.func.isRequired,
     setLoadingUploadImage: PropTypes.func.isRequired,
     cuttingGuideStroke: PropTypes.number.isRequired,

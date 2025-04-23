@@ -4,7 +4,6 @@ import { ToolBarButtonWrapper } from '../ToolBarButtonWrapper';
 import { IconDropDown } from '@/assets';
 import { DropDownItem, DropDownList, DropDownOption, IconWrapper } from './styled';
 import theme from '@/theme';
-import { TEXT_DICTIONARY } from '@/constants/textConstants';
 
 export const DropDown = ({
     left,
@@ -16,7 +15,7 @@ export const DropDown = ({
     list,
     onSelect,
     fontPicker,
-    tooltip = TEXT_DICTIONARY?.DROPDOWN,
+    tooltip,
 }) => {
     const [isOpen, setIsOpen] = useState(false);
     const dropdownRef = useRef(null);

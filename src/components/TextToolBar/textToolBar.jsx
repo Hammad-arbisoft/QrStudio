@@ -20,7 +20,7 @@ import { StyledImage } from '@/generic/Styled';
 import { ToolsTabBar } from '../ToolsTabBar';
 import { topTabBarpadding } from '@/constants/layoutConstants';
 import { OpacityPicker } from '../OpacityPicker';
-import { fontFamilies } from '@/constants';
+import { fontFamilies, funkyFonts } from '@/constants';
 import { TEXT_DICTIONARY } from '@/constants/textConstants';
 
 export const TextToolBar = ({
@@ -33,7 +33,7 @@ export const TextToolBar = ({
     textAlign,
     textOpacity,
     onChangeTextProperty,
-    translation,
+    languageLocale,
 }) => {
     let TextTabsData = [
         {
@@ -46,7 +46,8 @@ export const TextToolBar = ({
                     onChangeTextProperty('fontWeight', theme?.fontWeights[700]);
                 }
             },
-            tooltip: translation?.BOLD || TEXT_DICTIONARY?.BOLD,
+            tooltip: TEXT_DICTIONARY?.[languageLocale]?.BOLD,
+            disabled: funkyFonts.includes(fontFamily) ? true : false,
         },
         {
             element: <StyledImage src={IconTextItalic} />,
@@ -58,7 +59,8 @@ export const TextToolBar = ({
                     onChangeTextProperty('fontStyle', 'italic');
                 }
             },
-            tooltip: translation?.ITALIC || TEXT_DICTIONARY?.ITALIC,
+            tooltip: TEXT_DICTIONARY?.[languageLocale]?.ITALIC,
+            disabled: funkyFonts.includes(fontFamily) ? true : false,
         },
         {
             element: <StyledImage src={IconLineThrough} />,
@@ -78,7 +80,7 @@ export const TextToolBar = ({
                     );
                 }
             },
-            tooltip: translation?.LINE_THROUGH || TEXT_DICTIONARY?.LINE_THROUGH,
+            tooltip: TEXT_DICTIONARY?.[languageLocale]?.LINE_THROUGH,
         },
         {
             element: <StyledImage src={IconTextUnderLine} />,
@@ -98,7 +100,7 @@ export const TextToolBar = ({
                     );
                 }
             },
-            tooltip: translation?.UNDERLINE || TEXT_DICTIONARY?.UNDERLINE,
+            tooltip: TEXT_DICTIONARY?.[languageLocale]?.UNDERLINE,
         },
     ];
 
@@ -111,7 +113,7 @@ export const TextToolBar = ({
                     onChangeTextProperty('textAlign', 'left');
                 }
             },
-            tooltip: translation?.LEFT_ALIGN || TEXT_DICTIONARY?.LEFT_ALIGN,
+            tooltip: TEXT_DICTIONARY?.[languageLocale]?.LEFT_ALIGN,
         },
         {
             element: <StyledImage src={IconAlignCenter} />,
@@ -121,7 +123,7 @@ export const TextToolBar = ({
                     onChangeTextProperty('textAlign', 'center');
                 }
             },
-            tooltip: translation?.CENTER_ALIGN || TEXT_DICTIONARY?.CENTER_ALIGN,
+            tooltip: TEXT_DICTIONARY?.[languageLocale]?.CENTER_ALIGN,
         },
         {
             element: <StyledImage src={IconAlignRight} />,
@@ -131,7 +133,7 @@ export const TextToolBar = ({
                     onChangeTextProperty('textAlign', 'right');
                 }
             },
-            tooltip: translation?.RIGHT_ALIGN || TEXT_DICTIONARY?.RIGHT_ALIGN,
+            tooltip: TEXT_DICTIONARY?.[languageLocale]?.RIGHT_ALIGN,
         },
     ];
 
@@ -145,7 +147,7 @@ export const TextToolBar = ({
                 onSelect={e => {
                     onChangeTextProperty('fontFamily', e);
                 }}
-                tooltip={translation?.FONT_FAMILY || TEXT_DICTIONARY?.FONT_FAMILY}
+                tooltip={TEXT_DICTIONARY?.[languageLocale]?.FONT_FAMILY}
                 tooltipPosition={'bottom'}
             />
             <OpacityPicker
@@ -159,12 +161,12 @@ export const TextToolBar = ({
                 onChangeOpacity={e => onChangeTextProperty('fontSize', e)}
                 showLeftChild={false}
                 rightChild={<StyledImage src={IconDropDown} marginLeft={10} />}
-                tooltip={translation?.TEXT_SIZE || TEXT_DICTIONARY?.TEXT_SIZE}
+                tooltip={TEXT_DICTIONARY?.[languageLocale]?.TEXT_SIZE}
                 tooltipPosition={'bottom'}
             />
             <ToolBarButtonWrapper
                 gap={12}
-                tooltip={translation?.TEXT_COLOR || TEXT_DICTIONARY?.TEXT_COLOR}
+                tooltip={TEXT_DICTIONARY?.[languageLocale]?.TEXT_COLOR}
                 tooltipPosition={'bottom'}
             >
                 <StyledImage src={IconTextSmall} />
@@ -191,7 +193,7 @@ export const TextToolBar = ({
             <OpacityPicker
                 value={textOpacity}
                 onChangeOpacity={e => onChangeTextProperty('opacity', e)}
-                tooltip={translation?.TEXT_OPACITY || TEXT_DICTIONARY?.TEXT_OPACITY}
+                tooltip={TEXT_DICTIONARY?.[languageLocale]?.TEXT_OPACITY}
                 tooltipPosition={'bottom'}
             />
         </RowContainer>

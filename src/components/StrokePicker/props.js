@@ -9,7 +9,7 @@ export const propTypes = {
     onChangeStrokeWidth: PropTypes.func.isRequired,
     onChangeShapeStrokeColor: PropTypes.func.isRequired,
     pickerWidth: PropTypes.number,
-    translation: PropTypes.object,
+    languageLocale: PropTypes.string,
     tooltip: PropTypes.string,
     leftIcon: PropTypes.elementType,
 };

@@ -14,6 +14,7 @@ import {
     IconSentBack,
     IconUnlock,
 } from '@/assets';
+import { elementTypes } from '@/constants';
 import { TEXT_DICTIONARY } from '@/constants/textConstants';
 
 export const BottomToolBarControls = ({
@@ -23,7 +24,7 @@ export const BottomToolBarControls = ({
     selectedElement,
     bringSelectedElementToFront,
     sendSelectedElementToBack,
-    translation,
+    languageLocale,
 }) => {
     let BringFrontBackTabsData = [
         {
@@ -31,14 +32,14 @@ export const BottomToolBarControls = ({
             onClick: () => {
                 bringSelectedElementToFront && bringSelectedElementToFront();
             },
-            tooltip: translation?.BRING_FORWARD || TEXT_DICTIONARY?.BRING_FORWARD,
+            tooltip: TEXT_DICTIONARY?.[languageLocale]?.BRING_FORWARD,
         },
         {
             element: <StyledImage src={IconSentBack} />,
             onClick: () => {
                 sendSelectedElementToBack && sendSelectedElementToBack();
             },
-            tooltip: translation?.SEND_BACKWARD || TEXT_DICTIONARY?.SEND_BACKWARD,
+            tooltip: TEXT_DICTIONARY?.[languageLocale]?.SEND_BACKWARD,
         },
     ];
 
@@ -68,8 +69,8 @@ export const BottomToolBarControls = ({
             <ToolBarButtonWrapper
                 tooltip={
                     selectedElement?.draggable
-                        ? translation?.LOCK || TEXT_DICTIONARY?.LOCK
-                        : translation?.UNLOCK || TEXT_DICTIONARY?.UNLOCK
+                        ? TEXT_DICTIONARY?.[languageLocale]?.LOCK
+                        : TEXT_DICTIONARY?.[languageLocale]?.UNLOCK
                 }
                 tooltipPosition="top"
                 paddingRight={14.6}
@@ -84,20 +85,22 @@ export const BottomToolBarControls = ({
                     width={20}
                 />
             </ToolBarButtonWrapper>
+            {selectedElement?.type !== elementTypes?.qr && (
+                <ToolBarButtonWrapper
+                    tooltip={TEXT_DICTIONARY?.[languageLocale]?.COPY}
+                    tooltipPosition="top"
+                    paddingRight={14.6}
+                    paddingLeft={14.6}
+                    height={36}
+                    marginRight={0}
+                    onClick={onCopySelectedElement}
+                    disabled={!selectedElement?.draggable}
+                >
+                    <StyledImage src={IconCopy} />
+                </ToolBarButtonWrapper>
+            )}
             <ToolBarButtonWrapper
-                tooltip={translation?.COPY || TEXT_DICTIONARY?.COPY}
-                tooltipPosition="top"
-                paddingRight={14.6}
-                paddingLeft={14.6}
-                height={36}
-                marginRight={0}
-                onClick={onCopySelectedElement}
-                disabled={!selectedElement?.draggable}
-            >
-                <StyledImage src={IconCopy} />
-            </ToolBarButtonWrapper>
-            <ToolBarButtonWrapper
-                tooltip={translation?.DELETE || TEXT_DICTIONARY?.DELETE}
+                tooltip={TEXT_DICTIONARY?.[languageLocale]?.DELETE}
                 tooltipPosition="top"
                 paddingRight={14.6}
                 paddingLeft={14.6}

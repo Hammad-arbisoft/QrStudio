@@ -5,19 +5,37 @@ import { StyledImage } from '@/generic/Styled';
 import { IconZoomIn, IconZoomOut } from '@/assets';
 import { Tooltip } from '../Tooltip';
 import { TEXT_DICTIONARY } from '@/constants/textConstants';
+import { Button } from '../Button';
+import { ButtonVarients } from '@/constants';
 
-export const ZoomControls = ({ zoomLevel = 60, onZoomIn, onZoomOut, translation }) => (
+export const ZoomControls = ({
+    zoomLevel = 60,
+    onZoomIn,
+    onZoomOut,
+    languageLocale,
+    onSave,
+    saveButtonText,
+}) => (
     <Container>
-        <Tooltip text={translation?.ZOOM_IN_OUT || TEXT_DICTIONARY?.ZOOM_IN_OUT} position="top">
+        {onSave && (
+            <Button
+                text={saveButtonText || TEXT_DICTIONARY?.[languageLocale]?.SAVE}
+                varient={ButtonVarients?.primary}
+                marginBottom={10}
+                style={{ position: 'absolute', top: -50, zIndex: 400, right: 0 }}
+                onClick={onSave}
+            />
+        )}
+        <Tooltip text={TEXT_DICTIONARY?.[languageLocale]?.ZOOM_IN_OUT} position="top">
             <ZoomControlWrapper>
-                <ZoomButton onClick={onZoomIn}>
-                    <StyledImage src={IconZoomIn} />
+                <ZoomButton onClick={onZoomOut}>
+                    <StyledImage src={IconZoomOut} />
                 </ZoomButton>
                 <Divider />
                 <ZoomPercentage>{zoomLevel}%</ZoomPercentage>
                 <Divider />
-                <ZoomButton onClick={onZoomOut}>
-                    <StyledImage src={IconZoomOut} />
+                <ZoomButton onClick={onZoomIn}>
+                    <StyledImage src={IconZoomIn} />
                 </ZoomButton>
             </ZoomControlWrapper>
         </Tooltip>

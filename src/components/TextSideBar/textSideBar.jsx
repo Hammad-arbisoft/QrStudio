@@ -8,20 +8,25 @@ import { Collapsable } from '../Collapsable';
 import { textList } from '@/constants';
 import { TEXT_DICTIONARY } from '@/constants/textConstants';
 
-export const TextSideBar = ({ onAddTextToCanvas, translation }) => {
+export const TextSideBar = ({ onAddTextToCanvas, languageLocale, defaultText }) => {
     const renderTextListContent = () => {
         return (
             <Container>
                 {textList?.map((item, index) => {
                     return (
-                        <ItemWrapper key={index} onClick={() => onAddTextToCanvas(item)}>
+                        <ItemWrapper
+                            key={index}
+                            onClick={() => {
+                                onAddTextToCanvas({ ...item, text: defaultText || item?.text });
+                            }}
+                        >
                             <StyledText
                                 color={item?.color}
                                 fontFamily={item?.fontFamily}
                                 fontWeight={item?.fontWeight}
                                 fontSize={item?.fontSize}
                             >
-                                {item?.text}
+                                {defaultText || item?.text}
                             </StyledText>
                         </ItemWrapper>
                     );
@@ -32,13 +37,13 @@ export const TextSideBar = ({ onAddTextToCanvas, translation }) => {
     return (
         <StyledContainer>
             <Button
-                text={translation?.ADD_TEXT || TEXT_DICTIONARY?.ADD_TEXT}
+                text={TEXT_DICTIONARY?.[languageLocale]?.ADD_TEXT}
                 left={<StyledImage src={IconAddText} />}
                 marginBottom={38}
                 onClick={() => onAddTextToCanvas(null)}
             />
             <Collapsable
-                title={translation?.HELP_TEXT || TEXT_DICTIONARY?.HELP_TEXT}
+                title={TEXT_DICTIONARY?.[languageLocale]?.HELP_TEXT}
                 content={renderTextListContent()}
                 left={<StyledImage src={IconInfo} />}
             />

@@ -27,7 +27,7 @@ export const TemplateToolBar = ({
     onChangeBackgroundImageOpacity,
     onSetPageSize,
     selectedPageSize,
-    translation,
+    languageLocale,
     uploadImageCallBack,
     setLoadingUploadImage,
     cuttingGuideStroke,
@@ -63,11 +63,11 @@ export const TemplateToolBar = ({
                 onSelect={e => {
                     onSetPageSize && onSetPageSize(e);
                 }}
-                tooltip={translation?.PAGE_SIZE || TEXT_DICTIONARY?.PAGE_SIZE}
+                tooltip={TEXT_DICTIONARY?.[languageLocale]?.PAGE_SIZE}
             />
             <ToolBarButtonWrapper
                 gap={11}
-                tooltip={translation?.BACKGROUND_COLOR || TEXT_DICTIONARY?.BACKGROUND_COLOR}
+                tooltip={TEXT_DICTIONARY?.[languageLocale]?.BACKGROUND_COLOR}
                 tooltipPosition={'bottom'}
             >
                 <StyledImage src={IconBackgroundColor} />
@@ -80,16 +80,13 @@ export const TemplateToolBar = ({
                 paddingRight={17}
                 paddingLeft={17}
                 onClick={handleBackgroundUpload}
-                tooltip={translation?.BACKGROUND_IMAGE || TEXT_DICTIONARY?.BACKGROUND_IMAGE}
+                tooltip={TEXT_DICTIONARY?.[languageLocale]?.BACKGROUND_IMAGE}
                 tooltipPosition={'bottom'}
             >
                 <StyledImage src={IconBackgroundImage} />
             </ToolBarButtonWrapper>
             <OpacityPicker
-                tooltip={
-                    translation?.BACKGROUND_IMAGE_OPACITY ||
-                    TEXT_DICTIONARY?.BACKGROUND_IMAGE_OPACITY
-                }
+                tooltip={TEXT_DICTIONARY?.[languageLocale]?.BACKGROUND_IMAGE_OPACITY}
                 gap={10}
                 value={backgroundImageOpacity}
                 onChangeOpacity={onChangeBackgroundImageOpacity}
@@ -106,8 +103,8 @@ export const TemplateToolBar = ({
                 onChangeShapeStrokeColor={e => {
                     onChangeCuttingGuideProp('cuttingGuideStrokeColor', e);
                 }}
-                tooltip={translation?.CUTTING_GUIDE || TEXT_DICTIONARY?.CUTTING_GUIDE}
-                translation={translation}
+                tooltip={TEXT_DICTIONARY?.[languageLocale]?.CUTTING_GUIDE}
+                languageLocale={languageLocale}
                 leftIcon={IconFrame}
                 max={200}
             />

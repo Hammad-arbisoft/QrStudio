@@ -1,3 +1,4 @@
+import theme from '@/theme';
 import styled, { css } from 'styled-components';
 
 export const Wrapper = styled.div`
@@ -19,6 +20,8 @@ export const TooltipText = styled.div`
     opacity: 0;
     transition: all 0.1s;
     font-size: 13px;
+    font-family: ${theme.fonts.primary};
+    font-weight: ${theme.fontWeights[400]};
 
     ${({ position }) =>
         position === 'top' &&

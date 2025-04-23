@@ -5,19 +5,19 @@ import { StyledImage } from '@/generic/Styled';
 import { IconRedo, IconUndo } from '@/assets';
 import { TEXT_DICTIONARY } from '@/constants/textConstants';
 
-export const UndoRedoControls = ({ onUndo, onRedo, disableUndo, disableRedo, translation }) => {
+export const UndoRedoControls = ({ onUndo, onRedo, disableUndo, disableRedo, languageLocale }) => {
     let UndeRedoTabsData = [
         {
             element: <StyledImage src={IconUndo} />,
             onClick: () => onUndo(),
             disabled: disableUndo,
-            tooltip: translation?.UNDO || TEXT_DICTIONARY?.UNDO,
+            tooltip: TEXT_DICTIONARY?.[languageLocale]?.UNDO,
         },
         {
             element: <StyledImage src={IconRedo} />,
             onClick: () => onRedo(),
             disabled: disableRedo,
-            tooltip: translation?.REDO || TEXT_DICTIONARY?.REDO,
+            tooltip: TEXT_DICTIONARY?.[languageLocale]?.REDO,
         },
     ];
 

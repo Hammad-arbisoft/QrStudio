@@ -7,14 +7,14 @@ import { IconChevronLeft } from '@/assets';
 import { Tooltip } from '../Tooltip';
 import { TEXT_DICTIONARY } from '@/constants/textConstants';
 
-export const SideBarHeader = ({ onCollapse = () => {}, selectedSideBarItem, translation }) => {
+export const SideBarHeader = ({ onCollapse = () => {}, selectedSideBarItem, languageLocale }) => {
     const sideBarpillsText = {
-        Template: translation?.TEMPLATE || TEXT_DICTIONARY?.TEMPLATE,
-        Text: translation?.TEXT || TEXT_DICTIONARY?.TEXT,
-        Image: translation?.IMAGE || TEXT_DICTIONARY?.IMAGE,
-        Shape: translation?.SHAPE || TEXT_DICTIONARY?.SHAPE,
-        QR: translation?.QR_CODE || TEXT_DICTIONARY?.QR_CODE,
-        'White-label': translation?.BRANDING || TEXT_DICTIONARY?.BRANDING,
+        Template: TEXT_DICTIONARY?.[languageLocale]?.TEMPLATE,
+        Text: TEXT_DICTIONARY?.[languageLocale]?.TEXT,
+        Image: TEXT_DICTIONARY?.[languageLocale]?.IMAGE,
+        Shape: TEXT_DICTIONARY?.[languageLocale]?.SHAPE,
+        QR: TEXT_DICTIONARY?.[languageLocale]?.QR_CODE,
+        'White-label': TEXT_DICTIONARY?.[languageLocale]?.BRANDING,
     };
     return (
         <Container>
@@ -25,7 +25,7 @@ export const SideBarHeader = ({ onCollapse = () => {}, selectedSideBarItem, tran
             >
                 {sideBarpillsText?.[selectedSideBarItem]}
             </StyledText>
-            <Tooltip text={translation?.TEMPLATE || TEXT_DICTIONARY?.COLLAPSE} position="left">
+            <Tooltip text={TEXT_DICTIONARY?.[languageLocale]?.COLLAPSE} position="left">
                 <IconWrapper onClick={onCollapse}>
                     <StyledImage src={IconChevronLeft} />
                 </IconWrapper>

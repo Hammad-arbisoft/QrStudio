@@ -8,48 +8,42 @@ import { TEXT_DICTIONARY } from '@/constants/textConstants';
 export const SideBar = ({
     selectedSideBarItem,
     onClickPill = () => {},
-    translation,
     disableWhiteLabel,
     styleProps,
+    languageLocale,
 }) => {
-    const sideBarItems = useMemo(() => {
-        let List = [
-            {
-                id: sideBarpillsList.template,
-                text: translation?.TEMPLATE || TEXT_DICTIONARY?.TEMPLATE,
-                icon: IconTemplate,
-            },
-            {
-                id: sideBarpillsList.text,
-                text: translation?.TEXT || TEXT_DICTIONARY?.TEXT,
-                icon: IconText,
-            },
-            {
-                id: sideBarpillsList.image,
-                text: translation?.IMAGE || TEXT_DICTIONARY?.IMAGE,
-                icon: IconImage,
-            },
-            {
-                id: sideBarpillsList.shape,
-                text: translation?.SHAPE || TEXT_DICTIONARY?.SHAPE,
-                icon: IconShape,
-            },
-            {
-                id: sideBarpillsList.qr,
-                text: translation?.QR || TEXT_DICTIONARY?.QR,
-                icon: IconQrCode,
-            },
-        ];
-        if (!disableWhiteLabel) {
-            List.push({
-                id: sideBarpillsList.whiteLabel,
-                text: translation?.WHITE_LABEL || TEXT_DICTIONARY?.WHITE_LABEL,
-                icon: IconWhiteLabel,
-            });
-        }
-
-        return List;
-    }, [translation, disableWhiteLabel]);
+    const sideBarItems = [
+        {
+            id: sideBarpillsList.template,
+            text: TEXT_DICTIONARY?.[languageLocale]?.TEMPLATE,
+            icon: IconTemplate,
+        },
+        {
+            id: sideBarpillsList.text,
+            text: TEXT_DICTIONARY?.[languageLocale]?.TEXT,
+            icon: IconText,
+        },
+        {
+            id: sideBarpillsList.image,
+            text: TEXT_DICTIONARY?.[languageLocale]?.IMAGE,
+            icon: IconImage,
+        },
+        {
+            id: sideBarpillsList.shape,
+            text: TEXT_DICTIONARY?.[languageLocale]?.SHAPE,
+            icon: IconShape,
+        },
+        {
+            id: sideBarpillsList.qr,
+            text: TEXT_DICTIONARY?.[languageLocale]?.QR,
+            icon: IconQrCode,
+        },
+        {
+            id: sideBarpillsList.whiteLabel,
+            text: TEXT_DICTIONARY?.[languageLocale]?.WHITE_LABEL,
+            icon: IconWhiteLabel,
+        },
+    ];
     const onClickSinglePill = useCallback(
         e => {
             onClickPill(e);
@@ -59,18 +53,23 @@ export const SideBar = ({
 
     const renderPills = useMemo(
         () =>
-            sideBarItems?.map(item => (
-                <SideBarPill
-                    key={item?.id}
-                    isSelected={selectedSideBarItem === item?.id}
-                    onClick={() => onClickSinglePill(item?.id)}
-                    icon={item?.icon}
-                    text={item?.text}
-                    translation={translation}
-                    pillActiveColor={styleProps?.primaryColor}
-                />
-            )),
-        [selectedSideBarItem, onClickSinglePill],
+            sideBarItems?.map(item => {
+                if (item?.id === sideBarpillsList?.whiteLabel && disableWhiteLabel) {
+                    return null;
+                }
+                return (
+                    <SideBarPill
+                        key={item?.id}
+                        isSelected={selectedSideBarItem === item?.id}
+                        onClick={() => onClickSinglePill(item?.id)}
+                        icon={item?.icon}
+                        text={item?.text}
+                        languageLocale={languageLocale}
+                        pillActiveColor={styleProps?.primaryColor}
+                    />
+                );
+            }),
+        [selectedSideBarItem, onClickSinglePill, languageLocale],
     );
 
     return <SideBarWrapper>{renderPills}</SideBarWrapper>;

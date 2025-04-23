@@ -15,8 +15,8 @@ export const StrokePicker = ({
     onChangeStrokeWidth,
     onChangeShapeStrokeColor,
     pickerWidth = 100,
-    translation,
-    tooltip = translation?.STROKE_WIDTH_AND_COLOR || TEXT_DICTIONARY?.STROKE_WIDTH_AND_COLOR,
+    languageLocale = 'en',
+    tooltip = TEXT_DICTIONARY?.[languageLocale]?.STROKE_WIDTH_AND_COLOR,
     leftIcon = IconGrid,
 }) => {
     const pickerRef = useRef(null);

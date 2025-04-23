@@ -27,6 +27,7 @@ export const InnerContainer = styled.div`
     place-items: center;
     overflow: auto;
     flex: 1;
+    position: relative;
 `;
 
 export const InnerContainerWrapper = styled.div`

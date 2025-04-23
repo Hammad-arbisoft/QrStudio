@@ -17,7 +17,7 @@ export const TabBarContainer = styled.div`
 
 export const TabItem = styled.div`
     padding: ${({ tabPadding }) => tabPadding};
-    cursor: pointer;
+    cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
     border-right: ${({ isLast }) => (isLast ? 'none' : `1px solid ${theme.color.gray_200}`)};
     height: 100%;
     display: flex;
@@ -29,4 +29,5 @@ export const TabItem = styled.div`
     border-bottom-left-radius: ${({ isFirst }) => (isFirst ? '5' : '0')}px;
     border-top-right-radius: ${({ isLast }) => (isLast ? '5' : '0')}px;
     border-bottom-right-radius: ${({ isLast }) => (isLast ? '5' : '0')}px;
+    pointer-events: ${({ disabled }) => (disabled ? 'none' : 'all')};
 `;

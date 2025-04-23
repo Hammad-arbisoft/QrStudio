@@ -16,7 +16,7 @@ export const QrSideBar = ({
     addQrLogo,
     elements,
     qrLogo,
-    translation,
+    languageLocale,
 }) => {
     let logoVisible = useMemo(() => {
         let index = elements?.findIndex(e => e?.type === elementTypes?.qr);
@@ -33,22 +33,22 @@ export const QrSideBar = ({
                 marginRight={6}
                 marginBottom={17}
             >
-                {translation?.SETTINGS || TEXT_DICTIONARY?.SETTINGS}
+                {TEXT_DICTIONARY?.[languageLocale]?.SETTINGS}
             </StyledText>
             <RadioSection
-                text={translation?.SHOW_QR_CODE || TEXT_DICTIONARY?.SHOW_QR_CODE}
+                text={TEXT_DICTIONARY?.[languageLocale]?.SHOW_QR_CODE}
                 isActive={qrPresent}
                 onToggle={toggleQr}
             />
             <RadioSection
-                text={translation?.SHOW_LOGO_IN_QR || TEXT_DICTIONARY?.SHOW_LOGO_IN_QR}
+                text={TEXT_DICTIONARY?.[languageLocale]?.SHOW_LOGO_IN_QR}
                 isActive={qrPresent && logoVisible}
                 onToggle={toggleQrLogo}
                 disabled={!qrPresent}
             />
 
             <Button
-                text={translation?.ADD_LOGO || TEXT_DICTIONARY?.ADD_LOGO}
+                text={TEXT_DICTIONARY?.[languageLocale]?.ADD_LOGO}
                 left={<StyledImage src={IconUpload} />}
                 marginBottom={30}
                 marginTop={24}

@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 
 export const propTypes = {
     selectedTab: PropTypes.string,
-    translation: PropTypes.object,
+    languageLocale: PropTypes.string,
     title: PropTypes.string,
     zoomPercentage: PropTypes.number,
     onChangeZoomPercentage: PropTypes.func,

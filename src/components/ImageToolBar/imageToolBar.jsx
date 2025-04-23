@@ -15,7 +15,7 @@ export const ImageToolBar = ({
     onChangeImageStrokeColor,
     onChangeImageOpacity,
     selectedElement,
-    translation,
+    languageLocale,
 }) => {
     return (
         <RowContainer>
@@ -32,16 +32,17 @@ export const ImageToolBar = ({
                         : imageStrokeColor
                 }
                 onChangeShapeStrokeColor={onChangeImageStrokeColor}
-                translation={translation}
+                languageLocale={languageLocale}
             />
             <OpacityPicker
-                tooltip={translation?.IMAGE_OPACITY || TEXT_DICTIONARY?.IMAGE_OPACITY}
+                tooltip={TEXT_DICTIONARY?.[languageLocale]?.IMAGE_OPACITY}
                 value={
                     isElementOfSameType(selectedElement, elementTypes.image)
                         ? selectedElement?.opacity
                         : imageOpacity
                 }
                 onChangeOpacity={onChangeImageOpacity}
+                languageLocale={languageLocale}
             />
         </RowContainer>
     );
