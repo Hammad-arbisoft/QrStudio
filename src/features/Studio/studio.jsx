@@ -30,6 +30,8 @@ import {
     sideBarpillsList,
 } from '@/constants';
 import theme from '@/theme';
+import { StyleSheetManager } from 'styled-components';
+import isPropValid from '@emotion/is-prop-valid';
 /**
  * @typedef {Object} StudioProps
  * @property {string} [title]
@@ -57,7 +59,7 @@ export const Studio = forwardRef(
             title = 'untitled',
             elementsList = defaultElements,
             uploadImageCallBack,
-            customImages = [],
+            customImages,
             defaultImages = defaultSideBarImagesList,
             disableWhiteLabel,
             defaultTemplatesList = [],
@@ -95,7 +97,7 @@ export const Studio = forwardRef(
         const [qrStrokeColor, setQrStrokeColor] = useState(theme.color.black);
         const [qrOpacity, setQrOpacity] = useState(1);
         const [selectedElement, setSelectedElement] = useState(null);
-        const [customImagesList, setCustomImagesList] = useState(customImages);
+        const [customImagesList, setCustomImagesList] = useState(customImages || []);
         const [qrLogo, setQrLogo] = useState(null);
         const [defaultTextProps, setDefaultTextProps] = useState(basicTextProps);
         useImperativeHandle(ref, () => ({
@@ -110,16 +112,21 @@ export const Studio = forwardRef(
                 return { elements: processedElements, image: dataURL };
             },
         }));
+        // console.log(isPropValid('onClick'));
         useEffect(() => {
             setLanguageLocale(validateLocale(locale));
         }, [locale]);
 
         useEffect(() => {
+            setCustomImagesList(customImages);
+        }, [customImages]);
+
+        useEffect(() => {
             setLoadingFonts(true);
             loadAllGoogleFonts()
-                .then(msg => {
+                .then(() => {
                     // eslint-disable-next-line no-console
-                    console.log(msg);
+                    // console.log(msg);
                 })
                 .catch(err => {
                     // eslint-disable-next-line no-console
@@ -137,18 +144,17 @@ export const Studio = forwardRef(
             LoadImages(elementsList);
             setElements(elementsList);
         }, [...elementsList]);
-        useEffect(() => {
-            setCustomImagesList([...customImages]);
-        }, [customImages]);
 
         const LoadImages = elems => {
             setLoadingImages(true);
             preloadRelevantImages(elems)
-                .then(({ successes, errors }) => {
+                .then(({ errors }) => {
                     // eslint-disable-next-line no-console
-                    console.log('✅ Loaded images:', successes);
-                    // eslint-disable-next-line no-console
-                    console.log('❌ Failed images:', errors);
+                    // console.log('✅ Loaded images:', successes);
+                    if (errors?.length > 0) {
+                        // eslint-disable-next-line no-console
+                        console.log('❌ Failed images:', errors);
+                    }
                 })
                 .catch(err => {
                     // eslint-disable-next-line no-console
@@ -226,6 +232,7 @@ export const Studio = forwardRef(
             if (!size) {
                 return;
             }
+
             let elemClone = JSON.parse(JSON.stringify(elements));
             let sizeIndex = elemClone.findIndex(e => e?.type === elementTypes?.pageSize);
             if (sizeIndex > -1) {
@@ -350,6 +357,17 @@ export const Studio = forwardRef(
             };
             saveHistory([...elemClone, newElement]);
         };
+        const onRemoveBackgroundImage = () => {
+            let elemClone = JSON.parse(JSON.stringify(elements));
+            let backgroundImageIndex = elemClone.findIndex(
+                e => e?.type === elementTypes?.backgroundImage,
+            );
+            if (backgroundImageIndex > -1) {
+                elemClone.splice(backgroundImageIndex, 1);
+                saveHistory(elemClone);
+            }
+        };
+
         const onChangeBackgroundImageOpacity = val => {
             let backgroundImageIndex = elements?.findIndex(
                 e => e?.type === elementTypes?.backgroundImage,
@@ -709,120 +727,123 @@ export const Studio = forwardRef(
         };
 
         return (
-            <StudioWrapper>
-                <SideBar
-                    selectedSideBarItem={selectedTab}
-                    onClickPill={onSelectedTab}
-                    languageLocale={languageLocale}
-                    disableWhiteLabel={disableWhiteLabel}
-                    styleProps={styleProps}
-                />
-                <HelperSideBar
-                    selectedSideBarItem={selectedTab}
-                    onCollapse={onCollapseHelperSideBar}
-                    helperSideBarVisible={helperSideBarVisible}
-                    onAddShape={addShape}
-                    defaultImagesList={defaultImages}
-                    customImagesList={customImagesList}
-                    onAddCustomImageToList={addCustomImageToList}
-                    onAddImageToCanvas={addImageToCanvas}
-                    onAddTextToCanvas={addTextToCanvas}
-                    toggleQr={toggleQr}
-                    qrPresent={elements?.findIndex(elem => elem.type === elementTypes?.qr) > -1}
-                    toggleQrLogo={toggleQrLogo}
-                    addQrLogo={addQrLogo}
-                    qrLogo={
-                        elements?.[elements?.findIndex(elem => elem.type === elementTypes?.qr)]
-                            ?.qrLogo || qrLogo
-                    }
-                    elements={elements}
-                    oncreateNewTemplate={createNewTemplate}
-                    uploadImageCallBack={uploadImageCallBack}
-                    setLoadingUploadImage={setLoadingUploadImage}
-                    defaultTemplatesList={defaultTemplatesList}
-                    customTemplatesList={customTemplatesList}
-                    styleProps={styleProps}
-                    defaultText={defaultText}
-                    languageLocale={languageLocale}
-                />
-                <Editor
-                    // canvasSize={canvasSize}
-                    cuttingGuideStroke={
-                        elements?.find(e => e?.type === elementTypes?.pageSize)
-                            ?.cuttingGuideStroke || 0
-                    }
-                    cuttingGuideStrokeColor={
-                        elements?.find(e => e?.type === elementTypes?.pageSize)
-                            ?.cuttingGuideStrokeColor || theme?.color.black
-                    }
-                    onChangeCuttingGuideProp={(type, value) => {
-                        onChangeCuttingGuideProp(type, value);
-                    }}
-                    editorHeight={editorHeight}
-                    editorWidth={editorWidth}
-                    selectedTab={selectedTab}
-                    title={title}
-                    zoomPercentage={zoomPercentage}
-                    onChangeZoomPercentage={onChangeZoomPercentage}
-                    onSetBackgroundColor={onSetBackgroundColor}
-                    elements={elements}
-                    history={history}
-                    redoStack={redoStack}
-                    onSetBackgroundImage={onSetBackgroundImage}
-                    onUndo={undo}
-                    onRedo={redo}
-                    shapeStrokeColor={shapeStrokeColor}
-                    shapeStrokeWidth={shapeStrokeWidth}
-                    shapeFillColor={shapeFillColor}
-                    imageStrokeWidth={imageStrokeWidth}
-                    imageStrokeColor={imageStrokeColor}
-                    imageOpacity={imageOpacity}
-                    onChangeImageStrokeWidth={onChangeImageStrokeWidth}
-                    onChangeImageStrokeColor={onChangeImageStrokeColor}
-                    onChangeImageOpacity={onChangeImageOpacity}
-                    onChangeShapeStrokeColor={onChangeShapeStrokeColor}
-                    onChangeShapeStrokeWidth={onChangeShapeStrokeWidth}
-                    onChangeShapeFill={onChangeShapeFill}
-                    shapeOpacity={shapeOpacity}
-                    onChangeShapeOpacity={onChangeShapeOpacity}
-                    qrStrokeWidth={qrStrokeWidth}
-                    qrStrokeColor={qrStrokeColor}
-                    qrOpacity={qrOpacity}
-                    onChangeQrStrokeWidth={onChangeQrStrokeWidth}
-                    onChangeQrStrokeColor={onChangeQrStrokeColor}
-                    onChangeQrOpacity={onChangeQrOpacity}
-                    selectedElement={selectedElement}
-                    onSelectElement={onSelectElement}
-                    stageRef={stageRef}
-                    saveHistory={saveHistory}
-                    onChangeBackgroundImageOpacity={onChangeBackgroundImageOpacity}
-                    backgroundImageOpacity={
-                        elements?.find(e => e?.type === elementTypes?.backgroundImage)?.opacity ||
-                        backgroundImageOpacity
-                    }
-                    onDeleteSelectedElement={onDeleteSelectedElement}
-                    onCopySelectedElement={onCopySelectedElement}
-                    onToggleLockElement={onToggleLockElement}
-                    bringSelectedElementToFront={bringSelectedElementToFront}
-                    sendSelectedElementToBack={sendSelectedElementToBack}
-                    defaultTextProps={defaultTextProps}
-                    onChangeTextProperty={onChangeTextProperty}
-                    onSetPageSize={onSetPageSize}
-                    selectedPageSize={selectedPageSize}
-                    loadingImages={loadingImages}
-                    loadingFonts={loadingFonts}
-                    uploadImageCallBack={uploadImageCallBack}
-                    setLoadingUploadImage={setLoadingUploadImage}
-                    onSave={onSave && onSaveProgress}
-                    saveButtonText={saveButtonText}
-                    languageLocale={languageLocale}
-                />
-                {(loadingFonts || loadingImages || loadingUploadImage || loading) && (
-                    <Overlay>
-                        <LoadingSpinner size="60px" color={theme.color.secondary} />
-                    </Overlay>
-                )}
-            </StudioWrapper>
+            <StyleSheetManager shouldForwardProp={isPropValid}>
+                <StudioWrapper>
+                    <SideBar
+                        selectedSideBarItem={selectedTab}
+                        onClickPill={onSelectedTab}
+                        languageLocale={languageLocale}
+                        disableWhiteLabel={disableWhiteLabel}
+                        styleProps={styleProps}
+                    />
+                    <HelperSideBar
+                        selectedSideBarItem={selectedTab}
+                        onCollapse={onCollapseHelperSideBar}
+                        helperSideBarVisible={helperSideBarVisible}
+                        onAddShape={addShape}
+                        defaultImagesList={defaultImages}
+                        customImagesList={customImagesList}
+                        onAddCustomImageToList={addCustomImageToList}
+                        onAddImageToCanvas={addImageToCanvas}
+                        onAddTextToCanvas={addTextToCanvas}
+                        toggleQr={toggleQr}
+                        qrPresent={elements?.findIndex(elem => elem.type === elementTypes?.qr) > -1}
+                        toggleQrLogo={toggleQrLogo}
+                        addQrLogo={addQrLogo}
+                        qrLogo={
+                            elements?.[elements?.findIndex(elem => elem.type === elementTypes?.qr)]
+                                ?.qrLogo || qrLogo
+                        }
+                        elements={elements}
+                        oncreateNewTemplate={createNewTemplate}
+                        uploadImageCallBack={uploadImageCallBack}
+                        setLoadingUploadImage={setLoadingUploadImage}
+                        defaultTemplatesList={defaultTemplatesList}
+                        customTemplatesList={customTemplatesList}
+                        styleProps={styleProps}
+                        defaultText={defaultText}
+                        languageLocale={languageLocale}
+                    />
+                    <Editor
+                        // canvasSize={canvasSize}
+                        cuttingGuideStroke={
+                            elements?.find(e => e?.type === elementTypes?.pageSize)
+                                ?.cuttingGuideStroke || 0
+                        }
+                        cuttingGuideStrokeColor={
+                            elements?.find(e => e?.type === elementTypes?.pageSize)
+                                ?.cuttingGuideStrokeColor || theme?.color.black
+                        }
+                        onChangeCuttingGuideProp={(type, value) => {
+                            onChangeCuttingGuideProp(type, value);
+                        }}
+                        editorHeight={editorHeight}
+                        editorWidth={editorWidth}
+                        selectedTab={selectedTab}
+                        title={title}
+                        zoomPercentage={zoomPercentage}
+                        onChangeZoomPercentage={onChangeZoomPercentage}
+                        onSetBackgroundColor={onSetBackgroundColor}
+                        elements={elements}
+                        history={history}
+                        redoStack={redoStack}
+                        onSetBackgroundImage={onSetBackgroundImage}
+                        onUndo={undo}
+                        onRedo={redo}
+                        shapeStrokeColor={shapeStrokeColor}
+                        shapeStrokeWidth={shapeStrokeWidth}
+                        shapeFillColor={shapeFillColor}
+                        imageStrokeWidth={imageStrokeWidth}
+                        imageStrokeColor={imageStrokeColor}
+                        imageOpacity={imageOpacity}
+                        onChangeImageStrokeWidth={onChangeImageStrokeWidth}
+                        onChangeImageStrokeColor={onChangeImageStrokeColor}
+                        onChangeImageOpacity={onChangeImageOpacity}
+                        onChangeShapeStrokeColor={onChangeShapeStrokeColor}
+                        onChangeShapeStrokeWidth={onChangeShapeStrokeWidth}
+                        onChangeShapeFill={onChangeShapeFill}
+                        shapeOpacity={shapeOpacity}
+                        onChangeShapeOpacity={onChangeShapeOpacity}
+                        qrStrokeWidth={qrStrokeWidth}
+                        qrStrokeColor={qrStrokeColor}
+                        qrOpacity={qrOpacity}
+                        onChangeQrStrokeWidth={onChangeQrStrokeWidth}
+                        onChangeQrStrokeColor={onChangeQrStrokeColor}
+                        onChangeQrOpacity={onChangeQrOpacity}
+                        selectedElement={selectedElement}
+                        onSelectElement={onSelectElement}
+                        stageRef={stageRef}
+                        saveHistory={saveHistory}
+                        onChangeBackgroundImageOpacity={onChangeBackgroundImageOpacity}
+                        backgroundImageOpacity={
+                            elements?.find(e => e?.type === elementTypes?.backgroundImage)
+                                ?.opacity || backgroundImageOpacity
+                        }
+                        onDeleteSelectedElement={onDeleteSelectedElement}
+                        onCopySelectedElement={onCopySelectedElement}
+                        onToggleLockElement={onToggleLockElement}
+                        bringSelectedElementToFront={bringSelectedElementToFront}
+                        sendSelectedElementToBack={sendSelectedElementToBack}
+                        defaultTextProps={defaultTextProps}
+                        onChangeTextProperty={onChangeTextProperty}
+                        onSetPageSize={onSetPageSize}
+                        selectedPageSize={selectedPageSize}
+                        loadingImages={loadingImages}
+                        loadingFonts={loadingFonts}
+                        uploadImageCallBack={uploadImageCallBack}
+                        setLoadingUploadImage={setLoadingUploadImage}
+                        onSave={onSave && onSaveProgress}
+                        saveButtonText={saveButtonText}
+                        languageLocale={languageLocale}
+                        onRemoveBackgroundImage={onRemoveBackgroundImage}
+                    />
+                    {(loadingFonts || loadingImages || loadingUploadImage || loading) && (
+                        <Overlay>
+                            <LoadingSpinner size="60px" color={theme.color.secondary} />
+                        </Overlay>
+                    )}
+                </StudioWrapper>
+            </StyleSheetManager>
         );
     },
 );

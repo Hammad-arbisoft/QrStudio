@@ -12,7 +12,7 @@ export const propTypes = {
     qrLink: PropTypes.string,
     styleProps: PropTypes.object,
     defaultText: PropTypes.string,
-    onSave: PropTypes.func.isRequired,
+    onSave: PropTypes.func,
     saveButtonText: PropTypes.string,
     locale: PropTypes.oneOf(['en', 'ru', 'pl', 'de', 'es', 'fr', 'it']),
 };

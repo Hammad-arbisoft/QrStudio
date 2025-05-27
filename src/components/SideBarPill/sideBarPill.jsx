@@ -4,15 +4,15 @@ import { SideBarIcon, SideBarItem, SideBarText } from './styled';
 import theme from '@/theme';
 
 export const SideBarPill = ({
-    key,
     isSelected = false,
     onClick = () => {},
     icon,
     text,
     pillActiveColor,
+    id
 }) => (
     <SideBarItem
-        key={key}
+        key={id}
         isSelected={isSelected}
         onClick={() => onClick()}
         pillActiveColor={pillActiveColor || theme.color.primary}

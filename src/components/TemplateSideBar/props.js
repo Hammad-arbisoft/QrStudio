@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
 
 export const propTypes = {
-    oncreateNewTemplate: PropTypes.func.isRequired,
+    oncreateNewTemplate: PropTypes.func,
     languageLocale: PropTypes.string,
-    defaultTemplatesList: PropTypes.array.isRequired,
-    customTemplatesList: PropTypes.array.isRequired,
+    defaultTemplatesList: PropTypes.array,
+    customTemplatesList: PropTypes.array,
 };

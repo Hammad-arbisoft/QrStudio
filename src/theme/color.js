@@ -27,7 +27,7 @@ export const palette = {
     gray_F5F6F6: '#F5F6F6',
     gray_A1A1A1: '#A1A1A1',
     gray_F0F2F7: '#F0F2F7',
-    gray_333: '#333',
+    gray_333: '#333333',
     gray_EFEFEF: '#EFEFEF',
     gray_9DA1A7: '#9DA1A7',
     green_80D965: '#80D965',

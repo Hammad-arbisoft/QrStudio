@@ -30,7 +30,7 @@ export const DropDownOption = styled.div`
     padding: 8px 16px;
     cursor: pointer;
     font-size: 14px;
-    color: #333;
+    color: #333333;
     &:hover {
         background-color: #f0f0f0;
     }

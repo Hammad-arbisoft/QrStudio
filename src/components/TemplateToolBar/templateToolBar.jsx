@@ -2,11 +2,12 @@ import React from 'react';
 import { propTypes } from './props';
 import { ToolBarButtonWrapper } from '../ToolBarButtonWrapper';
 import { DropDown } from '../DropDown';
-import { Label, RowContainer } from './styled';
+import { Label, RemoveButton, RowContainer } from './styled';
 import {
     IconBackgroundColor,
     IconBackgroundImage,
     IconBackgroundImageOpacity,
+    IconCross,
     IconDropDownSmall,
     IconFrame,
 } from '@/assets';
@@ -33,6 +34,8 @@ export const TemplateToolBar = ({
     cuttingGuideStroke,
     cuttingGuideStrokeColor,
     onChangeCuttingGuideProp,
+    canvasBackgroundImage,
+    onRemoveBackgroundImage,
 }) => {
     const selectBackgroundColor = e => {
         onSetBackgroundColor(e);
@@ -83,7 +86,21 @@ export const TemplateToolBar = ({
                 tooltip={TEXT_DICTIONARY?.[languageLocale]?.BACKGROUND_IMAGE}
                 tooltipPosition={'bottom'}
             >
-                <StyledImage src={IconBackgroundImage} />
+                {canvasBackgroundImage && (
+                    <RemoveButton
+                        onClick={e => {
+                            onRemoveBackgroundImage && onRemoveBackgroundImage();
+                            e.stopPropagation();
+                        }}
+                    >
+                        <StyledImage src={IconCross} height={15} width={15} />
+                    </RemoveButton>
+                )}
+                <StyledImage
+                    src={canvasBackgroundImage?.src || IconBackgroundImage}
+                    height={24}
+                    width={24}
+                />
             </ToolBarButtonWrapper>
             <OpacityPicker
                 tooltip={TEXT_DICTIONARY?.[languageLocale]?.BACKGROUND_IMAGE_OPACITY}

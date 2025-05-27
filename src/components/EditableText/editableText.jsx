@@ -9,7 +9,7 @@ export const EditableText = ({
     onClick,
     onDragEnd,
     onTransformEnd,
-    key,
+    id,
     onTransform,
     onChangeTextContent,
     onChangeTextProperty,
@@ -78,7 +78,7 @@ export const EditableText = ({
         return (
             <Text
                 ref={textRef}
-                key={key}
+                key={id}
                 {...element}
                 id={element.id}
                 fontVariant={element?.fontWeight}
@@ -95,7 +95,7 @@ export const EditableText = ({
         <>
             <Text
                 ref={textRef}
-                key={key}
+                key={id}
                 {...element}
                 id={element.id}
                 fontVariant={element?.fontWeight}
