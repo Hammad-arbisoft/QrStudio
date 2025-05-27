@@ -84,6 +84,7 @@ export const Editor = ({
     onChangeCuttingGuideProp,
     onSave,
     saveButtonText,
+    onRemoveBackgroundImage,
 }) => {
     const transformerRef = useRef(null);
     useEffect(() => {
@@ -357,6 +358,7 @@ export const Editor = ({
                     return (
                         <EditableText
                             key={el.id}
+                            id={el.id}
                             element={el}
                             onClick={() => handleSelect(el)}
                             onTransform={e => handleTextTransform(el.id, e)}
@@ -419,6 +421,7 @@ export const Editor = ({
                     cuttingGuideStroke={cuttingGuideStroke}
                     cuttingGuideStrokeColor={cuttingGuideStrokeColor}
                     onChangeCuttingGuideProp={onChangeCuttingGuideProp}
+                    onRemoveBackgroundImage={onRemoveBackgroundImage}
                 />
             )}
             <InnerContainer>

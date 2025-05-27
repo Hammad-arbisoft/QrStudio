@@ -48,6 +48,7 @@ export const TopToolBar = ({
     cuttingGuideStroke,
     cuttingGuideStrokeColor,
     onChangeCuttingGuideProp,
+    onRemoveBackgroundImage,
 }) => {
     return (
         <ToolBarWrapper disabled={selectedElement && !selectedElement?.draggable}>
@@ -74,6 +75,7 @@ export const TopToolBar = ({
                     cuttingGuideStroke={cuttingGuideStroke}
                     cuttingGuideStrokeColor={cuttingGuideStrokeColor}
                     onChangeCuttingGuideProp={onChangeCuttingGuideProp}
+                    onRemoveBackgroundImage={onRemoveBackgroundImage}
                 />
             ) : selectedTab === sideBarpillsList?.text ? (
                 <TextToolBar

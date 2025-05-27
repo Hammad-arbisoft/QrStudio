@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 
 export const propTypes = {
-    element: PropTypes.object.isRequired,
+    element: PropTypes.object,
     onClick: PropTypes.func,
     onDragEnd: PropTypes.func,
     onTransformEnd: PropTypes.func,

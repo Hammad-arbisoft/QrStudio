@@ -1,16 +1,40 @@
 import PropTypes from 'prop-types';
 
 export const propTypes = {
-    height: PropTypes.string.isRequired,
-    paddingTop: PropTypes.string,
-    paddingBottom: PropTypes.string,
-    paddingLeft: PropTypes.string,
-    paddingRight: PropTypes.string,
-    children: PropTypes.node.isRequired,
-    marginLeft: PropTypes.string,
-    marginRight: PropTypes.string,
+    height: PropTypes.oneOfType([
+            PropTypes.string,
+            PropTypes.number,
+          ]),
+    paddingTop: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.number,
+      ]),
+    paddingBottom: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.number,
+      ]),
+    paddingLeft: PropTypes.oneOfType([
+            PropTypes.string,
+            PropTypes.number,
+          ]),
+    paddingRight: PropTypes.oneOfType([
+            PropTypes.string,
+            PropTypes.number,
+          ]),
+    children: PropTypes.node,
+    marginLeft: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.number,
+      ]),
+    marginRight: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.number,
+      ]),
     justifyContent: PropTypes.string,
-    gap: PropTypes.string,
+    gap: PropTypes.oneOfType([
+            PropTypes.string,
+            PropTypes.number,
+          ]),
     onClick: PropTypes.func,
     disabled: PropTypes.bool,
     tooltip: PropTypes.string,

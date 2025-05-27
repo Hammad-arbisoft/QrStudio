@@ -60,6 +60,7 @@ export const SideBar = ({
                 return (
                     <SideBarPill
                         key={item?.id}
+                        id={item?.id}
                         isSelected={selectedSideBarItem === item?.id}
                         onClick={() => onClickSinglePill(item?.id)}
                         icon={item?.icon}

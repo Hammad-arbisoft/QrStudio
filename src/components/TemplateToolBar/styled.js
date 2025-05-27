@@ -15,3 +15,16 @@ export const RowContainer = styled.div`
     flex-wrap: wrap;
     gap: 2px;
 `;
+
+export const RemoveButton = styled.div`
+    height: 20px;
+    width: 20px;
+    border-radius: 20px;
+    position: absolute;
+    right: -7px;
+    top: -7px;
+    background: #ff4d4d;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+`;

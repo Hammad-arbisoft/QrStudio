@@ -1,7 +1,10 @@
 import PropTypes from 'prop-types';
 
 export const propTypes = {
-    selectedSideBarItem: PropTypes.string,
+    selectedSideBarItem: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.object,
+      ]),
     helperSideBarVisible: PropTypes.bool,
     onCollapse: PropTypes.func,
     onAddShape: PropTypes.func,
@@ -14,7 +17,10 @@ export const propTypes = {
     toggleQrLogo: PropTypes.func,
     addQrLogo: PropTypes.func,
     elements: PropTypes.array,
-    qrLogo: PropTypes.string,
+    qrLogo: PropTypes.oneOfType([
+                PropTypes.string,
+                PropTypes.object,
+              ]),
     onAddTextToCanvas: PropTypes.func,
     oncreateNewTemplate: PropTypes.func,
     languageLocale: PropTypes.string,

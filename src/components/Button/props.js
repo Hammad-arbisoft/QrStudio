@@ -3,7 +3,10 @@ import PropTypes from 'prop-types';
 
 export const propTypes = {
     varient: PropTypes.oneOf(Object.values(ButtonVarients)),
-    left: PropTypes.node,
+    left: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.object,
+      ]),
     text: PropTypes.string,
     marginBottom: PropTypes.number,
     marginTop: PropTypes.number,

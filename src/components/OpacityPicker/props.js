@@ -9,7 +9,10 @@ export const propTypes = {
     pickerWidth: PropTypes.number,
     leftChild: PropTypes.node,
     rightChild: PropTypes.node,
-    gap: PropTypes.number,
+    gap: PropTypes.oneOfType([
+            PropTypes.string,
+            PropTypes.number,
+          ]),
     showLeftChild: PropTypes.bool,
     varient: PropTypes.string,
     fontFamily: PropTypes.string,

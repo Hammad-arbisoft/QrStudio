@@ -5,7 +5,10 @@ export const propTypes = {
     qrPresent: PropTypes.bool,
     toggleQrLogo: PropTypes.func,
     addQrLogo: PropTypes.func,
-    elements: PropTypes.array.isRequired,
-    qrLogo: PropTypes.object,
+    elements: PropTypes.array,
+    qrLogo: PropTypes.oneOfType([
+                    PropTypes.string,
+                    PropTypes.object,
+                  ]),
     languageLocale: PropTypes.string,
 };

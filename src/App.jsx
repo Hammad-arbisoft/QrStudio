@@ -245,21 +245,21 @@ const App = () => {
                     // elementsList={elems}
                     // defaultImages={[]}
                     // customImages={[]}
-                    defaultTemplatesList={defaultTemplates}
-                    customTemplatesList={customTemplates}
+                    // defaultTemplatesList={defaultTemplates}
+                    // customTemplatesList={customTemplates}
                     // disableWhiteLabel={true}
                     // title={'New Title'}
-                    styleProps={
-                        {
-                            // primaryColor: 'green',
-                        }
-                    }
-                    defaultText={'hellow this is default Text'}
+                    // styleProps={
+                    //     {
+                    //         // primaryColor: 'green',
+                    //     }
+                    // }
+                    // defaultText={'hellow this is default Text'}
                     // qrLink={'http://localhost:5173/'}
                     // uploadImageCallBack={uploadImageAndReturnUrl}
                     onSave={onSave}
                     // saveButtonText={'Save Progress'}
-                    locale={'fr'}
+                    locale={'en'}
                 />
             </InnerWrapper>
         </Wrapper>
