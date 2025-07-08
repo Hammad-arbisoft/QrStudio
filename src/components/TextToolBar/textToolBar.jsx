@@ -26,6 +26,7 @@ import { TEXT_DICTIONARY } from '@/constants/textConstants';
 export const TextToolBar = ({
     fontFamily,
     fontSize,
+    lineHeight,
     color,
     textDecoration,
     fontStyle,
@@ -162,6 +163,20 @@ export const TextToolBar = ({
                 showLeftChild={false}
                 rightChild={<StyledImage src={IconDropDown} marginLeft={10} />}
                 tooltip={TEXT_DICTIONARY?.[languageLocale]?.TEXT_SIZE}
+                tooltipPosition={'bottom'}
+            />
+            <OpacityPicker
+                gap={11}
+                value={lineHeight}
+                varient={'size'}
+                fontFamily={theme.fonts.primary}
+                min={1}
+                max={5}
+                step={0.5}
+                onChangeOpacity={e => onChangeTextProperty('lineHeight', e)}
+                showLeftChild={false}
+                rightChild={<StyledImage src={IconDropDown} marginLeft={10} />}
+                tooltip={TEXT_DICTIONARY?.[languageLocale]?.TEXT_LINE_HEIGHT}
                 tooltipPosition={'bottom'}
             />
             <ToolBarButtonWrapper

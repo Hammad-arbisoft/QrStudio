@@ -3,14 +3,16 @@ import { propTypes } from './props';
 import { Button } from '../Button';
 import { StyledImage, StyledText } from '@/generic/Styled';
 import { IconAdd } from '@/assets';
+import { IconDelete } from '@/assets';
 import { Collapsable } from '../Collapsable';
 import theme from '@/theme';
-import { StyledContainer, TemplateItem, TemplatesContainer } from './styled';
+import { StyledContainer, StyledDeleteButton, TemplateItem, TemplatesContainer } from './styled';
 import { TEXT_DICTIONARY } from '@/constants/textConstants';
 
 export const TemplateSideBar = ({
     oncreateNewTemplate,
     languageLocale,
+    onDeleteCustomTemplate,
     defaultTemplatesList,
     customTemplatesList,
 }) => {
@@ -64,6 +66,14 @@ export const TemplateSideBar = ({
                             maxWidth={115}
                             borderRadius={6}
                         />
+                        <StyledDeleteButton
+                            onClick={e => {
+                                e.stopPropagation(); // ⛔ Prevents parent onClick
+                                onDeleteCustomTemplate?.(item);
+                            }}
+                        >
+                            <StyledImage src={IconDelete} height={24} />
+                        </StyledDeleteButton>
                         <StyledText
                             color={theme.color.gray_A1A1A1}
                             fontSize={10}

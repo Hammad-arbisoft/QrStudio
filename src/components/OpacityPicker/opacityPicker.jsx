@@ -49,7 +49,7 @@ export const OpacityPicker = ({
             <ToolBarButtonWrapper gap={gap} tooltip={tooltip} tooltipPosition={tooltipPosition}>
                 {showLeftChild && (leftChild ? leftChild : <StyledImage src={IconOpacity} />)}
                 <StyledText fontFamily={fontFamily}>
-                    {varient === 'opacity' ? `${value * 100}%` : value}
+                    {varient === 'opacity' ? `${value * 100}%` : Math.round(value)}
                 </StyledText>
                 {rightChild && rightChild}
             </ToolBarButtonWrapper>

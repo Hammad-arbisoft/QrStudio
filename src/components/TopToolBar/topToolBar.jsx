@@ -89,6 +89,11 @@ export const TopToolBar = ({
                             ? selectedElement?.fontSize
                             : defaultTextProps?.fontSize
                     }
+                    lineHeight={
+                        isElementOfSameType(selectedElement, elementTypes.text)
+                            ? selectedElement?.lineHeight
+                            : defaultTextProps?.lineHeight
+                    }
                     color={
                         isElementOfSameType(selectedElement, elementTypes.text)
                             ? selectedElement?.color

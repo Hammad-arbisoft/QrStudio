@@ -83,6 +83,8 @@ export const Editor = ({
     cuttingGuideStrokeColor,
     onChangeCuttingGuideProp,
     onSave,
+    showSaveButton,
+    onSetSelectedTab,
     saveButtonText,
     onRemoveBackgroundImage,
 }) => {
@@ -357,6 +359,7 @@ export const Editor = ({
                 case elementTypes.text:
                     return (
                         <EditableText
+                            trRef={transformerRef}
                             key={el.id}
                             id={el.id}
                             element={el}
@@ -368,7 +371,6 @@ export const Editor = ({
                             }}
                             onDragMove={handleDragging}
                             onChangeTextContent={onChangeTextContent}
-                            onChangeTextProperty={onChangeTextProperty}
                         />
                     );
                 default:
@@ -426,7 +428,7 @@ export const Editor = ({
             )}
             <InnerContainer>
                 <InnerContainerWrapper editorHeight={editorHeight + 50} editorWidth={editorWidth}>
-                    <Title>{title}</Title>
+                    {title && <Title>{title}</Title>}
                     <EditorBox editorHeight={editorHeight} editorWidth={editorWidth}>
                         {!loadingImages && !loadingFonts && (
                             <Stage
@@ -436,12 +438,14 @@ export const Editor = ({
                                 onMouseDown={e => {
                                     if (e.target === e.target.getStage()) {
                                         onSelectElement(null);
+                                        onSetSelectedTab?.(sideBarpillsList.template);
                                     }
                                 }}
                             >
                                 <Layer
                                     onClick={() => {
                                         onSelectElement(null);
+                                        onSetSelectedTab?.(sideBarpillsList.template);
                                     }}
                                     listening={false}
                                 >
@@ -475,7 +479,14 @@ export const Editor = ({
                                                     selectedElement?.draggable
                                                         ? selectedElement?.type ===
                                                           elementTypes?.text
-                                                            ? ['middle-left', 'middle-right']
+                                                            ? [
+                                                                  'top-left',
+                                                                  'top-right',
+                                                                  'bottom-left',
+                                                                  'bottom-right',
+                                                                  'middle-left',
+                                                                  'middle-right',
+                                                              ]
                                                             : [
                                                                   'top-left',
                                                                   'top-right',
@@ -502,7 +513,12 @@ export const Editor = ({
                                                 // anchorCornerRadius={50}
                                                 boundBoxFunc={(oldBox, newBox) => {
                                                     // limit resize
-                                                    if (!selectedElement?.draggable) {
+                                                    if (
+                                                        !selectedElement?.draggable ||
+                                                        // Handle element flliping
+                                                        newBox.width < 1 ||
+                                                        newBox.height < 1
+                                                    ) {
                                                         return oldBox;
                                                     }
                                                     return newBox;
@@ -545,6 +561,7 @@ export const Editor = ({
                 sendSelectedElementToBack={sendSelectedElementToBack}
                 languageLocale={languageLocale}
                 onSave={onSave}
+                showSaveButton={showSaveButton}
                 saveButtonText={saveButtonText}
             />
         </Container>

@@ -3,7 +3,7 @@ import React, { useRef } from 'react';
 import './App.css';
 import { Studio } from './features';
 import { InnerWrapper, Wrapper } from './styled';
-import { customTemplates, defaultTemplates } from './constants';
+import { customTemplates, DEF_TEMPLATE, defaultTemplates } from './constants';
 let elems = [
     {
         type: 'pageSize',
@@ -242,11 +242,14 @@ const App = () => {
             <InnerWrapper>
                 <Studio
                     ref={studioRef}
-                    // elementsList={elems}
+                    // elementsList={elems} // Selected auto
                     // defaultImages={[]}
-                    // customImages={[]}
-                    // defaultTemplatesList={defaultTemplates}
-                    // customTemplatesList={customTemplates}
+                    customImages={[]}
+                    defaultTemplatesList={DEF_TEMPLATE}
+                    // customTemplatesList={DEF_TEMPLATE}
+                    // onDeleteCustomTemplate={() => {
+                    //     console.log('Calling onDeleteCustomTemplate')
+                    // }}
                     // disableWhiteLabel={true}
                     // title={'New Title'}
                     // styleProps={
@@ -256,8 +259,9 @@ const App = () => {
                     // }
                     // defaultText={'hellow this is default Text'}
                     // qrLink={'http://localhost:5173/'}
-                    // uploadImageCallBack={uploadImageAndReturnUrl}
+                    uploadImageCallBack={uploadImageAndReturnUrl}
                     onSave={onSave}
+                    showSaveButton
                     // saveButtonText={'Save Progress'}
                     locale={'en'}
                 />

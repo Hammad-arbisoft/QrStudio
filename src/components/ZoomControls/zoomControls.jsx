@@ -14,10 +14,11 @@ export const ZoomControls = ({
     onZoomOut,
     languageLocale,
     onSave,
+    showSaveButton,
     saveButtonText,
 }) => (
     <Container>
-        {onSave && (
+        {showSaveButton && (
             <Button
                 text={saveButtonText || TEXT_DICTIONARY?.[languageLocale]?.SAVE}
                 varient={ButtonVarients?.primary}

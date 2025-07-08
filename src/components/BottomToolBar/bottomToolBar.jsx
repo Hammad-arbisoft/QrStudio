@@ -21,6 +21,7 @@ export const BottomToolBar = ({
     sendSelectedElementToBack,
     languageLocale,
     onSave,
+    showSaveButton,
     saveButtonText,
 }) => {
     const onZoomIn = () => {
@@ -65,6 +66,7 @@ export const BottomToolBar = ({
                 onZoomOut={onZoomOut}
                 languageLocale={languageLocale}
                 onSave={onSave}
+                showSaveButton={showSaveButton}
                 saveButtonText={saveButtonText}
             />
         </BottomToolbarWrapper>

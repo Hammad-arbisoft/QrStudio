@@ -56,7 +56,7 @@ import isPropValid from '@emotion/is-prop-valid';
 export const Studio = forwardRef(
     (
         {
-            title = 'untitled',
+            title = '',
             elementsList = defaultElements,
             uploadImageCallBack,
             customImages,
@@ -64,24 +64,26 @@ export const Studio = forwardRef(
             disableWhiteLabel,
             defaultTemplatesList = [],
             customTemplatesList = [],
+            onDeleteCustomTemplate,
             qrLink = 'www.google.com',
             styleProps = {},
             defaultText,
             onSave,
+            showSaveButton,
             saveButtonText,
             locale = 'en',
         },
         ref,
     ) => {
         const stageRef = useRef(null);
-        const [selectedTab, setSelectedTab] = useState(null);
+        const [selectedTab, setSelectedTab] = useState(sideBarpillsList.template);
         const [languageLocale, setLanguageLocale] = useState(validateLocale(locale));
         const [loadingFonts, setLoadingFonts] = useState(true);
         const [loadingImages, setLoadingImages] = useState(true);
         const [loading, setLoading] = useState(false);
         const [loadingUploadImage, setLoadingUploadImage] = useState(false);
-        const [helperSideBarVisible, setHelperSideBarVisible] = useState(false);
-        const [zoomPercentage, setZoomPercentage] = useState(80);
+        const [helperSideBarVisible, setHelperSideBarVisible] = useState(true);
+        const [zoomPercentage, setZoomPercentage] = useState(100);
         const [elements, setElements] = useState(elementsList);
         const [backgroundImageOpacity, setBackgroundImageOpacity] = useState(1);
         const [history, setHistory] = useState([]);
@@ -760,6 +762,7 @@ export const Studio = forwardRef(
                         setLoadingUploadImage={setLoadingUploadImage}
                         defaultTemplatesList={defaultTemplatesList}
                         customTemplatesList={customTemplatesList}
+                        onDeleteCustomTemplate={onDeleteCustomTemplate}
                         styleProps={styleProps}
                         defaultText={defaultText}
                         languageLocale={languageLocale}
@@ -833,6 +836,8 @@ export const Studio = forwardRef(
                         uploadImageCallBack={uploadImageCallBack}
                         setLoadingUploadImage={setLoadingUploadImage}
                         onSave={onSave && onSaveProgress}
+                        showSaveButton={showSaveButton}
+                        onSetSelectedTab={onSelectedTab}
                         saveButtonText={saveButtonText}
                         languageLocale={languageLocale}
                         onRemoveBackgroundImage={onRemoveBackgroundImage}

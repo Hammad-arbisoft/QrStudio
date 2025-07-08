@@ -30,6 +30,7 @@ export const HelperSideBar = ({
     setLoadingUploadImage,
     defaultTemplatesList,
     customTemplatesList,
+    onDeleteCustomTemplate,
     styleProps,
     defaultText,
     languageLocale,
@@ -45,6 +46,7 @@ export const HelperSideBar = ({
                 <TemplateSideBar
                     oncreateNewTemplate={oncreateNewTemplate}
                     languageLocale={languageLocale}
+                    onDeleteCustomTemplate={onDeleteCustomTemplate}
                     defaultTemplatesList={defaultTemplatesList}
                     customTemplatesList={customTemplatesList}
                     styleProps={styleProps}
