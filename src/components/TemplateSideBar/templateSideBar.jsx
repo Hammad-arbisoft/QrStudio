@@ -104,10 +104,12 @@ export const TemplateSideBar = ({
                 title={TEXT_DICTIONARY?.[languageLocale]?.DEFAULT}
                 content={renderDefaultContent}
             />
-            <Collapsable
-                title={TEXT_DICTIONARY?.[languageLocale]?.CUSTOM_TEMPLATES}
-                content={renderCustomContent}
-            />
+            {customTemplatesList.length > 0 && (
+                <Collapsable
+                    title={TEXT_DICTIONARY?.[languageLocale]?.CUSTOM_TEMPLATES}
+                    content={renderCustomContent}
+                />
+            )}
         </StyledContainer>
     );
 };

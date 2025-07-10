@@ -35,6 +35,7 @@ import isPropValid from '@emotion/is-prop-valid';
 /**
  * @typedef {Object} StudioProps
  * @property {string} [title]
+ * @property {string} [defaultQrLogo]
  * @property {string} [languageLocale]
  * @property {Array} [elementsList]
  * @property {Array} [customImages]
@@ -57,6 +58,7 @@ export const Studio = forwardRef(
     (
         {
             title = '',
+            defaultQrLogo = null,
             elementsList = defaultElements,
             uploadImageCallBack,
             customImages,
@@ -76,6 +78,7 @@ export const Studio = forwardRef(
         ref,
     ) => {
         const stageRef = useRef(null);
+        const [copiedElement, setCopiedElement] = useState(null);
         const [selectedTab, setSelectedTab] = useState(sideBarpillsList.template);
         const [languageLocale, setLanguageLocale] = useState(validateLocale(locale));
         const [loadingFonts, setLoadingFonts] = useState(true);
@@ -100,8 +103,33 @@ export const Studio = forwardRef(
         const [qrOpacity, setQrOpacity] = useState(1);
         const [selectedElement, setSelectedElement] = useState(null);
         const [customImagesList, setCustomImagesList] = useState(customImages || []);
-        const [qrLogo, setQrLogo] = useState(null);
+        const [qrLogo, setQrLogo] = useState(defaultQrLogo);
         const [defaultTextProps, setDefaultTextProps] = useState(basicTextProps);
+
+        const overallLoading = loadingFonts || loadingImages || loadingUploadImage || loading;
+
+        const undo = useCallback(() => {
+            if (history.length > 0) {
+                setSelectedElement(null);
+
+                const previousState = history[history.length - 1];
+                setRedoStack([elements, ...redoStack]);
+                setHistory(history.slice(0, -1));
+                setElements(previousState);
+            }
+        }, [history, elements, redoStack, setRedoStack, setHistory, setElements]);
+
+        const redo = useCallback(() => {
+            if (redoStack.length > 0) {
+                setSelectedElement(null);
+
+                const nextState = redoStack[0];
+                setHistory([...history, elements]);
+                setRedoStack(redoStack.slice(1));
+                setElements(nextState);
+            }
+        }, [history, elements, redoStack, setHistory, setRedoStack, setElements]);
+
         useImperativeHandle(ref, () => ({
             onSave: async () => {
                 setLoading(true);
@@ -113,14 +141,82 @@ export const Studio = forwardRef(
                 setLoading(false);
                 return { elements: processedElements, image: dataURL };
             },
+            loading: overallLoading,
+            setLoading,
         }));
+        useEffect(() => {
+            const handleKeyDown = e => {
+                const isMac = navigator.platform.toUpperCase().includes('MAC');
+                const ctrlOrCmd = isMac ? e.metaKey : e.ctrlKey;
+                const shiftKey = e.shiftKey;
+
+                // Delete
+                if (
+                    (e.key === 'Delete' || e.key === 'Backspace') &&
+                    selectedElement &&
+                    selectedElement?.draggable !== false &&
+                    !['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName) &&
+                    !document.activeElement.isContentEditable
+                ) {
+                    e.preventDefault();
+                    onDeleteSelectedElement();
+                }
+
+                // Copy
+                if (ctrlOrCmd && e.key.toLowerCase() === 'c') {
+                    if (selectedElement) {
+                        e.preventDefault();
+                        const copied = { ...selectedElement };
+                        delete copied.ref;
+                        setCopiedElement(copied);
+                    }
+                }
+
+                // Paste
+                if (ctrlOrCmd && e.key.toLowerCase() === 'v') {
+                    if (copiedElement) {
+                        e.preventDefault();
+                        const newElement = {
+                            ...copiedElement,
+                            id: `element${Date.now()}`,
+                            x: copiedElement.x + 10,
+                            y: copiedElement.y + 10,
+                            draggable: true,
+                        };
+                        addElement(newElement);
+                        setSelectedElement(newElement);
+                    }
+                }
+
+                // Undo: Ctrl/Cmd + Z
+                if (ctrlOrCmd && !shiftKey && e.key.toLowerCase() === 'z') {
+                    e.preventDefault();
+                    undo();
+                }
+
+                // Redo: Ctrl/Cmd + Shift + Z or Ctrl + Y
+                if (
+                    (ctrlOrCmd && shiftKey && e.key.toLowerCase() === 'z') ||
+                    (ctrlOrCmd && e.key.toLowerCase() === 'y')
+                ) {
+                    e.preventDefault();
+                    redo();
+                }
+            };
+
+            window.addEventListener('keydown', handleKeyDown);
+            return () => {
+                window.removeEventListener('keydown', handleKeyDown);
+            };
+        }, [selectedElement, copiedElement, undo, redo]);
+
         // console.log(isPropValid('onClick'));
         useEffect(() => {
             setLanguageLocale(validateLocale(locale));
         }, [locale]);
 
         useEffect(() => {
-            setCustomImagesList(customImages);
+            setCustomImagesList(customImages || []);
         }, [customImages]);
 
         useEffect(() => {
@@ -384,31 +480,6 @@ export const Studio = forwardRef(
             setBackgroundImageOpacity(val);
         };
 
-        const undo = useCallback(() => {
-            if (history.length > 0) {
-                // if (history.length === 1) {
-                //     setSelectedElement(null);
-                // }
-                setSelectedElement(null);
-
-                const previousState = history[history.length - 1];
-                setRedoStack([elements, ...redoStack]);
-                setHistory(history.slice(0, -1));
-                setElements(previousState);
-            }
-        }, [history, elements, redoStack, setRedoStack, setHistory, setElements]);
-
-        const redo = useCallback(() => {
-            if (redoStack.length > 0) {
-                setSelectedElement(null);
-
-                const nextState = redoStack[0];
-                setHistory([...history, elements]);
-                setRedoStack(redoStack.slice(1));
-                setElements(nextState);
-            }
-        }, [history, elements, redoStack, setHistory, setRedoStack, setElements]);
-
         const onSelectElement = element => {
             if (isElementShape(element)) {
                 setSelectedTab(sideBarpillsList?.shape);
@@ -507,7 +578,27 @@ export const Studio = forwardRef(
             copyElements?.push(selectedElem);
             saveHistory([...copyElements]);
         };
-        const createNewTemplate = (elems = [...defaultElements]) => {
+        const createNewTemplate = (
+            elems = [
+                ...defaultElements,
+                {
+                    type: elementTypes.qr,
+                    id: `element${Date.now() + 1}`,
+                    width: 110,
+                    height: 110,
+                    x: 194.5,
+                    y: 280,
+                    fill: theme.color.green_80D965,
+                    stroke: theme.color.black,
+                    strokeWidth: 2,
+                    draggable: true,
+                    qrLogo: null,
+                    qrText: qrLink,
+                    opacity: 1,
+                    logoVisible: false,
+                },
+            ],
+        ) => {
             setElements([...elems]);
             setHistory([]);
             setRedoStack([]);
@@ -767,82 +858,84 @@ export const Studio = forwardRef(
                         defaultText={defaultText}
                         languageLocale={languageLocale}
                     />
-                    <Editor
-                        // canvasSize={canvasSize}
-                        cuttingGuideStroke={
-                            elements?.find(e => e?.type === elementTypes?.pageSize)
-                                ?.cuttingGuideStroke || 0
-                        }
-                        cuttingGuideStrokeColor={
-                            elements?.find(e => e?.type === elementTypes?.pageSize)
-                                ?.cuttingGuideStrokeColor || theme?.color.black
-                        }
-                        onChangeCuttingGuideProp={(type, value) => {
-                            onChangeCuttingGuideProp(type, value);
-                        }}
-                        editorHeight={editorHeight}
-                        editorWidth={editorWidth}
-                        selectedTab={selectedTab}
-                        title={title}
-                        zoomPercentage={zoomPercentage}
-                        onChangeZoomPercentage={onChangeZoomPercentage}
-                        onSetBackgroundColor={onSetBackgroundColor}
-                        elements={elements}
-                        history={history}
-                        redoStack={redoStack}
-                        onSetBackgroundImage={onSetBackgroundImage}
-                        onUndo={undo}
-                        onRedo={redo}
-                        shapeStrokeColor={shapeStrokeColor}
-                        shapeStrokeWidth={shapeStrokeWidth}
-                        shapeFillColor={shapeFillColor}
-                        imageStrokeWidth={imageStrokeWidth}
-                        imageStrokeColor={imageStrokeColor}
-                        imageOpacity={imageOpacity}
-                        onChangeImageStrokeWidth={onChangeImageStrokeWidth}
-                        onChangeImageStrokeColor={onChangeImageStrokeColor}
-                        onChangeImageOpacity={onChangeImageOpacity}
-                        onChangeShapeStrokeColor={onChangeShapeStrokeColor}
-                        onChangeShapeStrokeWidth={onChangeShapeStrokeWidth}
-                        onChangeShapeFill={onChangeShapeFill}
-                        shapeOpacity={shapeOpacity}
-                        onChangeShapeOpacity={onChangeShapeOpacity}
-                        qrStrokeWidth={qrStrokeWidth}
-                        qrStrokeColor={qrStrokeColor}
-                        qrOpacity={qrOpacity}
-                        onChangeQrStrokeWidth={onChangeQrStrokeWidth}
-                        onChangeQrStrokeColor={onChangeQrStrokeColor}
-                        onChangeQrOpacity={onChangeQrOpacity}
-                        selectedElement={selectedElement}
-                        onSelectElement={onSelectElement}
-                        stageRef={stageRef}
-                        saveHistory={saveHistory}
-                        onChangeBackgroundImageOpacity={onChangeBackgroundImageOpacity}
-                        backgroundImageOpacity={
-                            elements?.find(e => e?.type === elementTypes?.backgroundImage)
-                                ?.opacity || backgroundImageOpacity
-                        }
-                        onDeleteSelectedElement={onDeleteSelectedElement}
-                        onCopySelectedElement={onCopySelectedElement}
-                        onToggleLockElement={onToggleLockElement}
-                        bringSelectedElementToFront={bringSelectedElementToFront}
-                        sendSelectedElementToBack={sendSelectedElementToBack}
-                        defaultTextProps={defaultTextProps}
-                        onChangeTextProperty={onChangeTextProperty}
-                        onSetPageSize={onSetPageSize}
-                        selectedPageSize={selectedPageSize}
-                        loadingImages={loadingImages}
-                        loadingFonts={loadingFonts}
-                        uploadImageCallBack={uploadImageCallBack}
-                        setLoadingUploadImage={setLoadingUploadImage}
-                        onSave={onSave && onSaveProgress}
-                        showSaveButton={showSaveButton}
-                        onSetSelectedTab={onSelectedTab}
-                        saveButtonText={saveButtonText}
-                        languageLocale={languageLocale}
-                        onRemoveBackgroundImage={onRemoveBackgroundImage}
-                    />
-                    {(loadingFonts || loadingImages || loadingUploadImage || loading) && (
+                    {loadingFonts ? null : (
+                        <Editor
+                            // canvasSize={canvasSize}
+                            cuttingGuideStroke={
+                                elements?.find(e => e?.type === elementTypes?.pageSize)
+                                    ?.cuttingGuideStroke || 0
+                            }
+                            cuttingGuideStrokeColor={
+                                elements?.find(e => e?.type === elementTypes?.pageSize)
+                                    ?.cuttingGuideStrokeColor || theme?.color.black
+                            }
+                            onChangeCuttingGuideProp={(type, value) => {
+                                onChangeCuttingGuideProp(type, value);
+                            }}
+                            editorHeight={editorHeight}
+                            editorWidth={editorWidth}
+                            selectedTab={selectedTab}
+                            title={title}
+                            zoomPercentage={zoomPercentage}
+                            onChangeZoomPercentage={onChangeZoomPercentage}
+                            onSetBackgroundColor={onSetBackgroundColor}
+                            elements={elements}
+                            history={history}
+                            redoStack={redoStack}
+                            onSetBackgroundImage={onSetBackgroundImage}
+                            onUndo={undo}
+                            onRedo={redo}
+                            shapeStrokeColor={shapeStrokeColor}
+                            shapeStrokeWidth={shapeStrokeWidth}
+                            shapeFillColor={shapeFillColor}
+                            imageStrokeWidth={imageStrokeWidth}
+                            imageStrokeColor={imageStrokeColor}
+                            imageOpacity={imageOpacity}
+                            onChangeImageStrokeWidth={onChangeImageStrokeWidth}
+                            onChangeImageStrokeColor={onChangeImageStrokeColor}
+                            onChangeImageOpacity={onChangeImageOpacity}
+                            onChangeShapeStrokeColor={onChangeShapeStrokeColor}
+                            onChangeShapeStrokeWidth={onChangeShapeStrokeWidth}
+                            onChangeShapeFill={onChangeShapeFill}
+                            shapeOpacity={shapeOpacity}
+                            onChangeShapeOpacity={onChangeShapeOpacity}
+                            qrStrokeWidth={qrStrokeWidth}
+                            qrStrokeColor={qrStrokeColor}
+                            qrOpacity={qrOpacity}
+                            onChangeQrStrokeWidth={onChangeQrStrokeWidth}
+                            onChangeQrStrokeColor={onChangeQrStrokeColor}
+                            onChangeQrOpacity={onChangeQrOpacity}
+                            selectedElement={selectedElement}
+                            onSelectElement={onSelectElement}
+                            stageRef={stageRef}
+                            saveHistory={saveHistory}
+                            onChangeBackgroundImageOpacity={onChangeBackgroundImageOpacity}
+                            backgroundImageOpacity={
+                                elements?.find(e => e?.type === elementTypes?.backgroundImage)
+                                    ?.opacity || backgroundImageOpacity
+                            }
+                            onDeleteSelectedElement={onDeleteSelectedElement}
+                            onCopySelectedElement={onCopySelectedElement}
+                            onToggleLockElement={onToggleLockElement}
+                            bringSelectedElementToFront={bringSelectedElementToFront}
+                            sendSelectedElementToBack={sendSelectedElementToBack}
+                            defaultTextProps={defaultTextProps}
+                            onChangeTextProperty={onChangeTextProperty}
+                            onSetPageSize={onSetPageSize}
+                            selectedPageSize={selectedPageSize}
+                            loadingImages={loadingImages}
+                            loadingFonts={loadingFonts}
+                            uploadImageCallBack={uploadImageCallBack}
+                            setLoadingUploadImage={setLoadingUploadImage}
+                            onSave={onSave && onSaveProgress}
+                            showSaveButton={showSaveButton}
+                            onSetSelectedTab={onSelectedTab}
+                            saveButtonText={saveButtonText}
+                            languageLocale={languageLocale}
+                            onRemoveBackgroundImage={onRemoveBackgroundImage}
+                        />
+                    )}
+                    {overallLoading && (
                         <Overlay>
                             <LoadingSpinner size="60px" color={theme.color.secondary} />
                         </Overlay>
