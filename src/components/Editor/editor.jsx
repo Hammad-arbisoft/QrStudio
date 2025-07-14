@@ -538,6 +538,7 @@ export const Editor = ({
                                         strokeWidth={cuttingGuideStroke}
                                         strokeScaleEnabled={false}
                                         fill={'transparent'}
+                                        dash={[10, 5]} // [dash length, gap length]
                                     />
                                 </Layer>
                             </Stage>

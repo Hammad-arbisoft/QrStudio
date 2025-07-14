@@ -123,7 +123,7 @@ export const TemplateToolBar = ({
                 tooltip={TEXT_DICTIONARY?.[languageLocale]?.CUTTING_GUIDE}
                 languageLocale={languageLocale}
                 leftIcon={IconFrame}
-                max={200}
+                max={10}
             />
         </RowContainer>
     );

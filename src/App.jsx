@@ -245,6 +245,7 @@ const App = () => {
                     // elementsList={elems} // Selected auto
                     // defaultImages={[]}
                     customImages={[]}
+                    defaultQrLogo="https://i.ibb.co/zW7jxTxq/ea3f8b02-1ecd-47c7-a47d-37800dfd3591-1.png"
                     defaultTemplatesList={DEF_TEMPLATE}
                     // customTemplatesList={DEF_TEMPLATE}
                     // onDeleteCustomTemplate={() => {
