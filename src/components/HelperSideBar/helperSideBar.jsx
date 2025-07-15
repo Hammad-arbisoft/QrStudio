@@ -34,6 +34,7 @@ export const HelperSideBar = ({
     styleProps,
     defaultText,
     languageLocale,
+    onTemplateSelect,
 }) => (
     <SideBarWrapper visible={selectedSideBarItem && helperSideBarVisible}>
         <SideBarHeader
@@ -49,6 +50,7 @@ export const HelperSideBar = ({
                     onDeleteCustomTemplate={onDeleteCustomTemplate}
                     defaultTemplatesList={defaultTemplatesList}
                     customTemplatesList={customTemplatesList}
+                    onTemplateSelect={onTemplateSelect}
                     styleProps={styleProps}
                 />
             ) : selectedSideBarItem === sideBarpillsList?.text ? (

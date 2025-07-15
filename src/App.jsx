@@ -265,6 +265,7 @@ const App = () => {
                     showSaveButton
                     // saveButtonText={'Save Progress'}
                     locale={'en'}
+                    onCreateNewTemplate={template => console.log(template)}
                 />
             </InnerWrapper>
         </Wrapper>

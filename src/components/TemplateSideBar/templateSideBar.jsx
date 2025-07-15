@@ -15,6 +15,7 @@ export const TemplateSideBar = ({
     onDeleteCustomTemplate,
     defaultTemplatesList,
     customTemplatesList,
+    onTemplateSelect,
 }) => {
     const renderDefaultContent = useMemo(() => {
         return (
@@ -24,6 +25,9 @@ export const TemplateSideBar = ({
                         key={index}
                         onClick={() => {
                             oncreateNewTemplate(item?.elements);
+                            if (typeof onTemplateSelect === 'function') {
+                                onTemplateSelect(item?.id);
+                            }
                         }}
                     >
                         <StyledImage

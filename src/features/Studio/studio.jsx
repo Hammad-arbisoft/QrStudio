@@ -49,6 +49,8 @@ import isPropValid from '@emotion/is-prop-valid';
  * @property {Function} onSave
  * @property {string} [saveButtonText]
  * @property {'en'|'ru'|'pl'|'de'|'es'|'fr'|'it'} [locale]
+ * @property {Function} [onCreateNewTemplate] - called when user creates a new template, passes new canvas elements
+ * @property {Function} [onTemplateSelect] - called when a template is selected, passes template id
  */
 
 /**
@@ -74,6 +76,8 @@ export const Studio = forwardRef(
             showSaveButton,
             saveButtonText,
             locale = 'en',
+            onCreateNewTemplate,
+            onTemplateSelect,
         },
         ref,
     ) => {
@@ -602,6 +606,15 @@ export const Studio = forwardRef(
             setElements([...elems]);
             setHistory([]);
             setRedoStack([]);
+
+            if (typeof onCreateNewTemplate === 'function') {
+                onCreateNewTemplate(elems);
+            }
+
+            // Clear selected template ID
+            if (typeof onTemplateSelect === 'function') {
+                onTemplateSelect(null);
+            }
         };
 
         const sendSelectedElementToBack = () => {
@@ -857,6 +870,7 @@ export const Studio = forwardRef(
                         styleProps={styleProps}
                         defaultText={defaultText}
                         languageLocale={languageLocale}
+                        onTemplateSelect={onTemplateSelect}
                     />
                     {loadingFonts ? null : (
                         <Editor
