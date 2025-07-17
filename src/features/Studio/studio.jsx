@@ -1,3 +1,5 @@
+/* eslint-disable max-len */
+/* eslint-disable no-console */
 import React, {
     useCallback,
     useMemo,
@@ -51,6 +53,10 @@ import isPropValid from '@emotion/is-prop-valid';
  * @property {'en'|'ru'|'pl'|'de'|'es'|'fr'|'it'} [locale]
  * @property {Function} [onCreateNewTemplate] - called when user creates a new template, passes new canvas elements
  * @property {Function} [onTemplateSelect] - called when a template is selected, passes template id
+ * @property {Function} [uploadQRLogoImage] - Optional callback to upload the QR logo image. Should return a string or an object with `{ url }`
+ * @property {number} [zoomLevel] - Optional zoom level (e.g. 100 for 100%)
+ * @property {boolean} [showBackgroundImagePicker] - Used to set background image on entire canvas
+ * @property {boolean} [showOpacityPicker] - Related to showBackgroundImagePicker and it's opacity
  */
 
 /**
@@ -78,6 +84,10 @@ export const Studio = forwardRef(
             locale = 'en',
             onCreateNewTemplate,
             onTemplateSelect,
+            showBackgroundImagePicker,
+            showOpacityPicker,
+            uploadQRLogoImage,
+            zoomLevel,
         },
         ref,
     ) => {
@@ -90,7 +100,7 @@ export const Studio = forwardRef(
         const [loading, setLoading] = useState(false);
         const [loadingUploadImage, setLoadingUploadImage] = useState(false);
         const [helperSideBarVisible, setHelperSideBarVisible] = useState(true);
-        const [zoomPercentage, setZoomPercentage] = useState(100);
+        const [zoomPercentage, setZoomPercentage] = useState(zoomLevel ?? 100);
         const [elements, setElements] = useState(elementsList);
         const [backgroundImageOpacity, setBackgroundImageOpacity] = useState(1);
         const [history, setHistory] = useState([]);
@@ -147,7 +157,15 @@ export const Studio = forwardRef(
             },
             loading: overallLoading,
             setLoading,
+            undoCount: history.length,
+            hasChanges: history.length > 0,
+            redoCount: redoStack.length,
         }));
+        useEffect(() => {
+            if (typeof zoomLevel === 'number') {
+                setZoomPercentage(zoomLevel);
+            }
+        }, [zoomLevel]);
         useEffect(() => {
             const handleKeyDown = e => {
                 const isMac = navigator.platform.toUpperCase().includes('MAC');
@@ -330,25 +348,45 @@ export const Studio = forwardRef(
 
             saveHistory([...elemClone, newElement]);
         };
-        const onSetPageSize = size => {
-            if (!size) {
-                return;
-            }
+        const onSetPageSize = newSize => {
+            if (!newSize) return;
 
-            let elemClone = JSON.parse(JSON.stringify(elements));
-            let sizeIndex = elemClone.findIndex(e => e?.type === elementTypes?.pageSize);
-            if (sizeIndex > -1) {
-                elemClone[sizeIndex]['size'] = size;
-            } else {
-                let sizeElement = {
-                    type: elementTypes?.pageSize,
-                    id: `element${Date.now()}`,
-                    size: size,
-                };
-                elemClone.push(sizeElement);
-            }
+            const oldSize =
+                elements?.find(e => e?.type === elementTypes?.pageSize)?.size || pageSizes.A4;
 
-            saveHistory(removeImageProperty(elemClone));
+            const oldDims = pageSizesDimensions[oldSize];
+            const newDims = pageSizesDimensions[newSize];
+
+            const scaleX = newDims.width / oldDims.width;
+            const scaleY = newDims.height / oldDims.height;
+
+            const scaledElements = elements.map(elem => {
+                if (elem.type === elementTypes.pageSize) {
+                    return { ...elem, size: newSize }; // Just update the size
+                }
+
+                let scaled = { ...elem };
+
+                // Scale common position and size props
+                if (typeof scaled.x === 'number') scaled.x *= scaleX;
+                if (typeof scaled.y === 'number') scaled.y *= scaleY;
+                if (typeof scaled.width === 'number') scaled.width *= scaleX;
+                if (typeof scaled.height === 'number') scaled.height *= scaleY;
+                if (typeof scaled.radius === 'number') scaled.radius *= Math.min(scaleX, scaleY); // for circles, stars
+                if (typeof scaled.fontSize === 'number')
+                    scaled.fontSize *= Math.min(scaleX, scaleY);
+
+                // Special case: QR codes or icons that have scale or size props
+                if (scaled.points && Array.isArray(scaled.points)) {
+                    scaled.points = scaled.points.map((val, idx) =>
+                        idx % 2 === 0 ? val * scaleX : val * scaleY,
+                    );
+                }
+
+                return scaled;
+            });
+
+            saveHistory(removeImageProperty(scaledElements));
         };
 
         const onChangeCuttingGuideProp = (type, value) => {
@@ -393,7 +431,7 @@ export const Studio = forwardRef(
                 shapeProps['height'] = 100;
                 shapeProps['width'] = 100;
                 shapeProps['name'] = elementTypes.square;
-
+                shapeProps['cornerRadius'] = 0;
                 addElement(shapeProps);
             } else if (type === elementTypes.arrowRight) {
                 shapeProps['points'] = [0, 0, 100, 0];
@@ -783,11 +821,24 @@ export const Studio = forwardRef(
         const addQrLogo = async () => {
             const file = await pickImage();
             if (!file) return;
-            if (uploadImageCallBack) {
-                setLoadingUploadImage(true);
-                const imageUrl = await uploadImageCallBack(file);
-                addLogo(imageUrl);
-                setLoadingUploadImage(false);
+
+            if (uploadQRLogoImage) {
+                try {
+                    setLoadingUploadImage(true);
+                    const result = await uploadQRLogoImage(file);
+
+                    const imageUrl = typeof result === 'string' ? result : result?.url;
+
+                    if (imageUrl) {
+                        addLogo(imageUrl);
+                    } else {
+                        console.warn('uploadQRLogoImage did not return a valid image URL');
+                    }
+                } catch (error) {
+                    console.error('Error uploading QR logo image:', error);
+                } finally {
+                    setLoadingUploadImage(false);
+                }
             } else {
                 const reader = new FileReader();
                 reader.onload = () => {
@@ -947,6 +998,9 @@ export const Studio = forwardRef(
                             saveButtonText={saveButtonText}
                             languageLocale={languageLocale}
                             onRemoveBackgroundImage={onRemoveBackgroundImage}
+                            showBackgroundImagePicker={showBackgroundImagePicker}
+                            showOpacityPicker={showOpacityPicker}
+                            changeSelectedElementProperty={changeSelectedElementProperty}
                         />
                     )}
                     {overallLoading && (

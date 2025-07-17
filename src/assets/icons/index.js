@@ -52,3 +52,4 @@ export { default as IconHeart } from './ic_heart.svg';
 export { default as IconAddImage } from './ic_add_image.svg';
 export { default as IconUnlock } from './ic_unlock.svg';
 export { default as IconCross } from './ic_cross.svg';
+export { default as IconRoundedCorner } from './ic_rounded_corner.svg';

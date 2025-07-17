@@ -22,6 +22,7 @@ export const OpacityPicker = ({
     languageLocale = 'en',
     tooltip = TEXT_DICTIONARY?.[languageLocale]?.OPACITY,
     tooltipPosition = 'bottom',
+    toolBarIcon,
 }) => {
     const pickerRef = useRef(null);
 
@@ -47,9 +48,14 @@ export const OpacityPicker = ({
             }}
         >
             <ToolBarButtonWrapper gap={gap} tooltip={tooltip} tooltipPosition={tooltipPosition}>
-                {showLeftChild && (leftChild ? leftChild : <StyledImage src={IconOpacity} />)}
+                {showLeftChild &&
+                    (leftChild ? (
+                        leftChild
+                    ) : (
+                        <StyledImage src={varient === 'opacity' ? IconOpacity : toolBarIcon} />
+                    ))}
                 <StyledText fontFamily={fontFamily}>
-                    {varient === 'opacity' ? `${value * 100}%` : Math.round(value)}
+                    {varient === 'opacity' ? `${value * 100}%` : `${Math.round(value)}px`}
                 </StyledText>
                 {rightChild && rightChild}
             </ToolBarButtonWrapper>

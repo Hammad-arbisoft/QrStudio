@@ -87,6 +87,9 @@ export const Editor = ({
     onSetSelectedTab,
     saveButtonText,
     onRemoveBackgroundImage,
+    showBackgroundImagePicker,
+    showOpacityPicker,
+    changeSelectedElementProperty,
 }) => {
     const transformerRef = useRef(null);
     useEffect(() => {
@@ -199,6 +202,7 @@ export const Editor = ({
                             key={el.id}
                             {...el}
                             id={el.id}
+                            cornerRadius={el.cornerRadius || 0} 
                             onClick={() => handleSelect(el)}
                             onDragEnd={e => {
                                 handleTransform(el.id, e.target.attrs);
@@ -424,6 +428,9 @@ export const Editor = ({
                     cuttingGuideStrokeColor={cuttingGuideStrokeColor}
                     onChangeCuttingGuideProp={onChangeCuttingGuideProp}
                     onRemoveBackgroundImage={onRemoveBackgroundImage}
+                    showBackgroundImagePicker={showBackgroundImagePicker}
+                    showOpacityPicker={showOpacityPicker}
+                    changeSelectedElementProperty={changeSelectedElementProperty}
                 />
             )}
             <InnerContainer>

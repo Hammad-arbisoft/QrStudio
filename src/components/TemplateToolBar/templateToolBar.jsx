@@ -36,6 +36,8 @@ export const TemplateToolBar = ({
     onChangeCuttingGuideProp,
     canvasBackgroundImage,
     onRemoveBackgroundImage,
+    showBackgroundImagePicker = true,
+    showOpacityPicker = true,
 }) => {
     const selectBackgroundColor = e => {
         onSetBackgroundColor(e);
@@ -79,37 +81,41 @@ export const TemplateToolBar = ({
                     onChange={selectBackgroundColor}
                 />
             </ToolBarButtonWrapper>
-            <ToolBarButtonWrapper
-                paddingRight={17}
-                paddingLeft={17}
-                onClick={handleBackgroundUpload}
-                tooltip={TEXT_DICTIONARY?.[languageLocale]?.BACKGROUND_IMAGE}
-                tooltipPosition={'bottom'}
-            >
-                {canvasBackgroundImage && (
-                    <RemoveButton
-                        onClick={e => {
-                            onRemoveBackgroundImage && onRemoveBackgroundImage();
-                            e.stopPropagation();
-                        }}
-                    >
-                        <StyledImage src={IconCross} height={15} width={15} />
-                    </RemoveButton>
-                )}
-                <StyledImage
-                    src={canvasBackgroundImage?.src || IconBackgroundImage}
-                    height={24}
-                    width={24}
+            {showBackgroundImagePicker && (
+                <ToolBarButtonWrapper
+                    paddingRight={17}
+                    paddingLeft={17}
+                    onClick={handleBackgroundUpload}
+                    tooltip={TEXT_DICTIONARY?.[languageLocale]?.BACKGROUND_IMAGE}
+                    tooltipPosition={'bottom'}
+                >
+                    {canvasBackgroundImage && (
+                        <RemoveButton
+                            onClick={e => {
+                                onRemoveBackgroundImage && onRemoveBackgroundImage();
+                                e.stopPropagation();
+                            }}
+                        >
+                            <StyledImage src={IconCross} height={15} width={15} />
+                        </RemoveButton>
+                    )}
+                    <StyledImage
+                        src={canvasBackgroundImage?.src || IconBackgroundImage}
+                        height={24}
+                        width={24}
+                    />
+                </ToolBarButtonWrapper>
+            )}
+            {showOpacityPicker && (
+                <OpacityPicker
+                    tooltip={TEXT_DICTIONARY?.[languageLocale]?.BACKGROUND_IMAGE_OPACITY}
+                    gap={10}
+                    value={backgroundImageOpacity}
+                    onChangeOpacity={onChangeBackgroundImageOpacity}
+                    leftChild={<StyledImage src={IconBackgroundImageOpacity} />}
+                    rightChild={<StyledImage src={IconDropDownSmall} />}
                 />
-            </ToolBarButtonWrapper>
-            <OpacityPicker
-                tooltip={TEXT_DICTIONARY?.[languageLocale]?.BACKGROUND_IMAGE_OPACITY}
-                gap={10}
-                value={backgroundImageOpacity}
-                onChangeOpacity={onChangeBackgroundImageOpacity}
-                leftChild={<StyledImage src={IconBackgroundImageOpacity} />}
-                rightChild={<StyledImage src={IconDropDownSmall} />}
-            />
+            )}
             <StrokePicker
                 gap={10}
                 value={cuttingGuideStroke}

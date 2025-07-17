@@ -247,10 +247,10 @@ const App = () => {
                     customImages={[]}
                     defaultQrLogo="https://i.ibb.co/zW7jxTxq/ea3f8b02-1ecd-47c7-a47d-37800dfd3591-1.png"
                     defaultTemplatesList={DEF_TEMPLATE}
-                    // customTemplatesList={DEF_TEMPLATE}
-                    // onDeleteCustomTemplate={() => {
-                    //     console.log('Calling onDeleteCustomTemplate')
-                    // }}
+                    customTemplatesList={DEF_TEMPLATE}
+                    onDeleteCustomTemplate={() => {
+                        console.log('Calling onDeleteCustomTemplate')
+                    }}
                     // disableWhiteLabel={true}
                     // title={'New Title'}
                     // styleProps={
@@ -266,6 +266,9 @@ const App = () => {
                     // saveButtonText={'Save Progress'}
                     locale={'en'}
                     onCreateNewTemplate={template => console.log(template)}
+                    showBackgroundImagePicker={false}
+                    showOpacityPicker={false}
+                    zoomLevel={80}
                 />
             </InnerWrapper>
         </Wrapper>

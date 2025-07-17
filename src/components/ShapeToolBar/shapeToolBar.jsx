@@ -2,7 +2,7 @@ import React from 'react';
 import { propTypes } from './props';
 import { ToolBarButtonWrapper } from '../ToolBarButtonWrapper';
 import { RowContainer } from './styled';
-import { IconBackgroundColor } from '@/assets';
+import { IconBackgroundColor, IconRoundedCorner } from '@/assets';
 import { StyledImage } from '@/generic/Styled';
 import { ColorBox } from '../ColorBox';
 import { isElementShape } from '@/utils';
@@ -21,6 +21,7 @@ export const ShapeToolBar = ({
     onChangeShapeOpacity,
     selectedElement,
     languageLocale,
+    onChangeCornerRadius,
 }) => {
     return (
         <RowContainer>
@@ -56,6 +57,19 @@ export const ShapeToolBar = ({
                 onChangeOpacity={onChangeShapeOpacity}
                 languageLocale={languageLocale}
             />
+            {selectedElement?.type === 'square' && (
+                <OpacityPicker
+                    tooltip={TEXT_DICTIONARY?.[languageLocale]?.CORNER_RADIUS || 'Corner Radius'}
+                    value={selectedElement.cornerRadius || 0}
+                    min={0}
+                    max={50}
+                    step={1}
+                    varient="radius"
+                    onChangeOpacity={onChangeCornerRadius}
+                    languageLocale={languageLocale}
+                    toolBarIcon={IconRoundedCorner}
+                />
+            )}
         </RowContainer>
     );
 };

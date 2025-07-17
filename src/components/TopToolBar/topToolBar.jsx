@@ -49,6 +49,9 @@ export const TopToolBar = ({
     cuttingGuideStrokeColor,
     onChangeCuttingGuideProp,
     onRemoveBackgroundImage,
+    showBackgroundImagePicker,
+    showOpacityPicker,
+    changeSelectedElementProperty,
 }) => {
     return (
         <ToolBarWrapper disabled={selectedElement && !selectedElement?.draggable}>
@@ -76,6 +79,8 @@ export const TopToolBar = ({
                     cuttingGuideStrokeColor={cuttingGuideStrokeColor}
                     onChangeCuttingGuideProp={onChangeCuttingGuideProp}
                     onRemoveBackgroundImage={onRemoveBackgroundImage}
+                    showBackgroundImagePicker={showBackgroundImagePicker}
+                    showOpacityPicker={showOpacityPicker}
                 />
             ) : selectedTab === sideBarpillsList?.text ? (
                 <TextToolBar
@@ -151,6 +156,9 @@ export const TopToolBar = ({
                     onChangeShapeOpacity={onChangeShapeOpacity}
                     selectedElement={selectedElement}
                     languageLocale={languageLocale}
+                    onChangeCornerRadius={val => {
+                        changeSelectedElementProperty('cornerRadius', Number(val));
+                    }}
                 />
             ) : selectedTab === sideBarpillsList?.qr ? (
                 <QrToolBar
