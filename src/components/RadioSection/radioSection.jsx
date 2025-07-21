@@ -1,7 +1,6 @@
 import React from 'react';
 import { propTypes } from './props';
-import { StyledImage, StyledText } from '@/generic/Styled';
-import { IconInfo } from '@/assets';
+import { StyledText } from '@/generic/Styled';
 import theme from '@/theme';
 import { Container, InfoContainer, ToggleCircle, ToggleContainer } from './styled';
 
@@ -9,7 +8,6 @@ export const RadioSection = ({ text, onToggle, isActive, disabled }) => {
     return (
         <Container>
             <InfoContainer>
-                <StyledImage src={IconInfo} />
                 <StyledText
                     marginLeft={6}
                     color={theme.color.black}
