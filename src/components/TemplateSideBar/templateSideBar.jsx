@@ -62,6 +62,9 @@ export const TemplateSideBar = ({
                         key={index}
                         onClick={() => {
                             oncreateNewTemplate(item?.elements);
+                            if (typeof onTemplateSelect === 'function') {
+                                onTemplateSelect(item?.id);
+                            }
                         }}
                     >
                         <StyledImage
