@@ -148,7 +148,6 @@ export const Studio = forwardRef(
             onSave: async () => {
                 setLoading(true);
                 setSelectedElement(null);
-                setZoomPercentage(100);
                 await new Promise(resolve => setTimeout(resolve, 100));
                 let processedElements = removeImageProperty(elements);
                 const dataURL = await exportStageAsImage(stageRef);
@@ -875,7 +874,6 @@ export const Studio = forwardRef(
             }
             setLoading(true);
             setSelectedElement(null);
-            setZoomPercentage(100);
             await new Promise(resolve => setTimeout(resolve, 100));
             let processedElements = removeImageProperty(elements);
             const dataURL = await exportStageAsImage(stageRef);
