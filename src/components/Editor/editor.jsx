@@ -90,6 +90,7 @@ export const Editor = ({
     showBackgroundImagePicker,
     showOpacityPicker,
     changeSelectedElementProperty,
+    setLoading,
 }) => {
     const transformerRef = useRef(null);
     useEffect(() => {
@@ -340,6 +341,7 @@ export const Editor = ({
                             onTransformEnd={e => {
                                 handleTransform(el.id, e.target.attrs);
                             }}
+                            setLoading={setLoading}
                         />
                     );
                 case elementTypes.qr:

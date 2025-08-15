@@ -999,6 +999,7 @@ export const Studio = forwardRef(
                             showBackgroundImagePicker={showBackgroundImagePicker}
                             showOpacityPicker={showOpacityPicker}
                             changeSelectedElementProperty={changeSelectedElementProperty}
+                            setLoading={setLoading}
                         />
                     )}
                     {overallLoading && (

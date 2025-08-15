@@ -76,10 +76,9 @@ const App = () => {
           // elementsList={elems} // Selected auto
           // defaultImages={[]}
           customImages={[
-            "https://fixalert-dev-static-8c1dgy08.s3.amazonaws.com/media/qr_images/mo-test-1-org_badC2Eff/01_20250723_083416.png",
-            "https://fixalert-dev-static-8c1dgy08.s3.amazonaws.com/media/_01_vRkRH8A.png",
+            "https://fixalert-test-static-fy8hokri.s3.amazonaws.com/media/_01_1di2SuL.png",
           ]}
-          defaultQrLogo="https://i.ibb.co/zW7jxTxq/ea3f8b02-1ecd-47c7-a47d-37800dfd3591-1.png"
+          defaultQrLogo="https://fixalert-test-static-fy8hokri.s3.amazonaws.com/media/_01_1di2SuL.png"
           defaultTemplatesList={[
             {
               elements: [
