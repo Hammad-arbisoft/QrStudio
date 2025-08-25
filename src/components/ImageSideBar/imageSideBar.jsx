@@ -3,7 +3,7 @@ import { propTypes } from './props';
 import { Button } from '../Button';
 import { StyledImage, StyledText } from '@/generic/Styled';
 import { IconUpload } from '@/assets';
-import { ImagesContainer, SingleItem, StyledContainer } from './styled';
+import { AllowedFormats, ImagesContainer, SingleItem, StyledContainer } from './styled';
 import { Collapsable } from '../Collapsable';
 import theme from '@/theme';
 import { pickImage } from '@/utils';
@@ -17,6 +17,7 @@ export const ImageSideBar = ({
     languageLocale,
     uploadImageCallBack,
     setLoadingUploadImage,
+    allowedFormats,
 }) => {
     const renderDefaultContent = (
         <ImagesContainer>
@@ -60,7 +61,7 @@ export const ImageSideBar = ({
     );
 
     const addImageToList = async () => {
-        const file = await pickImage();
+        const file = await pickImage(allowedFormats);
         if (!file) return;
         if (uploadImageCallBack) {
             setLoadingUploadImage(true);
@@ -81,9 +82,19 @@ export const ImageSideBar = ({
             <Button
                 text={TEXT_DICTIONARY?.[languageLocale]?.ADD_IMAGE}
                 left={<StyledImage src={IconUpload} />}
-                marginBottom={38}
+                marginBottom={8}
                 onClick={addImageToList}
             />
+            {allowedFormats &&
+                (() => {
+                    const formats = (allowedFormats || [])
+                        .map(f => String(f).trim().toLowerCase())
+                        .filter(Boolean);
+
+                    const accept = formats.map(f => (f.startsWith('.') ? f : `.${f}`)).join(', ');
+
+                    return <AllowedFormats>{accept}</AllowedFormats>;
+                })()}
             <Collapsable
                 title={TEXT_DICTIONARY?.[languageLocale]?.DEFAULT}
                 content={renderDefaultContent}

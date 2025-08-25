@@ -35,6 +35,7 @@ export const HelperSideBar = ({
     defaultText,
     languageLocale,
     onTemplateSelect,
+    allowedFormats,
 }) => (
     <SideBarWrapper visible={selectedSideBarItem && helperSideBarVisible}>
         <SideBarHeader
@@ -70,6 +71,7 @@ export const HelperSideBar = ({
                     uploadImageCallBack={uploadImageCallBack}
                     setLoadingUploadImage={setLoadingUploadImage}
                     styleProps={styleProps}
+                    allowedFormats={allowedFormats}
                 />
             ) : selectedSideBarItem === sideBarpillsList?.shape ? (
                 <ShapeSideBar onAddShape={onAddShape} languageLocale={languageLocale} />
@@ -83,6 +85,7 @@ export const HelperSideBar = ({
                     qrLogo={qrLogo}
                     languageLocale={languageLocale}
                     styleProps={styleProps}
+                    allowedFormats={allowedFormats}
                 />
             ) : selectedSideBarItem === sideBarpillsList?.whiteLabel ? (
                 <WhiteLabelSideBar languageLocale={languageLocale} styleProps={styleProps} />

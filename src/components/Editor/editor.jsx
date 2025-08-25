@@ -26,6 +26,7 @@ import { useKonvaSnapping } from './util';
 import { TEXT_DICTIONARY } from '@/constants/textConstants';
 
 export const Editor = ({
+    setLoading,
     selectedTab,
     languageLocale,
     title = TEXT_DICTIONARY?.[languageLocale]?.TITLE,
@@ -90,7 +91,6 @@ export const Editor = ({
     showBackgroundImagePicker,
     showOpacityPicker,
     changeSelectedElementProperty,
-    setLoading,
 }) => {
     const transformerRef = useRef(null);
     useEffect(() => {
@@ -203,7 +203,7 @@ export const Editor = ({
                             key={el.id}
                             {...el}
                             id={el.id}
-                            cornerRadius={el.cornerRadius || 0} 
+                            cornerRadius={el.cornerRadius || 0}
                             onClick={() => handleSelect(el)}
                             onDragEnd={e => {
                                 handleTransform(el.id, e.target.attrs);

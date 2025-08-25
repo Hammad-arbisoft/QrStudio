@@ -2,7 +2,7 @@ import React from 'react';
 import { propTypes } from './props';
 import { Button } from '../Button';
 import { StyledImage, StyledText } from '@/generic/Styled';
-import { IconAddText, IconInfo } from '@/assets';
+import { IconAddText } from '@/assets';
 import { Container, ItemWrapper, StyledContainer } from './styled';
 import { Collapsable } from '../Collapsable';
 import { textList } from '@/constants';
@@ -45,7 +45,7 @@ export const TextSideBar = ({ onAddTextToCanvas, languageLocale, defaultText }) 
             <Collapsable
                 title={TEXT_DICTIONARY?.[languageLocale]?.HELP_TEXT}
                 content={renderTextListContent()}
-                left={<StyledImage src={IconInfo} />}
+                // left={<StyledImage src={IconInfo} />}
             />
         </StyledContainer>
     );

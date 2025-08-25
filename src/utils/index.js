@@ -8,11 +8,17 @@ export const getPercentage = (part, whole) => {
     if (whole === 0) return 0;
     return (part / whole) * 100;
 };
-export const pickImage = () => {
+export const pickImage = (allowedFormats = ['png', 'jpg', 'jpeg', 'svg', 'webp']) => {
     return new Promise((resolve, reject) => {
+        const formats = (allowedFormats || [])
+            .map(f => String(f).trim().toLowerCase())
+            .filter(Boolean);
+
+        const accept = formats.map(f => (f.startsWith('.') ? f : `.${f}`)).join(',');
+
         const input = document.createElement('input');
         input.type = 'file';
-        input.accept = 'image/*';
+        input.accept = accept || 'image/*';
         input.style.display = 'none';
 
         input.addEventListener('change', event => {

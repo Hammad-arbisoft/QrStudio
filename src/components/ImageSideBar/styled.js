@@ -23,3 +23,9 @@ export const SingleItem = styled.div`
     align-items: center;
     width: ${(width = 'calc(50% - 20px)') => width};
 `;
+
+export const AllowedFormats = styled.p`
+    margin: 0 0 16px;
+    font-size: 12px;
+    color: #555555;
+`;

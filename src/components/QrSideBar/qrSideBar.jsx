@@ -8,6 +8,7 @@ import { Button } from '../Button';
 import { IconUpload } from '@/assets';
 import { elementTypes } from '@/constants';
 import { TEXT_DICTIONARY } from '@/constants/textConstants';
+import { AllowedFormats } from '../ImageSideBar/styled';
 
 export const QrSideBar = ({
     toggleQr,
@@ -17,6 +18,7 @@ export const QrSideBar = ({
     elements,
     qrLogo,
     languageLocale,
+    allowedFormats,
 }) => {
     let logoVisible = useMemo(() => {
         let index = elements?.findIndex(e => e?.type === elementTypes?.qr);
@@ -50,10 +52,20 @@ export const QrSideBar = ({
             <Button
                 text={TEXT_DICTIONARY?.[languageLocale]?.ADD_LOGO}
                 left={<StyledImage src={IconUpload} />}
-                marginBottom={30}
+                marginBottom={8}
                 marginTop={24}
                 onClick={addQrLogo}
             />
+            {allowedFormats &&
+                (() => {
+                    const formats = (allowedFormats || [])
+                        .map(f => String(f).trim().toLowerCase())
+                        .filter(Boolean);
+
+                    const accept = formats.map(f => (f.startsWith('.') ? f : `.${f}`)).join(', ');
+
+                    return <AllowedFormats>{accept}</AllowedFormats>;
+                })()}
             {qrLogo && <StyledImage src={qrLogo} height={89} width={89} />}
         </StyledContainer>
     );

@@ -37,41 +37,6 @@ export const QrElement = ({
             setLogo({ img, scale });
         };
     }, [element]);
-
-    useEffect(() => {
-        let cancelled = false;
-        let objectUrl;
-
-        async function loadLogo() {
-            if (!element?.qrLogo) return;
-            try {
-            const res = await fetch(element.qrLogo, { mode: 'cors', cache: 'reload' });
-            if (!res.ok) throw new Error(`HTTP ${res.status}`);
-            const blob = await res.blob();
-            objectUrl = URL.createObjectURL(blob);
-            const img = new window.Image();
-            img.onload = () => {
-                if (cancelled) return;
-                const scaleX = innerRectWidth / img.width;
-                const scaleY = innerRectHeight / img.height;
-                const scale = Math.min(scaleX, scaleY);
-                setLogo({ img, scale });
-            };
-            img.src = objectUrl;
-            } catch (e) {
-            console.error('Failed to load QR logo:', e);
-            }
-        }
-
-        setLogo(null);
-        loadLogo();
-
-        return () => {
-            cancelled = true;
-            if (objectUrl) URL.revokeObjectURL(objectUrl);
-        };
-    }, [element?.qrLogo, innerRectWidth, innerRectHeight]);
-
     const addQR = async () => {
         try {
             QRCode.toDataURL(element?.qrText, { margin: 0, width: 110 }, function (err, url) {
@@ -87,10 +52,43 @@ export const QrElement = ({
                 };
             });
         } catch (err) {
-            // eslint-disable-next-line no-console
             console.error('Failed to generate QR code', err);
         }
     };
+    useEffect(() => {
+        let cancelled = false;
+        let objectUrl;
+
+        async function loadLogo() {
+            if (!element?.qrLogo) return;
+            try {
+                const res = await fetch(element.qrLogo, { mode: 'cors', cache: 'reload' });
+                if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                const blob = await res.blob();
+                objectUrl = URL.createObjectURL(blob);
+                const img = new window.Image();
+                img.onload = () => {
+                    if (cancelled) return;
+                    const scaleX = innerRectWidth / img.width;
+                    const scaleY = innerRectHeight / img.height;
+                    const scale = Math.min(scaleX, scaleY);
+                    setLogo({ img, scale });
+                };
+                img.src = objectUrl;
+            } catch (e) {
+                console.error('Failed to load QR logo:', e);
+            }
+        }
+
+        setLogo(null);
+        loadLogo();
+
+        return () => {
+            cancelled = true;
+            if (objectUrl) URL.revokeObjectURL(objectUrl);
+        };
+    }, [element?.qrLogo, innerRectWidth, innerRectHeight]);
+
     useEffect(() => {
         addQR();
     }, [element]);

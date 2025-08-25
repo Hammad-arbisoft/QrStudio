@@ -57,6 +57,7 @@ import isPropValid from '@emotion/is-prop-valid';
  * @property {number} [zoomLevel] - Optional zoom level (e.g. 100 for 100%)
  * @property {boolean} [showBackgroundImagePicker] - Used to set background image on entire canvas
  * @property {boolean} [showOpacityPicker] - Related to showBackgroundImagePicker and it's opacity
+ * @property {Array} [allowedFormats] - Allowed formats for image uploading functions
  */
 
 /**
@@ -88,6 +89,7 @@ export const Studio = forwardRef(
             showOpacityPicker,
             uploadQRLogoImage,
             zoomLevel,
+            allowedFormats = ['png', 'jpg', 'jpeg', 'svg', 'webp'],
         },
         ref,
     ) => {
@@ -920,10 +922,11 @@ export const Studio = forwardRef(
                         defaultText={defaultText}
                         languageLocale={languageLocale}
                         onTemplateSelect={onTemplateSelect}
+                        allowedFormats={allowedFormats}
                     />
                     {loadingFonts ? null : (
                         <Editor
-                            // canvasSize={canvasSize}
+                            setLoading={setLoading}
                             cuttingGuideStroke={
                                 elements?.find(e => e?.type === elementTypes?.pageSize)
                                     ?.cuttingGuideStroke || 0
@@ -999,7 +1002,6 @@ export const Studio = forwardRef(
                             showBackgroundImagePicker={showBackgroundImagePicker}
                             showOpacityPicker={showOpacityPicker}
                             changeSelectedElementProperty={changeSelectedElementProperty}
-                            setLoading={setLoading}
                         />
                     )}
                     {overallLoading && (
