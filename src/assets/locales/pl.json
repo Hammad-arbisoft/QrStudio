@@ -61,6 +61,11 @@
     "ADD_SHAPES": "Dodaj kształty",
     "SETTINGS": "Ustawienia",
     "PLEASE_ADD_IMAGES": "Dodaj obrazy",
-    "SAVE": "Zapisz"
+    "SAVE": "Zapisz",
+    "HEADING_1": "+ Nagłówek 1",
+    "HEADING_2": "+ Nagłówek 2",
+    "SCAN_THIS_QR": "Zeskanuj ten kod QR telefonem, aby zgłosić problem",
+    "LOCATION_BREADCRUMB": "nieruchomość > budynek > pokój",
+    "DOMAIN": "www.domain.com"
   }
   

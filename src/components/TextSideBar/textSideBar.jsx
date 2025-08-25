@@ -17,7 +17,8 @@ export const TextSideBar = ({ onAddTextToCanvas, languageLocale, defaultText }) 
                         <ItemWrapper
                             key={index}
                             onClick={() => {
-                                onAddTextToCanvas({ ...item, text: defaultText || item?.text });
+                                onAddTextToCanvas({ ...item, text: defaultText 
+                                    || (TEXT_DICTIONARY?.[languageLocale][item.text] || item?.text) });
                             }}
                         >
                             <StyledText
@@ -26,7 +27,7 @@ export const TextSideBar = ({ onAddTextToCanvas, languageLocale, defaultText }) 
                                 fontWeight={item?.fontWeight}
                                 fontSize={item?.fontSize}
                             >
-                                {defaultText || item?.text}
+                                {defaultText || (TEXT_DICTIONARY?.[languageLocale][item.text] || item?.text)}
                             </StyledText>
                         </ItemWrapper>
                     );

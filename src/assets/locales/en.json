@@ -61,6 +61,11 @@
     "ADD_SHAPES": "Add shapes",
     "SETTINGS": "Settings",
     "PLEASE_ADD_IMAGES": "Please Add Images",
-    "SAVE": "Save"
+    "SAVE": "Save",
+    "HEADING_1": "+ Heading 1",
+    "HEADING_2": "+ Heading 2",
+    "SCAN_THIS_QR": "Scan this QR code from your mobile to report the issue",
+    "LOCATION_BREADCRUMB": "property > building > room",
+    "DOMAIN": "www.domain.com"
   }
   

@@ -61,6 +61,11 @@
     "ADD_SHAPES": "Aggiungi forme",
     "SETTINGS": "Impostazioni",
     "PLEASE_ADD_IMAGES": "Aggiungi immagini",
-    "SAVE": "Salva"
+    "SAVE": "Salva",
+    "HEADING_1": "+ Intestazione 1",
+    "HEADING_2": "+ Intestazione 2",
+    "SCAN_THIS_QR": "Scansiona questo codice QR con il tuo cellulare per segnalare il problema",
+    "LOCATION_BREADCRUMB": "proprietà > edificio > stanza",
+    "DOMAIN": "www.domain.com"
   }
   

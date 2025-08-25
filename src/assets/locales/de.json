@@ -61,6 +61,11 @@
     "ADD_SHAPES": "Formen hinzufügen",
     "SETTINGS": "Einstellungen",
     "PLEASE_ADD_IMAGES": "Bitte Bilder hinzufügen",
-    "SAVE": "Speichern"
+    "SAVE": "Speichern",
+    "HEADING_1": "+ Überschrift 1",
+    "HEADING_2": "+ Überschrift 2",
+    "SCAN_THIS_QR": "Scannen Sie diesen QR-Code mit Ihrem Mobiltelefon, um das Problem zu melden",
+    "LOCATION_BREADCRUMB": "Objekt > Gebäude > Raum",
+    "DOMAIN": "www.domain.com"
   }
   

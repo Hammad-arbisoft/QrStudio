@@ -43,7 +43,7 @@ export const shapes = {
 export const defaultSideBarImagesList = [IconTools, IconToolsPink];
 export const textList = [
     {
-        text: '+ Heading 1',
+        text: 'HEADING_1',
         fontFamily: 'Open Sans',
         fontSize: 18,
         color: '#333333',
@@ -54,7 +54,7 @@ export const textList = [
         width: 125,
     },
     {
-        text: '+ Heading 2',
+        text: 'HEADING_2',
         fontFamily: 'Open Sans',
         fontSize: 16,
         color: '#333333',
@@ -63,18 +63,8 @@ export const textList = [
         fontStyle: 'normal',
         textAlign: 'left',
     },
-    // {
-    //     text: 'What problem are you facing in this meeting room?',
-    //     fontFamily: 'Open Sans Condensed',
-    //     fontSize: 18,
-    //     color: '#333333',
-    //     fontWeight: theme.fontWeights[700],
-    //     textDecoration: 'normal',
-    //     fontStyle: 'normal',
-    //     textAlign: 'left',
-    // },
     {
-        text: 'Scan this QR code from your mobile to report the issue',
+        text: 'SCAN_THIS_QR',
         fontFamily: 'Open Sans',
         fontSize: 16,
         color: '#333333',
@@ -85,7 +75,7 @@ export const textList = [
         width: 220,
     },
     {
-        text: 'property 1 > building 2 > Room 2',
+        text: 'LOCATION_BREADCRUMB',
         fontFamily: 'Open Sans',
         fontSize: 12,
         color: '#6D737B',
@@ -95,7 +85,7 @@ export const textList = [
         textAlign: 'left',
     },
     {
-        text: 'www.domain.com',
+        text: 'DOMAIN',
         fontFamily: 'Plus Jakarta Sans',
         fontSize: 10,
         color: '#333333',
