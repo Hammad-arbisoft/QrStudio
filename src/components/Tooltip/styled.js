@@ -1,10 +1,25 @@
 import styled, { css } from 'styled-components';
 import theme from '@/theme';
 
-export const Wrapper = styled.div`
+export const Wrapper = styled.span`
     position: relative;
-    display: inline-block;
+    display: inline-flex;
     cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
+`;
+
+export const Floating = styled.div`
+    background-color: rgba(0, 0, 0, 0.75);
+    color: #fff;
+    border-radius: 6px;
+    /* wrapping */
+    white-space: normal;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+    /* defaults (can be overridden via inline style in component) */
+    font-family: ${theme.fonts.primary};
+    font-weight: ${theme.fontWeights[400]};
+    pointer-events: none;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
 `;
 
 export const TooltipText = styled.div`

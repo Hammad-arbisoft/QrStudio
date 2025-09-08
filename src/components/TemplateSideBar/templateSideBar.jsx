@@ -2,12 +2,14 @@ import React, { useMemo } from 'react';
 import { propTypes } from './props';
 import { Button } from '../Button';
 import { StyledImage, StyledText } from '@/generic/Styled';
-import { IconAdd } from '@/assets';
+import { IconAdd, IconInfo } from '@/assets';
 import { IconDelete } from '@/assets';
 import { Collapsable } from '../Collapsable';
 import theme from '@/theme';
 import { StyledContainer, StyledDeleteButton, TemplateItem, TemplatesContainer } from './styled';
 import { TEXT_DICTIONARY } from '@/constants/textConstants';
+import { RadioSection } from '../RadioSection';
+import { Tooltip } from '../Tooltip';
 
 export const TemplateSideBar = ({
     oncreateNewTemplate,
@@ -16,6 +18,11 @@ export const TemplateSideBar = ({
     defaultTemplatesList,
     customTemplatesList,
     onTemplateSelect,
+    isLocationTextActive,
+    onToggleLocationText,
+    showQrIdToggle,
+    isQrIdTextActive,
+    onToggleQrIdText,
 }) => {
     const renderDefaultContent = useMemo(() => {
         return (
@@ -104,9 +111,69 @@ export const TemplateSideBar = ({
             <Button
                 text={TEXT_DICTIONARY?.[languageLocale]?.NEW_TEMPLATE}
                 left={<StyledImage src={IconAdd} />}
-                marginBottom={38}
+                marginBottom={20}
                 onClick={() => oncreateNewTemplate()}
             />
+            <div style={{ display: 'grid', gap: 12, marginBottom: 18 }}>
+                <RadioSection
+                    text={
+                        <div
+                            style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '8px',
+                                marginRight: '16px',
+                            }}
+                        >
+                            <StyledText>
+                                {TEXT_DICTIONARY?.[languageLocale]?.SHOW_PROPERTY_LOCATION ||
+                                    'Show Property Label'}
+                            </StyledText>
+                            <Tooltip
+                                text={TEXT_DICTIONARY?.[languageLocale]?.LOCATION_HELPER}
+                                position="top"
+                            >
+                                <StyledImage src={IconInfo} />
+                            </Tooltip>
+                        </div>
+                    }
+                    isActive={!!isLocationTextActive}
+                    onToggle={onToggleLocationText}
+                    disabled={false}
+                />
+
+                {showQrIdToggle ? (
+                    <>
+                        <RadioSection
+                            text={
+                                <div
+                                    style={{
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        gap: '8px',
+                                        marginRight: '16px',
+                                    }}
+                                >
+                                    <StyledText>
+                                        {TEXT_DICTIONARY?.[languageLocale]?.SHOW_QR_ID ||
+                                            'Show QR Id'}
+                                    </StyledText>
+                                    <Tooltip
+                                        text={TEXT_DICTIONARY?.[languageLocale]?.QR_ID_HELPER}
+                                        position="top"
+                                    >
+                                        <StyledImage src={IconInfo} />
+                                    </Tooltip>
+                                </div>
+                            }
+                            isActive={!!isQrIdTextActive}
+                            onToggle={onToggleQrIdText}
+                            disabled={false}
+                        />
+                    </>
+                ) : null}
+            </div>
+
             <Collapsable
                 title={TEXT_DICTIONARY?.[languageLocale]?.DEFAULT}
                 content={renderDefaultContent}

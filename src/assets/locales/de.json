@@ -66,6 +66,10 @@
     "HEADING_2": "+ Überschrift 2",
     "SCAN_THIS_QR": "Scannen Sie diesen QR-Code mit Ihrem Mobiltelefon, um das Problem zu melden",
     "LOCATION_BREADCRUMB": "Objekt > Gebäude > Raum",
-    "DOMAIN": "www.domain.com"
+    "DOMAIN": "www.domain.com",
+    "SHOW_PROPERTY_LOCATION": "Eigenschaftsbeschriftung anzeigen",
+    "LOCATION_HELPER": "Aktivieren Sie dies, um die Standortbeschriftung der Eigenschaft auf der Leinwand anzuzeigen, oder deaktivieren Sie es, um sie auszublenden.",
+    "SHOW_QR_ID": "QR-ID anzeigen",
+    "QR_ID_HELPER": "Aktivieren Sie dies, um die eindeutige QR-Code-ID auf der Leinwand anzuzeigen, oder deaktivieren Sie es, um sie zu entfernen."
   }
   

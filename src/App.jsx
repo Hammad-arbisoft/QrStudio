@@ -78,6 +78,9 @@ const App = () => {
           customImages={[
             "https://fixalert-test-static-fy8hokri.s3.amazonaws.com/media/_01_1di2SuL.png",
           ]}
+          showQrIdToggle
+          qrId="LOT-22-7B"
+          qrIdText={{ x: 210, y: 420, width: 240, textAlign: 'center', color: '#FFF' }}
           defaultQrLogo="https://fixalert-test-static-fy8hokri.s3.amazonaws.com/media/_01_1di2SuL.png"
           defaultTemplatesList={[
             {
@@ -1503,7 +1506,7 @@ const App = () => {
           onSave={onSave}
           showSaveButton
           // saveButtonText={'Save Progress'}
-          locale={"en"}
+          locale={"el"}
           onCreateNewTemplate={(template) => console.log(template)}
           showBackgroundImagePicker={false}
           showOpacityPicker={false}

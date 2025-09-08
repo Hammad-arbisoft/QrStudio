@@ -66,6 +66,10 @@
     "HEADING_2": "+ Intestazione 2",
     "SCAN_THIS_QR": "Scansiona questo codice QR con il tuo cellulare per segnalare il problema",
     "LOCATION_BREADCRUMB": "proprietà > edificio > stanza",
-    "DOMAIN": "www.domain.com"
-  }
+    "DOMAIN": "www.domain.com",
+    "SHOW_PROPERTY_LOCATION": "Mostra etichetta proprietà",
+    "LOCATION_HELPER": "Abilita questa opzione per mostrare l’etichetta della posizione della proprietà sulla tela, oppure disabilitala per nasconderla.",
+    "SHOW_QR_ID": "Mostra ID QR",
+    "QR_ID_HELPER": "Abilita questa opzione per mostrare l’ID univoco del codice QR sulla tela, oppure disabilitala per rimuoverlo."
+}
   

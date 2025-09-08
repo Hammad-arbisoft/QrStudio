@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React from 'react';
 import { propTypes } from './props';
 import { Button } from '../Button';
@@ -17,8 +18,11 @@ export const TextSideBar = ({ onAddTextToCanvas, languageLocale, defaultText }) 
                         <ItemWrapper
                             key={index}
                             onClick={() => {
-                                onAddTextToCanvas({ ...item, text: defaultText 
-                                    || (TEXT_DICTIONARY?.[languageLocale][item.text] || item?.text) });
+                                onAddTextToCanvas({
+                                    ...item,
+                                    text:
+                                        defaultText || (TEXT_DICTIONARY?.[languageLocale][item.text] || item?.text),
+                                });
                             }}
                         >
                             <StyledText
@@ -27,7 +31,8 @@ export const TextSideBar = ({ onAddTextToCanvas, languageLocale, defaultText }) 
                                 fontWeight={item?.fontWeight}
                                 fontSize={item?.fontSize}
                             >
-                                {defaultText || (TEXT_DICTIONARY?.[languageLocale][item.text] || item?.text)}
+                                {defaultText ||
+                                    (TEXT_DICTIONARY?.[languageLocale][item.text] || item?.text)}
                             </StyledText>
                         </ItemWrapper>
                     );

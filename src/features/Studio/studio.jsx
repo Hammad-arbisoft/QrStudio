@@ -1,5 +1,4 @@
-/* eslint-disable max-len */
-/* eslint-disable no-console */
+/* eslint-disable */
 import React, {
     useCallback,
     useMemo,
@@ -34,6 +33,7 @@ import {
 import theme from '@/theme';
 import { StyleSheetManager } from 'styled-components';
 import isPropValid from '@emotion/is-prop-valid';
+import { LOCATION_ELEMENT_ID, QRID_ELEMENT_ID } from '@/constants/textConstants';
 /**
  * @typedef {Object} StudioProps
  * @property {string} [title]
@@ -58,6 +58,8 @@ import isPropValid from '@emotion/is-prop-valid';
  * @property {boolean} [showBackgroundImagePicker] - Used to set background image on entire canvas
  * @property {boolean} [showOpacityPicker] - Related to showBackgroundImagePicker and it's opacity
  * @property {Array} [allowedFormats] - Allowed formats for image uploading functions
+ * @property {boolean} showQrIdToggle (boolean, default false) → controls visibility of the QR ID toggle
+ * @property {string | number} qrId (string | number | null, default null) → the value to render when toggled on
  */
 
 /**
@@ -90,10 +92,14 @@ export const Studio = forwardRef(
             uploadQRLogoImage,
             zoomLevel,
             allowedFormats = ['png', 'jpg', 'jpeg', 'svg', 'webp'],
+            showQrIdToggle = false,
+            qrId = null,
+            qrIdText = null,
         },
         ref,
     ) => {
         const stageRef = useRef(null);
+        const elementCacheRef = useRef({});
         const [copiedElement, setCopiedElement] = useState(null);
         const [selectedTab, setSelectedTab] = useState(sideBarpillsList.template);
         const [languageLocale, setLanguageLocale] = useState(validateLocale(locale));
@@ -246,39 +252,41 @@ export const Studio = forwardRef(
             setLoadingFonts(true);
             loadAllGoogleFonts()
                 .then(() => {
-                    // eslint-disable-next-line no-console
                     // console.log(msg);
                 })
                 .catch(err => {
-                    // eslint-disable-next-line no-console
                     console.error('❌ Error loading fonts:', err);
                 })
                 .finally(() => {
                     setTimeout(() => {
                         setLoadingFonts(false);
                     }, 1000);
-                    // eslint-disable-next-line no-console
                     console.log('🎉 Font loading complete!');
                 });
         }, []);
         useEffect(() => {
             LoadImages(elementsList);
             setElements(elementsList);
+            const foundLoc = elementsList?.find(
+                e => e.id === LOCATION_ELEMENT_ID && e.type === elementTypes.text,
+            );
+            if (foundLoc) {
+                // store a clean copy (no runtime refs)
+                const { ref, ...rest } = foundLoc || {};
+                elementCacheRef.current[LOCATION_ELEMENT_ID] = { ...rest };
+            }
         }, [...elementsList]);
 
         const LoadImages = elems => {
             setLoadingImages(true);
             preloadRelevantImages(elems)
                 .then(({ errors }) => {
-                    // eslint-disable-next-line no-console
                     // console.log('✅ Loaded images:', successes);
                     if (errors?.length > 0) {
-                        // eslint-disable-next-line no-console
                         console.log('❌ Failed images:', errors);
                     }
                 })
                 .catch(err => {
-                    // eslint-disable-next-line no-console
                     console.error('Something went really wrong:', err);
                 })
                 .finally(() => {
@@ -305,6 +313,174 @@ export const Studio = forwardRef(
         const selectedPageSize = useMemo(() => {
             return elements?.find(e => e?.type === elementTypes?.pageSize)?.size || pageSizes?.A4;
         }, [elements]);
+
+        const hasLocationText = useMemo(
+            () => elements.some(e => e.type === elementTypes.text && e.id === LOCATION_ELEMENT_ID),
+            [elements],
+        );
+        const hasQrIdText = useMemo(
+            () => elements.some(e => e.type === elementTypes.text && e.id === QRID_ELEMENT_ID),
+            [elements],
+        );
+
+        const removeElementById = id => {
+            const idx = elements.findIndex(e => e.id === id);
+            if (idx > -1) {
+                const snapshot = { ...elements[idx] };
+                delete snapshot.ref;
+                // cache latest props before removing
+                elementCacheRef.current[id] = snapshot;
+                const next = elements.slice();
+                next.splice(idx, 1);
+                if (id === QRID_ELEMENT_ID) {
+                    // remove its pill if present
+                    const pillId = `${QRID_ELEMENT_ID}-pill`;
+                    for (let i = next.length - 1; i >= 0; i--) {
+                        if (next[i].id === pillId) next.splice(i, 1);
+                    }
+                }
+                if (selectedElement?.id === id) setSelectedElement(null);
+                saveHistory(next);
+            }
+        };
+
+        const addElementFromCache = (id, fallbackFactory) => {
+            const cached = elementCacheRef.current[id];
+            const toAdd = cached ? { ...cached, id } : fallbackFactory?.(id);
+            if (!toAdd) return; // nothing to add (no cache + no fallback)
+            // Make sure required fields are sane
+            if (!toAdd.type) toAdd.type = elementTypes.text;
+            if (typeof toAdd.draggable !== 'boolean') toAdd.draggable = true;
+            saveHistory([...elements, toAdd]);
+            setSelectedElement(toAdd);
+        };
+
+        const addQrIdText = () => {
+            if (!qrId || hasQrIdText) return;
+
+            // 1) If we’ve seen it before, restore EXACTLY as it was
+            const cached = elementCacheRef.current[QRID_ELEMENT_ID];
+            if (cached) {
+                const toAdd = { ...cached, id: QRID_ELEMENT_ID, text: String(qrId) };
+                saveHistory([...elements, toAdd]);
+                setSelectedElement(toAdd);
+                return;
+            }
+
+            // 2) Otherwise, build from external qrIdText + sensible defaults
+            const sizeKey =
+                elements?.find(e => e?.type === elementTypes?.pageSize)?.size || pageSizes.A4;
+            const { width: Cw, height: Ch } = pageSizesDimensions[sizeKey];
+
+            const fs = defaultTextProps?.fontSize || 16;
+            const lineH = fs * 1.25;
+
+            // --- external layout (REQUIRED x,y for custom placement) ---
+            const hasExternal =
+                qrIdText && typeof qrIdText.x === 'number' && typeof qrIdText.y === 'number';
+
+            const x = hasExternal ? qrIdText.x : Math.max(0, (Cw - 240) / 2);
+            const y = hasExternal ? qrIdText.y : Math.max(0, (Ch - lineH) / 2);
+            const width = qrIdText?.width ?? 240;
+            const textAlign = qrIdText?.textAlign ?? 'center';
+            const color = qrIdText?.color ?? defaultTextProps?.color ?? '#111';
+
+            // optional readability helpers (opt-in)
+            const wantPill = !!qrIdText?.pill;
+            const pillColor =
+                qrIdText?.pillColor ||
+                (color === '#fff' || color.toLowerCase() === 'white'
+                    ? 'rgba(0,0,0,0.35)'
+                    : 'rgba(255,255,255,0.85)');
+            const wantOutline = !!qrIdText?.outline;
+
+            const pillId = `${QRID_ELEMENT_ID}-pill`;
+            const vPad = 8,
+                hPad = 10;
+
+            const newElements = [...elements];
+
+            if (wantPill) {
+                newElements.push({
+                    id: pillId,
+                    type: elementTypes.square,
+                    draggable: true,
+                    x: x - hPad,
+                    y: y - vPad,
+                    width: width + hPad * 2,
+                    height: lineH + vPad * 2,
+                    cornerRadius: 8,
+                    fill: pillColor,
+                    opacity: 1,
+                    stroke: 'rgba(0,0,0,0.12)',
+                    strokeWidth: 1,
+                });
+            }
+
+            const textProps = {
+                id: QRID_ELEMENT_ID,
+                type: elementTypes.text,
+                draggable: true,
+                x,
+                y,
+                width,
+                textAlign,
+                text: String(qrId),
+                opacity: defaultTextProps?.opacity,
+                fontSize: fs,
+                fontFamily: defaultTextProps?.fontFamily,
+                color,
+                textDecoration: defaultTextProps?.textDecoration,
+                fontStyle: defaultTextProps?.fontStyle,
+                fontWeight: defaultTextProps?.fontWeight,
+                ...(wantOutline && {
+                    stroke:
+                        color.toLowerCase() === '#ffffff' || color.toLowerCase() === 'white'
+                            ? 'rgba(0,0,0,0.5)'
+                            : 'rgba(255,255,255,0.8)',
+                    strokeWidth: 1,
+                    shadowColor: 'rgba(0,0,0,0.4)',
+                    shadowBlur: 3,
+                    shadowOpacity: 0.8,
+                }),
+            };
+
+            newElements.push(textProps);
+            saveHistory(newElements);
+            setSelectedElement(textProps);
+        };
+
+        const toggleLocationText = () => {
+            if (hasLocationText) {
+                removeElementById(LOCATION_ELEMENT_ID);
+            } else {
+                // If first-time and no cache, create a sensible fallback
+                addElementFromCache(LOCATION_ELEMENT_ID, id => {
+                    // fallback only used if the element was never seen before
+                    return {
+                        id,
+                        type: elementTypes.text,
+                        draggable: true,
+                        // a neutral default; you likely won’t hit this after first toggle
+                        x: 24,
+                        y: 24,
+                        text: 'Property location',
+                        opacity: defaultTextProps?.opacity,
+                        fontSize: defaultTextProps?.fontSize,
+                        fontFamily: defaultTextProps?.fontFamily,
+                        color: defaultTextProps?.color,
+                        textDecoration: defaultTextProps?.textDecoration,
+                        fontStyle: defaultTextProps?.fontStyle,
+                        fontWeight: defaultTextProps?.fontWeight,
+                        textAlign: defaultTextProps?.textAlign,
+                    };
+                });
+            }
+        };
+        
+        const toggleQrIdText = () => {
+            hasQrIdText ? removeElementById(QRID_ELEMENT_ID) : addQrIdText();
+        };
 
         const onSelectedTab = useCallback(
             tab => {
@@ -923,6 +1099,11 @@ export const Studio = forwardRef(
                         languageLocale={languageLocale}
                         onTemplateSelect={onTemplateSelect}
                         allowedFormats={allowedFormats}
+                        isLocationTextActive={hasLocationText}
+                        onToggleLocationText={toggleLocationText}
+                        showQrIdToggle={!!showQrIdToggle}
+                        isQrIdTextActive={hasQrIdText}
+                        onToggleQrIdText={toggleQrIdText}
                     />
                     {loadingFonts ? null : (
                         <Editor

@@ -66,6 +66,10 @@
     "HEADING_2": "+ Nagłówek 2",
     "SCAN_THIS_QR": "Zeskanuj ten kod QR telefonem, aby zgłosić problem",
     "LOCATION_BREADCRUMB": "nieruchomość > budynek > pokój",
-    "DOMAIN": "www.domain.com"
-  }
+    "DOMAIN": "www.domain.com",
+    "SHOW_PROPERTY_LOCATION": "Pokaż etykietę nieruchomości",
+    "LOCATION_HELPER": "Włącz tę opcję, aby wyświetlić etykietę lokalizacji nieruchomości na płótnie, lub wyłącz, aby ją ukryć.",
+    "SHOW_QR_ID": "Pokaż identyfikator QR",
+    "QR_ID_HELPER": "Włącz tę opcję, aby wyświetlić unikalny identyfikator kodu QR na płótnie, lub wyłącz, aby go usunąć."
+}
   

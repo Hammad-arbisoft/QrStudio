@@ -66,6 +66,10 @@
     "HEADING_2": "+ Titre 2",
     "SCAN_THIS_QR": "Scannez ce code QR avec votre mobile pour signaler le problème",
     "LOCATION_BREADCRUMB": "propriété > bâtiment > pièce",
-    "DOMAIN": "www.domain.com"
-  }
+    "DOMAIN": "www.domain.com",
+    "SHOW_PROPERTY_LOCATION": "Afficher l’étiquette de propriété",
+    "LOCATION_HELPER": "Activez ceci pour afficher l’étiquette de l’emplacement de la propriété sur la zone de travail, ou désactivez-le pour la masquer.",
+    "SHOW_QR_ID": "Afficher l’ID du QR",
+    "QR_ID_HELPER": "Activez ceci pour afficher l’ID unique du code QR sur la zone de travail, ou désactivez-le pour le supprimer."
+}
   

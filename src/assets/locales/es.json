@@ -66,6 +66,10 @@
     "HEADING_2": "+ Encabezado 2",
     "SCAN_THIS_QR": "Escanee este código QR con su móvil para reportar el problema",
     "LOCATION_BREADCRUMB": "propiedad > edificio > habitación",
-    "DOMAIN": "www.domain.com"
-  }
+    "DOMAIN": "www.domain.com",
+    "SHOW_PROPERTY_LOCATION": "Mostrar etiqueta de propiedad",
+    "LOCATION_HELPER": "Active esto para mostrar la etiqueta de ubicación de la propiedad en el lienzo, o desactívelo para ocultarla.",
+    "SHOW_QR_ID": "Mostrar ID de QR",
+    "QR_ID_HELPER": "Active esto para mostrar el identificador único del código QR en el lienzo, o desactívelo para eliminarlo."
+}
   

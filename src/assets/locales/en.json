@@ -66,6 +66,10 @@
     "HEADING_2": "+ Heading 2",
     "SCAN_THIS_QR": "Scan this QR code from your mobile to report the issue",
     "LOCATION_BREADCRUMB": "property > building > room",
-    "DOMAIN": "www.domain.com"
+    "DOMAIN": "www.domain.com",
+    "SHOW_PROPERTY_LOCATION": "Show Property Label",
+    "LOCATION_HELPER": "Enable this to show the property’s location label on the canvas, or disable it to hide it.",
+    "SHOW_QR_ID": "Show QR Id",
+    "QR_ID_HELPER": "Enable this to display the unique QR Code ID on the canvas, or disable it to remove it."
   }
   

@@ -36,6 +36,11 @@ export const HelperSideBar = ({
     languageLocale,
     onTemplateSelect,
     allowedFormats,
+    isLocationTextActive,
+    onToggleLocationText,
+    showQrIdToggle,
+    isQrIdTextActive,
+    onToggleQrIdText,
 }) => (
     <SideBarWrapper visible={selectedSideBarItem && helperSideBarVisible}>
         <SideBarHeader
@@ -53,6 +58,11 @@ export const HelperSideBar = ({
                     customTemplatesList={customTemplatesList}
                     onTemplateSelect={onTemplateSelect}
                     styleProps={styleProps}
+                    isLocationTextActive={isLocationTextActive}
+                    onToggleLocationText={onToggleLocationText}
+                    showQrIdToggle={showQrIdToggle}
+                    isQrIdTextActive={isQrIdTextActive}
+                    onToggleQrIdText={onToggleQrIdText}
                 />
             ) : selectedSideBarItem === sideBarpillsList?.text ? (
                 <TextSideBar
