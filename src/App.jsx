@@ -1506,7 +1506,7 @@ const App = () => {
           onSave={onSave}
           showSaveButton
           // saveButtonText={'Save Progress'}
-          locale={"el"}
+          locale={"en"}
           onCreateNewTemplate={(template) => console.log(template)}
           showBackgroundImagePicker={false}
           showOpacityPicker={false}
