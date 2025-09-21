@@ -1,4 +1,4 @@
-/* eslint-disable */
+/* eslint-disable no-console */
 import React, {
     useCallback,
     useMemo,
@@ -33,7 +33,7 @@ import {
 import theme from '@/theme';
 import { StyleSheetManager } from 'styled-components';
 import isPropValid from '@emotion/is-prop-valid';
-import { LOCATION_ELEMENT_ID, QRID_ELEMENT_ID, QRID_ELEMENT_PILL } from '@/constants/textConstants';
+import { LOCATION_ELEMENT_ID, QRID_ELEMENT_ID } from '@/constants/textConstants';
 /**
  * @typedef {Object} StudioProps
  * @property {string} [title]
@@ -53,7 +53,8 @@ import { LOCATION_ELEMENT_ID, QRID_ELEMENT_ID, QRID_ELEMENT_PILL } from '@/const
  * @property {'en'|'ru'|'pl'|'de'|'es'|'fr'|'it'} [locale]
  * @property {Function} [onCreateNewTemplate] - called when user creates a new template, passes new canvas elements
  * @property {Function} [onTemplateSelect] - called when a template is selected, passes template id
- * @property {Function} [uploadQRLogoImage] - Optional callback to upload the QR logo image. Should return a string or an object with `{ url }`
+ * @property {Function} [uploadQRLogoImage]
+ *  - Optional callback to upload the QR logo image. Should return a string or an object with `{ url }`
  * @property {number} [zoomLevel] - Optional zoom level (e.g. 100 for 100%)
  * @property {boolean} [showBackgroundImagePicker] - Used to set background image on entire canvas
  * @property {boolean} [showOpacityPicker] - Related to showBackgroundImagePicker and it's opacity
@@ -94,12 +95,12 @@ export const Studio = forwardRef(
             allowedFormats = ['png', 'jpg', 'jpeg', 'svg', 'webp'],
             showQrIdToggle = false,
             qrId = null,
-            qrIdText = null,
         },
         ref,
     ) => {
         const stageRef = useRef(null);
         const elementCacheRef = useRef({});
+        const qrIdActiveRef = useRef(false);
         const [copiedElement, setCopiedElement] = useState(null);
         const [selectedTab, setSelectedTab] = useState(sideBarpillsList.template);
         const [languageLocale, setLanguageLocale] = useState(validateLocale(locale));
@@ -110,7 +111,7 @@ export const Studio = forwardRef(
         const [helperSideBarVisible, setHelperSideBarVisible] = useState(true);
         const [zoomPercentage, setZoomPercentage] = useState(zoomLevel ?? 100);
         const [elements, setElements] = useState(elementsList);
-        const elementsRef = useRef(elements)
+        const elementsRef = useRef(elements);
         const [backgroundImageOpacity, setBackgroundImageOpacity] = useState(1);
         const [history, setHistory] = useState([]);
         const [redoStack, setRedoStack] = useState([]);
@@ -128,8 +129,64 @@ export const Studio = forwardRef(
         const [customImagesList, setCustomImagesList] = useState(customImages || []);
         const [qrLogo, setQrLogo] = useState(defaultQrLogo);
         const [defaultTextProps, setDefaultTextProps] = useState(basicTextProps);
+        const [currentQrId, setCurrentQrId] = useState(qrId);
 
         const overallLoading = loadingFonts || loadingImages || loadingUploadImage || loading;
+
+        const getPageDims = useCallback(
+            (base = elements) => {
+                const sizeKey =
+                    base?.find(e => e?.type === elementTypes?.pageSize)?.size || pageSizes.A4;
+                return pageSizesDimensions[sizeKey] || pageSizesDimensions[pageSizes.A4];
+            },
+            [elements],
+        );
+
+        const findById = useCallback(
+            (id, base = elements) => base.find(e => e.id === id),
+            [elements],
+        );
+
+        /**
+         * Compute the QR-ID frame:
+         * - If LOCATION_ELEMENT_ID exists: center-align above it
+         * - Otherwise: center of page
+         */
+        const computeQrIdFrame = useCallback(
+            (base = elements) => {
+                const { width: Cw, height: Ch } = getPageDims(base);
+                const loc = findById(LOCATION_ELEMENT_ID, base);
+
+                const fs = Math.max(
+                    14,
+                    Math.min(28, loc?.fontSize ?? defaultTextProps?.fontSize ?? 16),
+                );
+                const GAP = 8; // vertical gap above location text line
+                const width = Number.isFinite(loc?.width) ? loc.width : 240;
+
+                // center horizontally over location text (or page)
+                const x = loc
+                    ? Math.max(0, (loc.x ?? 0) + ((loc.width ?? width) - width) / 2)
+                    : Math.max(0, (Cw - width) / 2);
+
+                // place just above location text line (or vertical center)
+                const y = loc ? Math.max(0, (loc.y ?? 0) - fs - GAP) : Math.max(0, (Ch - fs) / 2);
+
+                const color = loc?.color ?? defaultTextProps?.color ?? '#111';
+                const fontFamily = loc?.fontFamily ?? defaultTextProps?.fontFamily;
+
+                return {
+                    x,
+                    y,
+                    width,
+                    textAlign: 'center',
+                    fontSize: fs,
+                    color,
+                    fontFamily,
+                };
+            },
+            [getPageDims, findById, defaultTextProps],
+        );
 
         const undo = useCallback(() => {
             if (history.length > 0) {
@@ -168,12 +225,39 @@ export const Studio = forwardRef(
             undoCount: history.length,
             hasChanges: history.length > 0,
             redoCount: redoStack.length,
+            updateQrId: newId => {
+                setCurrentQrId(newId);
+                const idx = elements.findIndex(e => e.id === QRID_ELEMENT_ID);
+                if (idx > -1) {
+                    const frame = computeQrIdFrame(elements);
+                    const newElements = [...elements];
+                    newElements[idx] = { ...newElements[idx], text: String(newId), ...frame };
+                    saveHistory(newElements);
+                    if (selectedElement?.id === QRID_ELEMENT_ID)
+                        setSelectedElement(newElements[idx]);
+                }
+            },
+            reflowQrId: () => {
+                const idx = elements.findIndex(e => e.id === QRID_ELEMENT_ID);
+                if (idx === -1) return;
+                const frame = computeQrIdFrame(elements);
+                const copy = [...elements];
+                copy[idx] = { ...copy[idx], ...frame };
+                saveHistory(copy);
+            },
         }));
+
+        useEffect(() => {
+            if (selectedElement && !elements.some(e => e.id === selectedElement.id)) {
+                setSelectedElement(null);
+            }
+        }, [elements, selectedElement]);
         useEffect(() => {
             if (typeof zoomLevel === 'number') {
                 setZoomPercentage(zoomLevel);
             }
         }, [zoomLevel]);
+
         useEffect(() => {
             const handleKeyDown = e => {
                 const isMac = navigator.platform.toUpperCase().includes('MAC');
@@ -273,7 +357,7 @@ export const Studio = forwardRef(
             );
             if (foundLoc) {
                 // store a clean copy (no runtime refs)
-                const { ref, ...rest } = foundLoc || {};
+                const { ...rest } = foundLoc || {};
                 elementCacheRef.current[LOCATION_ELEMENT_ID] = { ...rest };
             }
         }, [...elementsList]);
@@ -324,22 +408,21 @@ export const Studio = forwardRef(
             [elements],
         );
 
+        useEffect(() => {
+            qrIdActiveRef.current = hasQrIdText; // keep this in sync
+        }, [hasQrIdText]);
+
         const removeElementById = id => {
             const idx = elements.findIndex(e => e.id === id);
             if (idx > -1) {
                 const snapshot = { ...elements[idx] };
                 delete snapshot.ref;
                 // cache latest props before removing
-                elementCacheRef.current[id] = snapshot;
+                if (id !== QRID_ELEMENT_ID) {
+                    elementCacheRef.current[id] = snapshot; // never cache QR-ID
+                }
                 const next = elements.slice();
                 next.splice(idx, 1);
-                if (id === QRID_ELEMENT_ID) {
-                    // remove its pill if present
-                    const pillId = `${QRID_ELEMENT_ID}-pill`;
-                    for (let i = next.length - 1; i >= 0; i--) {
-                        if (next[i].id === pillId) next.splice(i, 1);
-                    }
-                }
                 if (selectedElement?.id === id) setSelectedElement(null);
                 saveHistory(next);
             }
@@ -356,98 +439,24 @@ export const Studio = forwardRef(
             setSelectedElement(toAdd);
         };
 
-        const addQrIdText = () => {
-            if (!qrId || hasQrIdText) return;
+        const addQrIdText = (base = elements) => {
+            if (!currentQrId || base.some(e => e.id === QRID_ELEMENT_ID)) return;
 
-            // 1) If we’ve seen it before, restore EXACTLY as it was
-            const cached = elementCacheRef.current[QRID_ELEMENT_ID];
-            if (cached) {
-                const toAdd = { ...cached, id: QRID_ELEMENT_ID, text: String(qrId) };
-                saveHistory([...elements, toAdd]);
-                setSelectedElement(toAdd);
-                return;
-            }
-
-            // 2) Otherwise, build from external qrIdText + sensible defaults
-            const sizeKey =
-                elements?.find(e => e?.type === elementTypes?.pageSize)?.size || pageSizes.A4;
-            const { width: Cw, height: Ch } = pageSizesDimensions[sizeKey];
-
-            const fs = defaultTextProps?.fontSize || 16;
-            const lineH = fs * 1.25;
-
-            // --- external layout (REQUIRED x,y for custom placement) ---
-            const hasExternal =
-                qrIdText && typeof qrIdText.x === 'number' && typeof qrIdText.y === 'number';
-
-            const x = hasExternal ? qrIdText.x : Math.max(0, (Cw - 240) / 2);
-            const y = hasExternal ? qrIdText.y : Math.max(0, (Ch - lineH) / 2);
-            const width = qrIdText?.width ?? 240;
-            const textAlign = qrIdText?.textAlign ?? 'center';
-            const color = qrIdText?.color ?? defaultTextProps?.color ?? '#111';
-
-            // optional readability helpers (opt-in)
-            const wantPill = !!qrIdText?.pill;
-            const pillColor =
-                qrIdText?.pillColor ||
-                (color === '#fff' || color.toLowerCase() === 'white'
-                    ? 'rgba(0,0,0,0.35)'
-                    : 'rgba(255,255,255,0.85)');
-            const wantOutline = !!qrIdText?.outline;
-
-            const pillId = `${QRID_ELEMENT_ID}-pill`;
-            const vPad = 8,
-                hPad = 10;
-
-            const newElements = [...elements];
-
-            if (wantPill) {
-                newElements.push({
-                    id: pillId,
-                    type: elementTypes.square,
-                    draggable: true,
-                    x: x - hPad,
-                    y: y - vPad,
-                    width: width + hPad * 2,
-                    height: lineH + vPad * 2,
-                    cornerRadius: 8,
-                    fill: pillColor,
-                    opacity: 1,
-                    stroke: 'rgba(0,0,0,0.12)',
-                    strokeWidth: 1,
-                });
-            }
+            const frame = computeQrIdFrame(base);
 
             const textProps = {
                 id: QRID_ELEMENT_ID,
                 type: elementTypes.text,
                 draggable: true,
-                x,
-                y,
-                width,
-                textAlign,
-                text: String(qrId),
+                text: String(currentQrId),
+                fontWeight: '700', // always bold
+                textAlign: 'center',
                 opacity: defaultTextProps?.opacity,
-                fontSize: fs,
-                fontFamily: defaultTextProps?.fontFamily,
-                color,
-                textDecoration: defaultTextProps?.textDecoration,
-                fontStyle: defaultTextProps?.fontStyle,
-                fontWeight: qrIdText?.fontWeight ?? defaultTextProps?.fontWeight ?? '400',
-                ...(wantOutline && {
-                    stroke:
-                        color.toLowerCase() === '#ffffff' || color.toLowerCase() === 'white'
-                            ? 'rgba(0,0,0,0.5)'
-                            : 'rgba(255,255,255,0.8)',
-                    strokeWidth: 1,
-                    shadowColor: 'rgba(0,0,0,0.4)',
-                    shadowBlur: 3,
-                    shadowOpacity: 0.8,
-                }),
+                ...frame,
             };
 
-            newElements.push(textProps);
-            saveHistory(newElements);
+            const next = [...base, textProps];
+            saveHistory(next);
             setSelectedElement(textProps);
         };
 
@@ -478,7 +487,7 @@ export const Studio = forwardRef(
                 });
             }
         };
-        
+
         const toggleQrIdText = () => {
             hasQrIdText ? removeElementById(QRID_ELEMENT_ID) : addQrIdText();
         };
@@ -816,16 +825,29 @@ export const Studio = forwardRef(
                 },
             ],
         ) => {
-            const prevElements = elementsRef.current
-            const prevQrIdText = prevElements.find(element => element.id === QRID_ELEMENT_ID)
-            const newQrIdText = elems.find(element => element.id === QRID_ELEMENT_ID)
-            if (!newQrIdText?.id && prevQrIdText?.id) {
-              const qrIdPill = prevElements.find(
-                (element) => element.id === QRID_ELEMENT_PILL
-              );
-              if (qrIdPill.id) elems.push(qrIdPill);
-              elems.push(prevQrIdText);
+            const prevHadQrId = elementsRef.current?.some(e => e.id === QRID_ELEMENT_ID);
+            let next = [...elems];
+
+            // If toggle was ON before and current template doesn’t include QR-ID, re-add it above Location (or center)
+            if (
+                prevHadQrId &&
+                !next.some(e => e.id === QRID_ELEMENT_ID) &&
+                showQrIdToggle &&
+                currentQrId
+            ) {
+                const frame = computeQrIdFrame(next);
+                next.push({
+                    id: QRID_ELEMENT_ID,
+                    type: elementTypes.text,
+                    draggable: true,
+                    text: String(currentQrId),
+                    fontWeight: '700',
+                    textAlign: 'center',
+                    opacity: defaultTextProps?.opacity,
+                    ...frame,
+                });
             }
+
             setElements([...elems]);
             setHistory([]);
             setRedoStack([]);
@@ -841,8 +863,8 @@ export const Studio = forwardRef(
         };
 
         useEffect(() => {
-            elementsRef.current = elements
-        },[elements])
+            elementsRef.current = elements;
+        }, [elements]);
 
         const sendSelectedElementToBack = () => {
             let copyElements = [...elements];
