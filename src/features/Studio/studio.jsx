@@ -33,7 +33,7 @@ import {
 import theme from '@/theme';
 import { StyleSheetManager } from 'styled-components';
 import isPropValid from '@emotion/is-prop-valid';
-import { LOCATION_ELEMENT_ID, QRID_ELEMENT_ID } from '@/constants/textConstants';
+import { LOCATION_ELEMENT_ID, QRID_ELEMENT_ID, QRID_ELEMENT_PILL } from '@/constants/textConstants';
 /**
  * @typedef {Object} StudioProps
  * @property {string} [title]
@@ -110,6 +110,7 @@ export const Studio = forwardRef(
         const [helperSideBarVisible, setHelperSideBarVisible] = useState(true);
         const [zoomPercentage, setZoomPercentage] = useState(zoomLevel ?? 100);
         const [elements, setElements] = useState(elementsList);
+        const elementsRef = useRef(elements)
         const [backgroundImageOpacity, setBackgroundImageOpacity] = useState(1);
         const [history, setHistory] = useState([]);
         const [redoStack, setRedoStack] = useState([]);
@@ -432,7 +433,7 @@ export const Studio = forwardRef(
                 color,
                 textDecoration: defaultTextProps?.textDecoration,
                 fontStyle: defaultTextProps?.fontStyle,
-                fontWeight: defaultTextProps?.fontWeight,
+                fontWeight: qrIdText?.fontWeight ?? defaultTextProps?.fontWeight ?? '400',
                 ...(wantOutline && {
                     stroke:
                         color.toLowerCase() === '#ffffff' || color.toLowerCase() === 'white'
@@ -723,9 +724,6 @@ export const Studio = forwardRef(
             let selectedElementCopy = { ...selectedElement };
             selectedElementCopy[key] = value;
             delete selectedElementCopy['ref'];
-            if (key === 'fontWeight') {
-                selectedElementCopy['fontVariant'] = value;
-            }
             const updatedElements = elements?.map(el =>
                 el.id === selectedElementCopy?.id ? { ...selectedElementCopy } : el,
             );
@@ -818,6 +816,16 @@ export const Studio = forwardRef(
                 },
             ],
         ) => {
+            const prevElements = elementsRef.current
+            const prevQrIdText = prevElements.find(element => element.id === QRID_ELEMENT_ID)
+            const newQrIdText = elems.find(element => element.id === QRID_ELEMENT_ID)
+            if (!newQrIdText?.id && prevQrIdText?.id) {
+              const qrIdPill = prevElements.find(
+                (element) => element.id === QRID_ELEMENT_PILL
+              );
+              if (qrIdPill.id) elems.push(qrIdPill);
+              elems.push(prevQrIdText);
+            }
             setElements([...elems]);
             setHistory([]);
             setRedoStack([]);
@@ -831,6 +839,10 @@ export const Studio = forwardRef(
                 onTemplateSelect(null);
             }
         };
+
+        useEffect(() => {
+            elementsRef.current = elements
+        },[elements])
 
         const sendSelectedElementToBack = () => {
             let copyElements = [...elements];
